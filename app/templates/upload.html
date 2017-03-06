@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Visual Narrator v1.2</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Import the Google Web Fonts CSS -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!--<link href="static/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
+
+    <!-- CSS for dropdown enhancer-->
+    <link href="static/css/dropdowns-enhancement.less" rel="stylesheet">
+    <!-- CSS for bootstrap-select plugin -->
+    <link rel="stylesheet" href="static/css/bootstrap-multiselect.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS for the sidebar navigation -->
+    <link href="static/css/sidebar-vn.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/custom.css" rel="stylesheet">
+</head>
+
+
+<body>
+<header class="header-bar">
+    <nav id="nav-down">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">AQUSA</a></li>
+            <li><a href="#">VN</a></li>
+        </ul>
+    </nav>
+    <div id="topbar-button">
+        <a id="topbar-button-a" href="#">Menu<span class="topbar-icon glyphicon glyphicon-menu-down"></span></a>
+    </div>
+</header>
+<!-- A wrapper that wraps all of the content -->
+<div id="wrapper">
+    <div id="content-wrapper"><!--This is the area on the right side -->
+        <div class="container-fluid" id=""><!-- This contains the network generated from the data -->
+            <div class="row">
+                <div id="" class="col-lg-2"></div>
+                <div id="" class="col-lg-8">
+                    <p>Upload User Story Set</p>
+                    <div id="uploadform" class="form-group" style="width:250px; margin-top:50px;">
+                        <form action="" method=post enctype=multipart/form-data>
+                            <input class="" type=file name=file>
+                            <input class="btn btn-default" type=submit value=Upload>
+                        </form>
+                    </div>
+
+                    <div id="uploadform" class="form-group" style="width:250px; margin-top:50px;">
+                        <form action="" method=post enctype=multipart/form-data>
+                            <input class="" type=file name=file>
+                            <input class="btn btn-default" type=submit value=Process>
+                        </form>
+                    </div>
+                    <div id="" class="col-lg-2"></div>
+                    <!-- <h4>Input Groups</h4>
+                          <div class="input-group">
+                              <label class="input-group-btn">
+                                  <span class="btn btn-primary">
+                                      Browse&hellip; <input type="file" style="display: none;" multiple>
+                                  </span>
+                              </label>
+                              <input type="text" class="form-control" readonly>
+                            <span class="help-block">
+                              Try selecting one or more files and watch the feedback
+                            </span>
+                        </div> -->
+
+                </div> <!-- End .col-lg-12-->
+            </div><!-- End .row -->
+        </div><!-- End .container-fluid-->
+    </div> <!-- End vis-wrapper-->
+</div><!--End #wrapper -->
+
+<!-- JAVASCRIPT FILES ===============================
+   ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!--<script>window.jQuery || document.write('<script src="../../assets/static/js/vendor/jquery.min.js"><\/script>')</script>-->
+
+<!-- Bootstrap Javascript files -->
+<script src="static/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<!-- <script src="assets/static/js/ie10-viewport-bug-workaround.js"></script> -->
+
+<!-- Include the Javascript for the dropdown enhancer-->
+<script src="static/js/dropdowns-enhancement.js"></script>
+
+<!--Inlcude the Javascript for the zoom scrollbar-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.0.0/bootstrap-slider.js"></script>
+
+<!-- Load the JS for the bootstrap-select plugin -->
+<script type="text/javascript" src="static/js/bootstrap-multiselect.js"></script>
+
+<!-- Initialize the multiselect plugin and apply our own settings: -->
+<script type="text/javascript" src="static/js/multiselect-vn.js"></script>
+
+<!-- Load theJS to hide Header on on scroll down -->
+<script type="text/javascript" src="static/js/header-bar-vn.js"></script>
+
+<script type="text/javascript" src="static/js/sidebar-vn.js"></script>
+
+
+<!-- Open the sidebar menu when clicking the hamburger/a element up top -->
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        // e.defaultPrevented();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+
+<!-- Javascript to open/close the horizontal header-bar -->
+<script>
+    $("#topbar-button-a").click(function (e) {
+        e.preventDefault();
+        $("header").toggleClass("nav-up");
+    });
+</script>
+<script>
+    $(function () {
+
+        // We can attach the `fileselect` event to all file inputs on the page
+        $(document).on('change', ':file', function () {
+            var input = $(this),
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        // We can watch for our custom `fileselect` event like this
+        $(document).ready(function () {
+            $(':file').on('fileselect', function (event, numFiles, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                    log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>

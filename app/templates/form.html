@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} Form {% endblock title %}
+{% block main %}
+    <form action="" method="post" name="submit">
+
+        <p>Please enter your Company Name:</p><br>
+        {{ form.company_name(size=80) }}<br>
+        <p>Please enter your Company Number:</p><br>
+        {{ form.company_id(size=80) }}<br>
+
+        <p>Please enter your Sprint name:</p><br>
+        {{ form.sprint_name (size=80) }}<br>
+        <p>Please enter your Sprint number:</p><br>
+        {{ form.sprint_id (size=80) }}<br>
+
+        {{ form.submit }}
+    </form>
+
+    <p>Upload User Story Set</p>
+    <div id="uploadform" class="form-group" style="width:250px; margin-top:50px;">
+        <form action="" method=post enctype=multipart/form-data>
+            <input class="" type=file name=file>
+            <input class="btn btn-default" type=submit value=Upload>
+        </form>
+    </div>
+
+
+{% endblock main %}
