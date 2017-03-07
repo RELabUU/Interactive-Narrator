@@ -9,7 +9,7 @@ visualized using Vis.js and is presented to the user in the browser from where t
 user's needs.
 
 **Dependencies**
-This program needs Python 3 to run. It has been tested to work with Ubuntu 16.04 and the instructions below are based on Ubuntu being on your machine as well.
+This program has been and tested to run with Python 3.5.2. It has been tested to work with Ubuntu 16.04 and the instructions below are based on Ubuntu being on your machine. 
 The main dependency for the program is Visual Narrator (https://github.com/marcelrobeer/visualnarrator). 
 To run the Interactive Narrator, you need to install Visual Narrator in the same directory as the Interactive Narrator folder is in (/InteractiveNarrator) Other depencies can be found in requirements.txt
 
