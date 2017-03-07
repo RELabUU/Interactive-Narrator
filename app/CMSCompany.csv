@@ -1,0 +1,34 @@
+As an editor, I want to maintain language labels for different site parts by categories, so that I can search and maintain language labels easily.
+As a system administrator, I want to deploy filters run-time, so that I can roll-out filter dependent functionality efficiently througout DTAP
+As a marketeer, I want to set the title attribute of a link, so I can improve the SE ranking of the website
+As a marketeer, I want to switch URLs when URL duplication occurs between pages, so that I can solve conflicts between pages easily without having to search all pages in the tree
+As a marketeer, I want to create friendly URLs for my nested product pages, so I can improve the SE ranking of the product section of my website
+As a marketeer, I want to set the rel attribute of external links, so I can make sure that SE bots do no affect SE rankings for pages with many external links
+As a marketeer, I want to set canonical tags to individual pages, so I can avoid duplicate content easily without having to set permanent redirects, and thereby will improve the SE ranking of the website.
+As a marketeer, I want to be solve URL conflicts immediately, so I avoid not-friendly URLs and thereby, will postively influence the overall SE ranking of the website
+As a marketeer, I want to view basic analytics data of media items easily, so that I can analyze whether content is relevant to the intended audience
+As a marketeer, I want to view the top keywords of the week easily, so that I can analyze key words, and when needed, I can undertake action upon this information
+As a marketeer, I want to view segment page view results of the current week easily, so I can see at a glance whether content is relevant to the intended segment.
+As a marketeer, I want to view the top refferals of the week, so I can quickly see what websites drive most traffic to a specific page or media item. 
+As an editor, I want to assign page sections  to pages using the current page section structure, so I can easily and efficiently manage page sections assigned to pages
+As an editor, I want to access content items quickly from a content element, so I do not have to look up these content types in the menu and therefore, I can work more productive.
+As an editor, I want to crop images, so I can edit images easily without using photo editing tools, and therefore, I can work more productive.
+As a developer, I want to check on all released flash versions supported by browsers, so  I can adjust my flash presentation towards new flash versions in particular.
+As a developer, I want to pass on variables to flash files directly.
+As an editor, I want to set a default editor environment language, so I can easily login in the preffered language without changing languages each time I login.
+As an editor, I want to set a content language, so I see SiteManager in my personal language without having to change content language each time after login
+As a developer, I want to  define presentation variants in my presentation configuration xml file, so I can easily and efficiently deploy my presentation throughout DTAP
+As a system administrator, I want to  define presentation variants in my presentation configuration xml file, so I can easily and efficiently deploy my presentation throughout DTAP
+As an editor, I want to search on media item titles and terms in the Media Repository in an case insensitive way, so the number of media item results are increased, and I find relevant media items more efficiently.
+As an editor, I want to show media items from another web initiative using  thesaurus relationships  of that web initiative on my website, so I do not have to reconstruct the thesaurus of the other web initiative for my own website, which saves time since its duplication.
+As an IT manager, I want IPv6 support by CMS SiteManager, so I'm ensured that CMS SiteManager will work fine once IPv6 is applied into our hosting/network environment
+As a main editor, I want to configure workflow on classification-level, so that I can control what editors are allowed to use several terms which are used on specific site parts / facets in order to prevent publishing faulty content
+As a main editor, I want to configure workflow on media item-level for specific content types, so that I can control who can modify what specific item in order to prevent editors from publishing faulty content
+As a online channel manager, I want to publish content in multiple languages, so I can target my audience in their native language, which increases relevancy and attract more traffic to my website
+As an editor, I want to translate media items to multiple languages,  so I can produce content in different language easily
+As an editor, I want to maintain media items in multiple languages easily and in an intuitive way, so that I can work productively
+As an editor, I need time zone support for setting publication and expiration dates for my content, so I know what time a content item goes 'live' in my time zone. 
+As an system administrator, I want to monitor the performance of CMS SiteManager, so I can analyze indicators which influence the health of CMS SiteManager, and undertake action upon this analysis in order to make CMS SiteManager healthy again.
+As an editor, I want to search full-text on content in the editor environment, so that I can find relevant content faster and therefore work more productive
+As a business decision-maker, I want to use French as native language for CMS SiteManager, so that native french-speaking editors adopt CMS SiteManager easily, and as a result gain a better understanding of the application
+As an editor, I want to maintain FAQs in multiple languages easily and in an intuitive way, so that I can work productively
