@@ -67,7 +67,7 @@ def form():
         # session.add(SprintVN(sprint_id='12', sprint_name='sprint1', company_name='abc', company_id='1'))
         session.commit()
         # run the visual narrator back-end and obtain needed objects for visualization
-        data = run.program('CMSCompany.csv')
+        data = run.program('example_stories.txt')
         #  run the poster method to place the objects and their attributes in the database
         poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
 
