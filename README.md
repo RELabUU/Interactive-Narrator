@@ -4,15 +4,14 @@
 Visualize your user stories to improve understanding of the project, inspect system functionality 
 and imporve communication among stakeholders.
 
-This application uses the Visual Narrator (https://github.com/marcelrobeer/visualnarrator)to generate a conceptual model which is then
+This application uses the Visual Narrator (https://github.com/marcelrobeer/visualnarrator) to generate a conceptual model which is then
 visualized using Vis.js and is presented to the user in the browser from where the visualization can be modified to cater to the 
 user's needs.
 
 **Dependencies**
-
+This program needs Python 3 to run.
 The main dependency for the program is Visual Narrator (https://github.com/marcelrobeer/visualnarrator). 
-To run the program, you need to install Visual Narrator in the same directory as the Interactive Narrator Project Folder (/inwebapp):
-Other depencies can be found in requirements.txt
+To run the Interactive Narrator, you need to install Visual Narrator in the same directory as the Interactive Narrator folder is in (/InteractiveNarrator) Other depencies can be found in requirements.txt
 
 **Installation**
 
@@ -28,7 +27,7 @@ your_virtualenvironment
 │____lib  
 |____include
 │____share
-└───inwebapp
+└───InteractiveNarrator
 │   │
 │   └───app
 │       │   app.py
@@ -41,7 +40,7 @@ your_virtualenvironment
     │
 ```
 Note that you should place the Visual Narrator folder in the same directory as your
-Interactive Narrator (inwebapp) folder.
+Interactive Narrator (InteractiveNarrator) folder.
 
 Change this line(21) in app.py:
 sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
@@ -53,8 +52,8 @@ To tell Python where to look for de VisualNarrator package on your computer.
 **Running the Project**
 
 Each time you run the project, change line 70:
-data = run.program('CMSCompany.csv')
-to contain the filename of your user story set located in the inwebapp folder
+data = run.program('example_stories.txt')
+to contain the filename of your own user story set located in the inwebapp folder
 
 1. open a terminal in your virtual environment directory
 2. activate your virtual environment with 'source bin/activate'
