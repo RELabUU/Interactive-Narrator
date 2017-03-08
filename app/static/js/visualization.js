@@ -88,15 +88,11 @@ var options = {
         },
 
         shape: 'dot',
-        size: 20,
+        // size: 20,
         widthConstraint: {minimum: 25, maximum: 40}
     },
     groups: {
         Role: {color: {background: '#97C2FC'}, borderWidth: 5}
-        // selected_role_node: {color:{background:'#97C2FC'}},
-        // greyed_out:{color:{background:'#E8E8E8'}, borderWidth:0},
-        // selected_edge:{color:{color:'#97C2FC'}}
-
     },
 
     edges: {
@@ -111,6 +107,8 @@ var options = {
     }
 
 };
+
+
 var network = new vis.Network(container, data, options);
 // network.setOptions(
 //     {

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os
+import math
 from _operator import and_
 
 sys.path.append('/home/gjslob/Documents/environments/inarrator')
@@ -209,9 +210,8 @@ def concepts():
     concept_list = []
     concepts_query_res = conn.execute(concepts_query)
     for c in concepts_query_res:
-        # weight = int(c.weight)
-        # weight2 = weight - 5
-        concept_dictionary = {'id': c.class_id, 'label': c.class_name, 'weight': c.weight, 'theme': "theme1",
+        weight2 = 15 + (3 * math.sqrt(c.weight))
+        concept_dictionary = {'id': c.class_id, 'label': c.class_name, 'weight': c.weight, 'size': weight2,
                               'group': c.group}
 
 
