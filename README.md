@@ -8,9 +8,7 @@ This application uses the Visual Narrator (https://github.com/marcelrobeer/visua
 visualized using Vis.js and is presented to the user in the browser from where the visualization can be modified to cater to the 
 user's needs.
 
-![alt tag](https://raw.githubusercontent.com/Gionimo/InteractiveNarrator/master/ScreenshotInteractiveNarrator.png)
 ![alt tag](https://github.com/Gionimo/InteractiveNarrator/blob/master/Screenshot%20Interactive%20Narrator)
-![Screenshot](Screenshot Interactive Narrator.png)
 
 **Dependencies**
 This program has been and tested to run with Python 3.5.2. It has been tested to work with Ubuntu 16.04 and the instructions below are based on Ubuntu being on your machine. 
