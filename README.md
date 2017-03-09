@@ -49,10 +49,12 @@ Note that you should place the Visual Narrator folder in the same directory as y
 Interactive Narrator (InteractiveNarrator) is in.
 
 Now change this line(21) in app.py and line(9) in post.py:
-    sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
+   
+   `sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')`
 
 **to:**
-    sys.path.append('/path/on/your/computer/yourvirtualenvironment/VisualNarrator')
+
+   `sys.path.append('/path/on/your/computer/yourvirtualenvironment/VisualNarrator')`
 
 To tell Python where to look for de VisualNarrator package on your computer.
 
