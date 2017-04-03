@@ -13,8 +13,8 @@ Base = declarative_base()
 class CompanyVN(Base):
     __tablename__ = 'company'
 
-    # id = Column(Integer)
-    company_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    company_id = Column(Integer)
     company_name = Column(Text)
     # one to many unidirectional relationship
     sprints = relationship("SprintVN", backref="company")

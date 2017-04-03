@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{% block title %}{% endblock title %}</title>
+    <title>{% block title %}Upload your User Stories{% endblock title %}</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon"/>
-    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.3.1/united/bootstrap.min.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
-          rel="stylesheet">
+{#    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.3.1/united/bootstrap.min.css" rel="stylesheet">#}
+{#    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"#}
+{#          rel="stylesheet">#}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link href="static/css/custom.css" rel="stylesheet">
+
+{#    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>#}
     <style>
         .content {
             margin-top: 60px;
@@ -24,33 +35,54 @@
     <script>
 
     </script>
-    {% block extra_head %}{% endblock extra_head %}
+    {% block extra_head %}
+    {% endblock extra_head %}
 </head>
 <body>
 <div id="main">
-    <div class="utility-nav navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-
-                <ul class="nav">
-
-                </ul>
-                <ul class="nav pull-right">
-                    <li class="dropdown">
-
-                        <ul class="dropdown-menu">
-
-                        </ul>
-                    </li>
-                </ul>
-
-                <ul class="nav pull-right">
-
-                </ul>
-
-            </div>
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Interactive Narrator</a>
         </div>
-    </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="/visjs">Visualization</a></li>
+            <li><a href="/help">Help</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+{#    <div class="utility-nav navbar navbar-fixed-top">#}
+{#        <div class="navbar-inner">#}
+{#            <div class="container">#}
+{##}
+{#                <ul class="nav">#}
+{##}
+{#                </ul>#}
+{#                <ul class="nav pull-right">#}
+{#                    <li class="dropdown">#}
+{##}
+{#                        <ul class="dropdown-menu">#}
+{##}
+{#                        </ul>#}
+{#                    </li>#}
+{#                </ul>#}
+{##}
+{#                <ul class="nav pull-right">#}
+{##}
+{#                </ul>#}
+{##}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
     <div class="content container">
         {% block main %}{% endblock main %}
     </div>

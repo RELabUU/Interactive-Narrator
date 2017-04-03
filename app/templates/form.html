@@ -1,28 +1,43 @@
 {% extends 'base.html' %}
 {% block title %} Form {% endblock title %}
 {% block main %}
-    <form action="" method="post" name="submit">
+    <div id="uploadform">
 
-        <p>Please enter your Company Name:</p><br>
-        {{ form.company_name(size=80) }}<br>
-        <p>Please enter your Company Number:</p><br>
-        {{ form.company_id(size=80) }}<br>
+        <h3>Interactive Narrator</h3>
+        <br>
+        <h5>Instructions:</h5>
+        <p>
+            Welcome to the Interactive Narrator. To begin using the tool, please
+            follow these instructions. .
 
-        <p>Please enter your Sprint name:</p><br>
-        {{ form.sprint_name (size=80) }}<br>
-        <p>Please enter your Sprint number:</p><br>
-        {{ form.sprint_id (size=80) }}<br>
+            Please supply some information about your set of user stories below.
+            Then upload your set of user stories in .txt or .csv format on this page
 
-        {{ form.submit }}
-    </form>
+        <p id="mandatory">All fields are mandatory.
+            Fields marked with a * should be a unique identifier: they can never already exist
+            in the database.
+        </p>
+        </p>
+        <br>
+        <form action="" method="post" enctype=multipart/form-data name="submit">
 
-    <p>Upload User Story Set</p>
-    <div id="uploadform" class="form-group" style="width:250px; margin-top:50px;">
-        <form action="" method=post enctype=multipart/form-data>
+            <p>Company Name:</p>
+            {{ form.company_name(size=80) }}
+            <p>Company Number:</p>
+            {{ form.company_id(size=80) }}*<br>
+            <p>Sprint name:</p>
+            {{ form.sprint_name (size=80) }}<br>
+            <p>Sprint number:</p>
+            {{ form.sprint_id (size=80) }}*<br>
+            <br>
+            <br>
+            <h6>Upload your user stories in .txt or .csv format</h6>
             <input class="" type=file name=file>
-            <input class="btn btn-default" type=submit value=Upload>
+            <br>
+
+            {{ form.submit }}
         </form>
-    </div>
-
-
+        <br>
+        <br>
+</div>
 {% endblock main %}

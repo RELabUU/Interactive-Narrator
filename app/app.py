@@ -29,8 +29,10 @@ from models import UserStoryVN, RelationShipVN, ClassVN, CompanyVN, \
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'uploads/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -58,6 +60,17 @@ def form():
         form_data['company_name'] = form.company_name.data
         form_data['sprint_id'] = form.sprint_id.data
         form_data['sprint_name'] = form.sprint_name.data
+
+        file = request.files['file']
+        # Check if the file is one of the allowed types/extensions
+        if file and allowed_file(file.filename):
+        #     # Make the filename safe, remove unsupported chars
+            filename = secure_filename(file.filename)
+        #     # Move the file form the temporal folder to
+        #     # the upload folder we setup
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        set_filename = 'uploads/'+file.filename
         #  if company name and id are supplied store them in DB
 
         session.add(CompanyVN(company_id=form.company_id.data, company_name=form.company_name.data))
@@ -68,7 +81,7 @@ def form():
         # session.add(SprintVN(sprint_id='12', sprint_name='sprint1', company_name='abc', company_id='1'))
         session.commit()
         # run the visual narrator back-end and obtain needed objects for visualization
-        data = run.program('example_stories.txt')
+        data = run.program(set_filename)
         #  run the poster method to place the objects and their attributes in the database
         poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
 
@@ -96,7 +109,25 @@ def get_sprints():
     print(all_sprints)
     return jsonify(all_sprints)
 
-
+@app.route('/clickquery')
+def click_query():
+    clicked_nodes = json.loads(request.args.get('nodes'))
+    print('NODES', clicked_nodes)
+    node_userstory_list = []
+    for one_node in clicked_nodes:
+        print(one_node['id'])
+        node_userstory = session.query(UserStoryVN).join(us_class_association_table)\
+            .join(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
+        print('INFO', node_userstory)
+        # node_info = session.query(ClassVN).filter(ClassVN.class_id == one_node['id']).one()
+        # print('INFO', node_info)
+        if node_userstory:
+            node_userstory_list = [{"id": us.userstory_id,"text":us.text,"in sprint":us.in_sprint} for us in node_userstory]
+        else:
+            node_userstory_list = []
+        print('NODEINFO', node_userstory_list)
+    return jsonify(node_userstory_list)
+    # return Response(json.dumps(node_userstory_list), mimetype='application/json')
 # this is the main query that queries the database for concepts and relationships basd on the
 # roles and sprints that were selected by the user
 #
@@ -168,28 +199,6 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-# a route for the uploading of user story sets
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join('uploads', filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    return render_template('upload.html')
-
-
 # redirect the user to the uploaded file
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -212,7 +221,7 @@ def concepts():
     for c in concepts_query_res:
         weight2 = 15 + (3 * math.sqrt(c.weight))
         concept_dictionary = {'id': c.class_id, 'label': c.class_name, 'weight': c.weight, 'size': weight2,
-                              'group': c.group}
+                              'group': c.group, 'title': ""}
 
 
         concept_list.append(concept_dictionary)

@@ -124,7 +124,7 @@ function makeSprintSelector() {
         },
         onInitialized: function (select, container) {
             var $button = container.find("button").eq(0);
-            $button.append('<span class="multiselect_icon sub_icon glyphicon glyphicon-user" aria-hidden="true"></span>');
+            $button.append('<span class="multiselect_icon sub_icon glyphicon glyphicon-dashboard" aria-hidden="true"></span>');
             console.log($button);
 
         },

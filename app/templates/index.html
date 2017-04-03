@@ -27,6 +27,9 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 
+    <!-- Tooltip library -->
+    <link rel="stylesheet" type="text/css" href="static/css/tipped/tipped.css"/>
+
     <!-- load VIS.js-->
     <script src="static/js/vis.js"></script>
     <link href="static/css/vis.css" rel="stylesheet" type="text/css"/>
@@ -119,6 +122,7 @@
 
 
         </ul> <!-- End .sidebar-nav-->
+
     </div><!-- End #sidebar-wrapper -->
 
     <div id="vis-wrapper"><!--This is the area on the right side -->
@@ -129,6 +133,9 @@
                     <script src="static/js/visualization.js"></script>
                 </div> <!-- End .col-lg-12-->
             </div><!-- End .row -->
+            <div id="userstoryinfo">
+                <table id="userstorytable"></table>
+            </div>
         </div><!-- End .container-fluid-->
     </div> <!-- End vis-wrapper-->
 </div><!--End #wrapper -->
@@ -165,6 +172,8 @@
 <!-- Load theJS to hide Header on on scroll down -->
 <script type="text/javascript" src="static/js/header-bar-vn.js"></script>
 
+<!-- Load the tooltip lib -->
+<script type="text/javascript" src="static/js/tipped/tipped.js"></script>
 
 <!-- Open the sidebar menu when clicking the hamburger/a element up top -->
 <script>
@@ -174,7 +183,11 @@
     });
 
 </script>
-
+<script>
+    $(document).ready(function() {
+  Tipped.create('#demo-tooltip', 'Some tooltip text');
+});
+</script>
 <!-- Javascript to open/close the horizontal header-bar -->
 <script>
     //   $("#topbar-button-a").click(function(e){

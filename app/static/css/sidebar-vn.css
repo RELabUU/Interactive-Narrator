@@ -329,9 +329,9 @@ ul.multiselect-container > li > a {
 #weightSlider {
     display: block;
     color: rgb(133, 134, 133);
-    width: 65%;
+    width: 63%;
     margin-left: 20px;
-    /*margin-right: auto;*/
+    margin-right: 15px;
     float: left;
     height: 10px;
     font-weight: 600;

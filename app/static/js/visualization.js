@@ -4,6 +4,7 @@
  */
     //this file helps obtaining the json data from the app **??
 
+
 //Create an object for a HTTP-request
 var HttpClient = function () {
         this.get = function (aUrl, aCallback) {
@@ -11,12 +12,12 @@ var HttpClient = function () {
             anHttpRequest.onreadystatechange = function () {
                 if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
                     aCallback(anHttpRequest.responseText);
-            }
+            };
 
             anHttpRequest.open("GET", aUrl, true);
             anHttpRequest.send(null);
         }
-    }
+    };
 
 // Obtain the concepts from the back-end with an HTTP-request
 aClient = new HttpClient();
@@ -34,7 +35,7 @@ aClient.get('http://127.0.0.1:5000/concepts', function (response) { //actually e
 var edges = new vis.DataSet([]);
 bClient = new HttpClient();
 bClient.get('http://127.0.0.1:5000/relationships', function (response) {
-    var edges_parsed = JSON.parse(response)
+    var edges_parsed = JSON.parse(response);
     // console.log(edges_parsed);
     edges.add(edges_parsed);
 });
@@ -52,6 +53,26 @@ var data = {
     edges: edges
 };
 var options = {
+    interaction:{
+    dragNodes:true,
+    dragView: true,
+    hideEdgesOnDrag: false,
+    hideNodesOnDrag: false,
+    hover: false,
+    hoverConnectedEdges: true,
+    keyboard: {
+      enabled: false,
+      speed: {x: 10, y: 10, zoom: 0.02},
+      bindToWindow: true
+    },
+    multiselect: true,
+    navigationButtons: true,
+    selectable: true,
+    selectConnectedEdges: true,
+    tooltipDelay: 300,
+    zoomView: true
+  },
+
     //      physics:{
     //        enabled:true,
     // //        adaptiveTimestep:true,
@@ -110,14 +131,33 @@ var options = {
 
 
 var network = new vis.Network(container, data, options);
-// network.setOptions(
-//     {
-//
-//         physics: {enabled:false}
-//     }
-// );
-//  var zaadje = network.getSeed();
-//  console.log(zaadje)
+
+// Retrieve the user stories that belong to the node that is clicked, and put them in a table
+network.on( 'click', function(properties) {
+    var ids = properties.nodes;
+    var clickedNodes = nodes.get(ids);
+    console.log('clicked nodes:', clickedNodes);
+    $.getJSON('/clickquery', {
+                    nodes: JSON.stringify(clickedNodes)
+    },function (data) {
+        console.log(data);
+        $("#userstorytable tr").remove();
+        for (var i = 0; i < data.length; i++) {
+
+            console.log(data[i].id);
+            console.log(data[i].text);
+            console.log(data[i]['in sprint']);
+            tr = $('<tr/>');
+            tr.append("<td>" + data[i]['in sprint'] + "</td>");
+            tr.append("<td>" + data[i].id + "</td>");
+            tr.append("<td>" + data[i].text + "</td>");
+
+            $('#userstorytable').append(tr);
+        }
+
+        }
+    );
+});
 
 // set the first initial zoom level
 network.once('initRedraw', function () {
