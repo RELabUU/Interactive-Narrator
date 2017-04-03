@@ -8,7 +8,7 @@ This application uses the Visual Narrator (https://github.com/marcelrobeer/visua
 visualized using Vis.js and is presented to the user in the browser from where the visualization can be adapted to cater to the 
 user's needs.
 
-![alt tag](https://github.com/Gionimo/InteractiveNarrator/blob/master/Screenshot%20Interactive%20Narrator)
+![alt tag](https://github.com/Gionimo/InteractiveNarrator/blob/master/Screenshot%20Interactive%20Narrator2)
 
 **Dependencies**
 
