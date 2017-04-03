@@ -63,19 +63,15 @@ To tell Python where to look for de VisualNarrator package on your computer.
 
 Linux:
 
-1. open a terminal in your virtual environment directory
+1. open a command prompt/terminal in your virtual environment directory
 2. activate your virtual environment with `source bin/activate`
 3. change directory to the InteractiveNarrator folder with `cd InteractiveNarrator`
 4. run app.py with `python app.py`
 5. open your web browser and browse to http://127.0.0.1:5000/form
 6. add identifiers for your company, company id, sprint name and sprint number(id) to the form
+   and upload your set of user stories
 7. submit the data and wait for the visualization to appear
 
-To run the project with your own set of stories, change line 70 in app.py:
-
-`data = run.program('example_stories.txt')`
-
-to contain the filename of your own user story set located in the InteractiveNarrator folder
 
 **License**
 
