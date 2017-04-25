@@ -20,8 +20,8 @@ header {
 }
 
 nav#nav-down {
-    width: 250px;
-    margin: auto;
+    /*width: 550px;*/
+    /*margin: auto;*/
 }
 
 #nav-down > ul {
@@ -87,6 +87,14 @@ nav#nav-down {
 
 .nav-up {
     top: -40px;
+}
+
+#navbar-items{
+    margin-left: 40px;
+}
+
+#useraccountitems{
+    margin-right: 75px;
 }
 
 #vis-wrapper {
@@ -207,3 +215,26 @@ p#mandatory{
     margin-top: 10px;
     font-style: italic;
 }
+
+ul.flashes li{
+    color: #b93331;
+}
+
+.help-inline{
+    color:#b93331;
+}
+
+.mandatory-sign{
+    display: block;
+    float: left;
+}
+/*#uploadform form .form-group{*/
+    /*width: 70%;*/
+/*}*/
+
+/*LOGIN PAGE*/
+
+.login-form #submit{
+   width:10%
+}
+

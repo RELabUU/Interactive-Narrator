@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Title</title>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#</body>#}
+
+{% macro render_field(field) %}
+    <div class="form-group">
+  <dt>{{ field.label }}
+  <dd>{{ field(**kwargs)|safe }}
+  {% if field.errors %}
+{#    <ul class=errors>#}
+    {% for error in field.errors %}
+        <span class="help-inline">{{ error }}</span>
+    {% endfor %}
+{#    </ul>#}
+  {% endif %}
+  </dd>
+    </div>
+{% endmacro %}
+</html>

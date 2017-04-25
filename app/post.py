@@ -74,7 +74,7 @@ def poster(us_instances, output_ontobj, output_prologobj, m, form_data):
             us.relationships.append(rel)
     session.commit()
 
-    # add the concepts (class_vn) from the classes which will become nodes
+    # add the concepts (class_vn) to a list of dicts from the classes which will become nodes
     i = 0
     concepts_list = []
     weights_dict = dict(m['sum'].copy().reset_index().sort_values(['sum'], ascending=False).values.tolist())
@@ -96,7 +96,8 @@ def poster(us_instances, output_ontobj, output_prologobj, m, form_data):
     for class_vn in concepts_list:
 
         class_entry = ClassVN(class_name=class_vn['class_name'],
-                              parent_name=class_vn['parent_name'], weight=class_vn['weight'], group=class_vn['group'])
+                              parent_name=class_vn['parent_name'], weight=class_vn['weight'], group=class_vn['group'],
+                              cluster='')
         session.add(class_entry)
         session.commit()
 

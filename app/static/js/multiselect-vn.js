@@ -1,7 +1,8 @@
 //This document contains the functions to select nodes based on the user interface elements in the sidebar
 
 window.onresize = function() {
-    network.fit();}
+    network.fit();
+};
 
 function showDataSet(data) {
 

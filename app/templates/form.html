@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% from 'fields.html' import render_field %}
+
 {% block title %} Form {% endblock title %}
 {% block main %}
     <div id="uploadform">
@@ -19,24 +21,44 @@
         </p>
         </p>
         <br>
-        <form action="" method="post" enctype=multipart/form-data name="submit">
+        <form class="" action="" method="post" enctype=multipart/form-data name="submit">
+{#            {{ render_field(form.company_name, maxlength=255, placeholder="the name of your company") }}#}
+{#            {{ render_field(form.company_id, maxlength=255, placeholder="the ID of your company") }}#}
+            {{ render_field(form.sprint_name, maxlength=255, placeholder="the name of your sprint") }}
 
-            <p>Company Name:</p>
-            {{ form.company_name(size=80) }}
-            <p>Company Number:</p>
-            {{ form.company_id(size=80) }}*<br>
-            <p>Sprint name:</p>
-            {{ form.sprint_name (size=80) }}<br>
-            <p>Sprint number:</p>
-            {{ form.sprint_id (size=80) }}*<br>
+            {{ render_field(form.sprint_id, maxlength=255, placeholder="the ID of your sprint") }}
+
+
             <br>
             <br>
             <h6>Upload your user stories in .txt or .csv format</h6>
             <input class="" type=file name=file>
             <br>
 
+
+{#             template for how a message should be flashed#}
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+{#            {% if form.errors %}#}
+{#                <ul class=errors>#}
+{#                {% for error in form.errors %}#}
+{#                  <li>{{ error }}</li>#}
+{#                {% endfor %}#}
+{#                </ul>#}
+{#              {% endif %}#}
+
             {{ form.submit }}
         </form>
+
+
         <br>
         <br>
 </div>

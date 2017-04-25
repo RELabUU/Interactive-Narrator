@@ -5,6 +5,13 @@
     //this file helps obtaining the json data from the app **??
 
 
+// $.getJSON('/clusters',
+//     function (data) {
+//     console.log(data.nodes);
+//
+// });
+
+
 //Create an object for a HTTP-request
 var HttpClient = function () {
         this.get = function (aUrl, aCallback) {
@@ -24,9 +31,11 @@ aClient = new HttpClient();
 var nodes_parsed;
 var nodes = new vis.DataSet([]); //make a new DataSet to put the list of objects in as nodes
 
-aClient.get('http://127.0.0.1:5000/concepts', function (response) { //actually execute the HTTP-request
+aClient.get('/concepts', function (response) { //actually execute the HTTP-request
     var nodes_parsed = JSON.parse(response); //make an array of objects from the obtained string
-    // console.log(nodes_parsed);
+    // var nodes_parsed = response['json_concepts'];
+    // console.log('repsone tuple', response.clusters);
+    console.log(nodes_parsed);
     nodes.add(nodes_parsed); // add the parsed data to the DataSet
     console.log(nodes)
 });
@@ -34,7 +43,7 @@ aClient.get('http://127.0.0.1:5000/concepts', function (response) { //actually e
 // HTTP-request to obtain the edges (relationships between concepts)
 var edges = new vis.DataSet([]);
 bClient = new HttpClient();
-bClient.get('http://127.0.0.1:5000/relationships', function (response) {
+bClient.get('/relationships', function (response) {
     var edges_parsed = JSON.parse(response);
     // console.log(edges_parsed);
     edges.add(edges_parsed);
@@ -66,10 +75,10 @@ var options = {
       bindToWindow: true
     },
     multiselect: true,
-    navigationButtons: true,
+    // navigationButtons: true,
     selectable: true,
     selectConnectedEdges: true,
-    tooltipDelay: 300,
+    // tooltipDelay: 300,
     zoomView: true
   },
 
@@ -108,9 +117,9 @@ var options = {
             background: '#D2E5FF'
         },
 
-        shape: 'dot',
+        shape: 'dot'
         // size: 20,
-        widthConstraint: {minimum: 25, maximum: 40}
+        // widthConstraint: {minimum: 25, maximum: 50}
     },
     groups: {
         Role: {color: {background: '#97C2FC'}, borderWidth: 5}
@@ -159,6 +168,8 @@ network.on( 'click', function(properties) {
     );
 });
 
+//CLUSTERING//
+
 // set the first initial zoom level
 network.once('initRedraw', function () {
     if (lastClusterZoomLevel === 0) {
@@ -202,8 +213,8 @@ function makeClusters(scale, clusterIndex) {
             }
             clusterOptions.childrenCount = childrenCount;
             clusterOptions.label = "cid: " + clusterIndex + " (" + childrenCount + ")";
-            clusterOptions.font = {size: childrenCount * 3 + 10}  //size of the label is calculated based on number of childnodes
-            clusterOptions.size = childrenCount * 2 + 10; //size of the node is calculated based on number of childnodes
+            clusterOptions.font = {size: childrenCount * 3 + 10};  //size of the label is calculated based on number of childnodes
+            clusterOptions.size = childrenCount * 1.5 + 10; //size of the node is calculated based on number of childnodes
             clusterOptions.id = 'cluster:' + clusterIndex;
             clusters.push({id: 'cluster:' + clusterIndex, scale: scale});
             return clusterOptions;
@@ -212,7 +223,7 @@ function makeClusters(scale, clusterIndex) {
             return childOptions.cid == clusterIndex;
         },
         clusterNodeProperties: {borderWidth: 3, shape: 'dot', font: {size: 30}}
-    }
+    };
     network.cluster(clusterOptionsByData);
     //  if (document.getElementById('stabilizeCheckbox').checked === true) {
     //      network.stabilize();

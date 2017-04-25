@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% from 'fields.html' import render_field %}
+
+{% block title %} Form {% endblock title %}
+{% block main %}
+    <div id="registrationform">
+
+        <h3>Interactive Narrator</h3>
+        <br>
+        <h5>Instructions:</h5>
+        <p>
+
+        </p>
+
+        <br>
+        <form class="" action="" method="post" enctype=multipart/form-data name="submit">
+            {{ render_field(form.username, maxlength=255, placeholder="the username of your choice") }}
+            {{ render_field(form.company_name, maxlength=255, placeholder="the name of your company") }}
+            {{ render_field(form.email, maxlength=255, placeholder="your e-mail adress") }}
+            {{ render_field(form.password, maxlength=255, placeholder="your new password") }}
+
+            {{ render_field(form.confirm, maxlength=255, placeholder="enter your password again") }}
+
+            {{ render_field(form.accept_tos, maxlength=255, placeholder="") }}
+
+            {{ form.submit }}
+        </form>
+
+        {% if error %}
+			<p class="error"><strong>Error:</strong>{{error}}</p>
+		{% endif %}
+
+{#    MESSAGE FLASHING#}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+</div>
+{% endblock main %}

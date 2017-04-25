@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% from 'fields.html' import render_field %}
+
+{% block title %} Dashboard {% endblock title %}
+{% block main %}
+    <div id="user_info"></div>
+    <div id="sets"></div>
+    <h3>Dashboard</h3>
+    <a class="btn btn-default" href="{{ url_for('form') }}"> Upload Set</a>
+
+    <a class="btn btn-default" href="{{ url_for('logout') }}">Log Out</a>
+
+    <h5>Your Sprints:</h5>
+    <div id="db_records">
+        {% for sprint in sprints %}
+        <strong>Sprint ID:</strong> {{ sprint.sprint_id }} <br>
+        <strong>Sprint name:</strong> {{ sprint.sprint_name }} <br>
+        <strong>Company name:</strong> {{ sprint.company_name }} <br>
+        <strong>Company ID:</strong> {{ sprint.company_id }} <br>
+            <a class="btn btn-default" href="/visjs">Show</a>
+        {% endfor %}
+    </div>
+
+{#    <input id=logout type="submit" value="Logout" class="btn btn-primary btn-large btn-block" >#}
+
+{% endblock main %}

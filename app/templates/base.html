@@ -57,32 +57,15 @@
             <li><a href="/visjs">Visualization</a></li>
             <li><a href="/help">Help</a></li>
           </ul>
+            <ul id="useraccountitems"class="nav navbar-nav navbar-right">
+                <li><a id="signupbtn" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-{#    <div class="utility-nav navbar navbar-fixed-top">#}
-{#        <div class="navbar-inner">#}
-{#            <div class="container">#}
-{##}
-{#                <ul class="nav">#}
-{##}
-{#                </ul>#}
-{#                <ul class="nav pull-right">#}
-{#                    <li class="dropdown">#}
-{##}
-{#                        <ul class="dropdown-menu">#}
-{##}
-{#                        </ul>#}
-{#                    </li>#}
-{#                </ul>#}
-{##}
-{#                <ul class="nav pull-right">#}
-{##}
-{#                </ul>#}
-{##}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+
+
     <div class="content container">
         {% block main %}{% endblock main %}
     </div>
