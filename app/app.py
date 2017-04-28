@@ -5,6 +5,7 @@ import math
 from _operator import and_
 
 sys.path.append('/home/gjslob/Documents/environments/inarrator')
+sys.path.append('/var/www/interactivenarrator')
 
 from sqlalchemy import create_engine, select, update, func
 from sqlalchemy.orm import sessionmaker
@@ -22,6 +23,8 @@ from post import poster
 
 
 sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
+sys.path.append('/var/www/VisualNarrator')
+
 from VisualNarrator import run
 from models import UserStoryVN, RelationShipVN, ClassVN, CompanyVN, \
     SprintVN, engine, us_class_association_table, \
