@@ -21,7 +21,7 @@ To run the Interactive Narrator, you need to install Visual Narrator in the same
 Currently, Interactive Narrator needs to be run from your local machine. I assume you have Python3 installed system wide and have pip setup tools installed too. 
 If not install pip (Linux) with: `sudo apt-get install python-setuptools python-dev build-essential`. Then, the preferred method is to create a virtual Python environment using virtualenv 
 (http://docs.python-guide.org/en/latest/dev/virtualenvs/). Install virtualenv with `pip install virtualenv`. Then set your virtual environment up wth Python3 using this command: `virtualenv -p python3 environmentname`. 
-Now you should have a virtual environment ready and you can download the InteractiveNarrator and VisualNarrator into that directory. Finally, activate your virtual environment with activate your virtual environment with `source bin/activate` 
+Now you should have a virtual environment ready and you can download the InteractiveNarrator and VisualNarrator into that directory. Finally, activate your virtual environment with with `source bin/activate` 
 while standing in the virtual environment directory install the packages listed in requirements.txt in your virtual environment 
 with `pip install -r requirements.txt`
 Note that Interactive Narrator's Python files are configured to be used in a virtual environment because of the shebang #!/usr/bin/env python
@@ -66,7 +66,7 @@ Linux:
 
 1. open a command prompt/terminal in your virtual environment directory
 2. activate your virtual environment with `source bin/activate`
-3. change directory to the InteractiveNarrator folder with `cd InteractiveNarrator`
+3. change directory to the InteractiveNarrator folder with `cd InteractiveNarrator/app`
 4. run app.py with `python app.py`
 5. open your web browser and browse to http://127.0.0.1:5000/form
 6. add identifiers for your company, company id, sprint name and sprint number(id) to the form
