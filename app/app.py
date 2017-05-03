@@ -2,7 +2,7 @@
 import sys
 import os
 import math
-from _operator import and_
+# from _operator import and_
 
 sys.path.append('/home/gjslob/Documents/environments/inarrator')
 sys.path.append('/var/www/interactivenarrator')
