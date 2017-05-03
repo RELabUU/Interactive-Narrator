@@ -26,6 +26,7 @@ sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
 sys.path.append('/var/www/VisualNarrator')
 
 from VisualNarrator import run
+import VisualNarrator.run
 from models import UserStoryVN, RelationShipVN, ClassVN, CompanyVN, \
     SprintVN, engine, us_class_association_table, \
     us_relationship_association_table, \
@@ -222,7 +223,7 @@ def form2():
                 if succes:
                     flash('Set data Successfully added! Please wait while we process your data')
             # run the visual narrator back-end and obtain needed objects for visualization
-                data = run.program(set_filename)
+                data = VisualNarrator.run.program(set_filename)
             #  run the poster method to place the objects and their attributes in the database
                 poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
 
