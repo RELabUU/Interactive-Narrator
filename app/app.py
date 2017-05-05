@@ -125,18 +125,22 @@ def do_admin_login():
             check_user = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]))
 
             user_exists = check_user.first()
-            print(user_exists.password)
-            # if the password matches the username, log the user in
-            if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
-                print(check_user)
-            # if check_user:
-                session['logged_in'] = True
-                flash('thanks!')
-                print('succes')
-                return redirect(url_for('show_dash'))
+            # print(user_exists.password)
+            if user_exists:
+                flash('Wrong username/password, please try again')
+                # if the password matches the username, log the user in
+                if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
+                    print(check_user)
+                # if check_user:
+                    session['logged_in'] = True
+                    flash('Thanks for loggin in!')
+                    print('succes')
+                    return redirect(url_for('show_dash'))
+                else:
+                    flash('Sorry, wrong password')
+                    print('failure')
+                    return render_template('login.html')
             else:
-                flash('sorry, wrong password')
-                print('failure')
                 return render_template('login.html')
     else:
         return render_template('dashboard.html')
@@ -176,7 +180,7 @@ def sprint_detail(sprint_id):
     return render_template('set_detail.html',
                            set=set)
 
-#  route for getting the form info (company/sprint) and putting it into the database
+#  OLD! route for getting the form info (company/sprint) and putting it into the database
 @app.route('/form2', methods=['GET', 'POST'])
 def form2():
     # use the form class from form.py
