@@ -157,6 +157,7 @@ def show_dash():
     if not session.get('logged_in'):
         return render_template("login.html")
     else:
+        username = session['username']
         # show all the sprints that are in the database on the dashboard page
         all_sprints = sqlsession.query(SprintVN).all()
         sprints = [dict(sprint_id=sprint.sprint_id,
@@ -164,7 +165,7 @@ def show_dash():
                         company_id=sprint.company_id,
                         company_name=sprint.company_name) for sprint in all_sprints]
 
-        return render_template("dashboard.html", sprints=sprints)
+        return render_template("dashboard.html", sprints=sprints, username=username)
 
 
 @app.route('/sprints/<int:sprint_id>/')

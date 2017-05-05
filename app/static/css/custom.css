@@ -238,3 +238,8 @@ ul.flashes li{
    width:10%
 }
 
+/*DASHBOARD CSS*/
+
+#db_records{
+    padding: 10px 5px 5px 5px;
+}
