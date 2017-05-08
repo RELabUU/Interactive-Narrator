@@ -168,6 +168,41 @@ def show_dash():
         return render_template("dashboard.html", sprints=sprints, username=username)
 
 
+@app.route("/deletedatabase")
+def delete_database():
+
+    # sprint = sqlsession.query(SprintVN).filter(SprintVN.sprint_id == '1').all()
+    # for item in sprint:
+    #     print(item)
+    #     sqlsession.delete(item)
+
+    ust = sqlsession.query(UserStoryVN).all()
+    for item in ust:
+        print(ust)
+        sqlsession.delete(item)
+        # sqlsession.commit()
+        # sqlsession.query(UserStoryVN).delete(item)
+
+    # sqlsession.query(ClassVN).delete()
+    # sqlsession.query(RelationShipVN).delete()
+    # rel_asso = sqlsession.query(UserStoryVN).all()
+    # for ust in rel_asso:
+    #     ust.classes = []
+    # us_rels = sqlsession.query(us_relationship_association_table).all()
+    # for pair in us_rels:
+    #     pair.userstory_id = ""
+    #     pair.relationship_id = ""
+
+    # sqlsession.query(us_class_association_table).delete()
+    # sqlsession.query(us_sprint_association_table).delete()
+    try:
+        sqlsession.commit()
+        return redirect(url_for('show_dash'))
+    except:
+        sqlsession.rollback()
+        return redirect(url_for('show_dash'))
+
+
 @app.route('/sprints/<int:sprint_id>/')
 def sprint_detail(sprint_id):
     """Provide HTML page with a given sprint."""

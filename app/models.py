@@ -117,13 +117,13 @@ class UserStoryVN(Base):
     in_sprint = Column(Integer)
 
     # many to one relationship
-    sprints = relationship("SprintVN",
+    sprints = relationship("SprintVN", cascade="delete",
                            secondary=us_sprint_association_table, backref="userstorysprints", lazy='dynamic')
     # many to many relationship
-    classes = relationship("ClassVN",
+    classes = relationship("ClassVN", cascade="delete",
                            secondary=us_class_association_table, backref="userstories", lazy='dynamic')
     # many to many relationship
-    relationships = relationship("RelationShipVN",
+    relationships = relationship("RelationShipVN", cascade="delete",
                                  secondary=us_relationship_association_table, backref="relationships", lazy='dynamic')
 
 
