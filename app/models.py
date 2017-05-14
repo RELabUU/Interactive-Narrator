@@ -131,7 +131,7 @@ class ClassVN(Base):
     __tablename__ = 'class'
 
     class_id = Column(Integer, primary_key=True)
-    class_name = Column(Text)
+    class_name = Column(Text, unique=True)
     parent_name = Column(Text)
     weight = Column(Integer)
     group = Column(Text)

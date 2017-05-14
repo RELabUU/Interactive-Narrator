@@ -71,7 +71,7 @@ function showDataSet(data) {
 
 }
 
-//    @app.route('/rolesquery')
+//    ROLE SELECTION
 function makeRoleSelector() {
     $('#roleselector').multiselect({
         enableClickableOptGroups: true,
@@ -82,6 +82,25 @@ function makeRoleSelector() {
         enableCaseInsensitiveFiltering: true,
         buttonText: function (options, select) {
             return 'Roles';
+        },
+        onSelectAll: function (option, checked, select) {		//use the onChange event to listen to changes in the listbox
+            var role_values = $('#roleselector option:selected');//add the selected options to a var
+            var sprint_values = $('#sprintselector option:selected');
+
+            var selectedRoles = $(role_values).map(function (index, option) {
+                return $(option).val();		//put the values in the array
+            });
+            var selectedSprints = $(sprint_values).map(function (index, option) {
+                return $(option).val();
+            });
+            // Array to keep track of selected checkboxes i.e. selected themes
+            selectedRoles = selectedRoles.toArray();
+            selectedSprints = selectedSprints.toArray();
+
+            $.getJSON('/query', {
+                    roles: JSON.stringify(selectedRoles),
+                    sprints: JSON.stringify(selectedSprints)
+                }, showDataSet);
         },
         onInitialized: function (select, container) {
             var $button = container.find("button").eq(0);
@@ -105,14 +124,14 @@ function makeRoleSelector() {
             $.getJSON('/query', {
                     roles: JSON.stringify(selectedRoles),
                     sprints: JSON.stringify(selectedSprints)
-                }, showDataSet
-            );
+                }, showDataSet);
         }
     });
 }
 
+// SPRINT SELECTION
 function makeSprintSelector() {
-    //@app.route('/sprintsquery')
+
     $('#sprintselector').multiselect({
         enableClickableOptGroups: true,
         enableCollapsibleOptGroups: true,
@@ -122,6 +141,25 @@ function makeSprintSelector() {
         enableCaseInsensitiveFiltering: true,
         buttonText: function (options, select) {
             return 'Sprints';
+        },
+        onSelectAll: function (option, checked, select) {		//use the onChange event to listen to changes in the listbox
+            var role_values = $('#roleselector option:selected');//add the selected options to a var
+            var sprint_values = $('#sprintselector option:selected');
+
+            var selectedRoles = $(role_values).map(function (index, option) {
+                return $(option).val();		//put the values in the array
+            });
+            var selectedSprints = $(sprint_values).map(function (index, option) {
+                return $(option).val();
+            });
+            // Array to keep track of selected checkboxes i.e. selected themes
+            selectedRoles = selectedRoles.toArray();
+            selectedSprints = selectedSprints.toArray();
+
+            $.getJSON('/query', {
+                    roles: JSON.stringify(selectedRoles),
+                    sprints: JSON.stringify(selectedSprints)
+                }, showDataSet);
         },
         onInitialized: function (select, container) {
             var $button = container.find("button").eq(0);
@@ -160,6 +198,7 @@ function makeSprintSelector() {
     });
 }
 
+// THEME SELECTION, NOT WORKING YET
 $(document).ready(function () {
     $('#themeselector').multiselect({
 
