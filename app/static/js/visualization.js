@@ -75,7 +75,7 @@ var options = {
       bindToWindow: true
     },
     multiselect: true,
-    // navigationButtons: true,
+    navigationButtons: true,
     selectable: true,
     selectConnectedEdges: true,
     // tooltipDelay: 300,
@@ -166,6 +166,7 @@ network.on( 'click', function(properties) {
 
         }
     );
+    // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');
 });
 
 //CLUSTERING//
