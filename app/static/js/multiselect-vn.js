@@ -23,10 +23,12 @@ function showDataSet(data) {
         var selected = nodes_dataset.get(node.id);
         // console.log(node.id);
         // console.log(selected);
+        // if nothing is selected, make everythin grey. NOT WORKING!
         if (!selected) {
 
             nodes.update({id: node.id, color: '#E8E8E8'});
         }
+        // else if a node is selected make it blue
         else {
             if (node.group == 'Role') {
                 nodes.update({id: node.id, color: '#97C2FC'});
@@ -50,9 +52,11 @@ function showDataSet(data) {
     edges.forEach(function (edge) {
         var selected = edges_dataset.get(edge.id);
         // console.log(edge.id);
+        // if no edges are part of the selection, make them grey
         if (!selected) {
             edges.update({id: edge.id, color: '#E8E8E8'});
         }
+        //else make all edegs blue
         else {
             edges.update({id: edge.id, color: '#5898ED'});
         }
@@ -93,6 +97,9 @@ function makeRoleSelector() {
             var selectedSprints = $(sprint_values).map(function (index, option) {
                 return $(option).val();
             });
+
+            console.log('SELECTEDROLES', selectedRoles);
+            console.log('SELECTEDSPRINTS', selectedSprints);
             // Array to keep track of selected checkboxes i.e. selected themes
             selectedRoles = selectedRoles.toArray();
             selectedSprints = selectedSprints.toArray();

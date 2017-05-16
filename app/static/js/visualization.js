@@ -128,7 +128,7 @@ var options = {
     edges: {
         labelHighlightBold: true,
         width: 1,
-        // length:200, //the lenght of the edges is set here. standard:undefined
+        length:200, //the lenght of the edges is set here. standard:undefined
         arrows: {
             to: {enabled: true, scaleFactor: 1, type: 'arrow'},
             middle: {enabled: false, scaleFactor: 1, type: 'arrow'},

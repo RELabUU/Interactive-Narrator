@@ -4,7 +4,7 @@ import os
 import math
 # from _operator import and_
 
-sys.path.append('/home/gjslob/Documents/environments/inarrator')
+# sys.path.append('/home/gjslob/Documents/environments/inarrator')
 sys.path.append('/var/www/interactivenarrator')
 
 from sqlalchemy import create_engine, select, update, func
@@ -22,7 +22,7 @@ import json
 from post import poster
 
 
-sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
+# sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
 sys.path.append('/var/www/VisualNarrator')
 
 from VisualNarrator import run
@@ -127,20 +127,21 @@ def do_admin_login():
             user_exists = check_user.first()
             # print(user_exists.password)
             if user_exists:
-                flash('Wrong username/password, please try again')
+                # flash('Wrong username/password, please try again')
                 # if the password matches the username, log the user in
                 if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
                     print(check_user)
                 # if check_user:
                     session['logged_in'] = True
-                    flash('Thanks for loggin in!')
+                    flash('Thanks for logging in!')
                     print('succes')
                     return redirect(url_for('show_dash'))
                 else:
-                    flash('Sorry, wrong password')
+                    flash('Sorry, wrong password/username')
                     print('failure')
                     return render_template('login.html')
             else:
+                flash('Sorry, wrong password/username')
                 return render_template('login.html')
     else:
         return render_template('dashboard.html')
@@ -176,15 +177,15 @@ def delete_database():
     #     print(item)
     #     sqlsession.delete(item)
 
-    ust = sqlsession.query(UserStoryVN).all()
-    for item in ust:
-        print(ust)
-        sqlsession.delete(item)
+    # ust = sqlsession.query(UserStoryVN).all()
+    # for item in ust:
+    #     print(ust)
+    #     sqlsession.delete(item)
         # sqlsession.commit()
-        # sqlsession.query(UserStoryVN).delete(item)
-
-    # sqlsession.query(ClassVN).delete()
-    # sqlsession.query(RelationShipVN).delete()
+    sqlsession.query(UserStoryVN).delete()
+    sqlsession.query(ClassVN).delete()
+    sqlsession.query(RelationShipVN).delete()
+    sqlsession.query(SprintVN).delete()
     # rel_asso = sqlsession.query(UserStoryVN).all()
     # for ust in rel_asso:
     #     ust.classes = []
@@ -294,7 +295,7 @@ def form():
         active_company = sqlsession.query(CompanyVN).filter \
             (CompanyVN.company_name == active_company_name).first()
 
-        flash(session['username'])
+        # flash(session['username'])
 
     if request.method == 'POST' and form.validate():
         form_data = {}
@@ -313,7 +314,7 @@ def form():
             sqlsession.add(SprintVN(sprint_id=form_data['sprint_id'], sprint_name=form_data['sprint_name'],
                                     company_name=active_company_name, company_id=active_company.id))
             print('added sprint')
-            flash('sprint added')
+            # flash('sprint added')
 
         # FILE UPLOAD HANDLING
         file = request.files['file']
@@ -340,8 +341,9 @@ def form():
             return redirect(url_for('index'))
 
     else:
-        flash('something went wrong, please try again')
+        # flash('something went wrong, please try again')
         print('nothing happens')
+        return render_template('form.html', form=form)
 
     return render_template('form.html', form=form)
 
@@ -392,6 +394,7 @@ def click_query():
 def get_test():
     checked_roles = json.loads(request.args.get('roles'))
     checked_sprints = json.loads(request.args.get('sprints'))
+    checked_sprints.append(1)
     print(checked_roles)
     classes = sqlsession.query(ClassVN) \
         .join(us_class_association_table) \
