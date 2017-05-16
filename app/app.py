@@ -449,10 +449,11 @@ def get_test():
 # a route for displaying the visualization
 @app.route('/visjs', methods=['GET', 'POST'])
 def index():
-    if session.get('logged_in'):
-        return render_template('index.html')
-    else:
-        return redirect(url_for('home'))
+    return render_template('index.html')
+    # if session.get('logged_in'):
+    #     return render_template('index.html')
+    # else:
+    #     return redirect(url_for('home'))
 
 
 # def allowed_file(filename):
@@ -469,30 +470,30 @@ def uploaded_file(filename):
     return send_from_directory('uploads', filename)
 
 # a route for clustering
-@app.route('/clusters')
-def cluster():
-    # get all the nodes that are connected to a role
-    x = 1
-    start_at_role = sqlsession.query(UserStoryVN.functional_role).distinct()
-    list_of_roles = [role.functional_role for role in start_at_role]
-    nodes = []
-    for role in list_of_roles:
-        classes = sqlsession.query(ClassVN) \
-            .join(us_class_association_table) \
-            .join(UserStoryVN) \
-            .filter(or_(UserStoryVN.functional_role == func.lower(role),
-                        UserStoryVN.functional_role == role)) \
-            .all()
-
-        for concept in classes:
-            concept.cluster = x
-            nodes.append([{"name": concept.class_name} for concept in classes])
-        sqlsession.commit()
-        x = x + 1
-
-    json_nodes = json.dumps(nodes)
-
-    return jsonify(roles=list_of_roles, nodes=nodes)
+# @app.route('/clusters')
+# def cluster():
+#     # get all the nodes that are connected to a role
+#     x = 1
+#     start_at_role = sqlsession.query(UserStoryVN.functional_role).distinct()
+#     list_of_roles = [role.functional_role for role in start_at_role]
+#     nodes = []
+#     for role in list_of_roles:
+#         classes = sqlsession.query(ClassVN) \
+#             .join(us_class_association_table) \
+#             .join(UserStoryVN) \
+#             .filter(or_(UserStoryVN.functional_role == func.lower(role),
+#                         UserStoryVN.functional_role == role)) \
+#             .all()
+#
+#         for concept in classes:
+#             concept.cluster = x
+#             nodes.append([{"name": concept.class_name} for concept in classes])
+#         sqlsession.commit()
+#         x = x + 1
+#
+#     json_nodes = json.dumps(nodes)
+#
+#     return jsonify(roles=list_of_roles, nodes=nodes)
 
 
 # a route for delivering the list of concepts to be made into nodes
