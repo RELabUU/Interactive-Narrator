@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{% block title %}Upload your User Stories{% endblock title %}</title>
+    <title>{% block title %}Interactive Narrator{% endblock title %}</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon"/>
 {#    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.3.1/united/bootstrap.min.css" rel="stylesheet">#}
 {#    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"#}
@@ -49,17 +49,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Interactive Narrator</a>
+          <a class="navbar-brand" href="/home">Interactive Narrator</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="/visjs">Visualization</a></li>
-            <li><a href="/help">Help</a></li>
+{#            <li class="active"><a href="/home">Home</a></li>#}
+              {% if session.get('logged_in') %}
+                  <li><a href="/vis">Visualization</a></li>
+              {% endif %}
+
+{#            <li><a href="/help">Help</a></li>#}
           </ul>
             <ul id="useraccountitems"class="nav navbar-nav navbar-right">
+                {% if session.get('logged_in') %}
+                     <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>#}
+                {% else %}
                 <li><a id="signupbtn" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% endif %}
             </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -69,6 +76,6 @@
     <div class="content container">
         {% block main %}{% endblock main %}
     </div>
-</div>
+</div> <!-- /.main-->
 </body>
 </html>

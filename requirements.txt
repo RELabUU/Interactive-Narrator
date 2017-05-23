@@ -8,7 +8,7 @@ Flask-SQLAlchemy
 SQLAlchemy
 WTForms
 # Visual Narrator Requirements
-numpy==1.7
+numpy==1.10.1
 pandas==0.17.1
 spacy==1.1.0
 Django==1.9

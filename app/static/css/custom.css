@@ -8,51 +8,10 @@
   text-align: center;
 } */
 
-header {
-    background-color: rgb(51, 47, 48);
-    height: 40px;
-    position: fixed;
-    top: 0;
+#main-nav{
+    height: 50px;
     transition: top 0.2s ease-in-out;
-    width: 100%;
-    overflow: visible;
-    z-index: 1;
-}
-
-nav#nav-down {
-    /*width: 550px;*/
-    /*margin: auto;*/
-}
-
-#nav-down > ul {
-    margin-bottom: 0px;
-}
-
-#nav-down li {
-    float: left;
-    list-style: none;
-    /*line-height: 40px;*/
-    height: 40px;
-    /*padding-top: 5px;*/
-
-}
-
-#nav-down li a {
-    color: rgb(133, 134, 133);
-    display: block;
-    text-decoration: none;
-    font-weight: 600;
-    font-family: 'Open Sans', sans-serif;
-    padding: 10px 10px 5px 10px;
-    text-align: center;
-    height: inherit;
-    border-left: 1px solid rgb(66, 66, 66);
-    border-right: 1px solid rgb(66, 66, 66);
-}
-
-#nav-down li a:hover {
-    color: #fff;
-    background: rgb(236, 195, 72);
+    background-color: #332f30;
 }
 
 #topbar-button {
@@ -62,7 +21,7 @@ nav#nav-down {
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    top: 40px;
+    /*top: 50px;*/
     z-index: 1;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -86,11 +45,12 @@ nav#nav-down {
 }
 
 .nav-up {
-    top: -40px;
+    top: -50px;
 }
 
 #navbar-items{
-    margin-left: 40px;
+    width: 300px;
+    margin: auto;
 }
 
 #useraccountitems{

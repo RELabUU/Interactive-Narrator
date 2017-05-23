@@ -59,13 +59,20 @@ Session = sessionmaker(bind=engine)
 sqlsession = Session()
 conn = engine.connect()
 
+
+@app.route('/home')
+def homepage():
+    return render_template('index.html')
+
 # Homepage
 @app.route('/')
 def home():
     if not session.get('logged_in'):
-        return render_template('login.html')
+        # return render_template('login.html')
+        return redirect(url_for('do_admin_login'))
     else:
-        return render_template('dashboard.html')
+        return redirect(url_for('show_dash'))
+        # return render_template('dashboard.html')
 
 
 # registering a user
@@ -144,7 +151,9 @@ def do_admin_login():
                 flash('Sorry, wrong password/username')
                 return render_template('login.html')
     else:
-        return render_template('dashboard.html')
+        return redirect(url_for(show_dash))
+        # return render_template('dashboard.html')
+
     # except:
     return redirect(url_for('show_dash'))
 
@@ -309,6 +318,7 @@ def form():
         if sprint_exists:
             flash('sprint is already in the database')
             print('sprint exists already', sprint_exists)
+            return redirect(url_for('form'))
         # ...if it doesn't, add it to the DB
         else:
             sqlsession.add(SprintVN(sprint_id=form_data['sprint_id'], sprint_name=form_data['sprint_name'],
@@ -394,7 +404,7 @@ def click_query():
 def get_test():
     checked_roles = json.loads(request.args.get('roles'))
     checked_sprints = json.loads(request.args.get('sprints'))
-    checked_sprints.append(1)
+    # checked_sprints.append(1)
     print(checked_roles)
     classes = sqlsession.query(ClassVN) \
         .join(us_class_association_table) \
@@ -447,9 +457,9 @@ def get_test():
 
 
 # a route for displaying the visualization
-@app.route('/visjs', methods=['GET', 'POST'])
+@app.route('/vis', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return render_template('vis.html')
     # if session.get('logged_in'):
     #     return render_template('index.html')
     # else:
