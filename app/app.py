@@ -60,19 +60,19 @@ sqlsession = Session()
 conn = engine.connect()
 
 
-@app.route('/home')
+@app.route('/')
 def homepage():
     return render_template('index.html')
 
-# Homepage
-@app.route('/')
-def home():
-    if not session.get('logged_in'):
-        # return render_template('login.html')
-        return redirect(url_for('do_admin_login'))
-    else:
-        return redirect(url_for('show_dash'))
-        # return render_template('dashboard.html')
+# # Homepage
+# @app.route('/')
+# def home():
+#     if not session.get('logged_in'):
+#         # return render_template('login.html')
+#         return redirect(url_for('do_admin_login'))
+#     else:
+#         return redirect(url_for('show_dash'))
+#         # return render_template('dashboard.html')
 
 
 # registering a user
