@@ -19,14 +19,14 @@
         <strong>Sprint name:</strong> {{ sprint.sprint_name }} <br>
         <strong>Company name:</strong> {{ sprint.company_name }} <br>
         <strong>Company ID:</strong> {{ sprint.company_id }} <br>
-            <a class="btn btn-default" href="/visjs">Show</a>
+            <a class="btn btn-default" href="/vis">Show</a>
             </div>
         {% endfor %}
     </div>
 
     <a class="btn btn-default" href="{{ url_for('form') }}"> Upload Set</a>
 
-    <a class="btn btn-default" href="{{ url_for('delete_database') }}"> Clean Database</a>
+    <a class="btn btn-default" href="{{ url_for('clean_database') }}"> Clean Database</a>
 
     <a class="btn btn-default" href="{{ url_for('logout') }}">Log Out</a>
 

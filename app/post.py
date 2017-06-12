@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 import sys
+
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc, and_
 from models import Base, ClassVN, UserStoryVN, RelationShipVN, SprintVN, engine
 from form import SetInfoForm
+import pdb
 
 sys.path.insert(0, '/home/gjslob/Documents/environments/inarrator/VisualNarrator')
 # from post import poster # the function to add the stuff to the database
@@ -27,16 +29,17 @@ def occurence_list(li):
     return "Doesn not occur, deducted"
 
 
-def poster(us_instances, output_ontobj, output_prologobj, m, form_data):
+# # get the starting position for the new userstory IDs, based on the presence/absence of
+# # user stories already in the database
+# starting_id = session.query(UserStoryVN).order_by(UserStoryVN.id.desc()).first()
+# if starting_id is None:
+#     starting_id = 0
+# else:
+#     starting_id = starting_id.id
+# print('FIRST STARTING_ID', starting_id.id)
 
-    # get the starting position for the new userstory IDs, based on the presence/absence of
-    # user stories already in the database
-    starting_id = session.query(UserStoryVN).order_by(UserStoryVN.id.desc()).first()
-    if starting_id is None:
-        starting_id = 0
-    else:
-        starting_id = starting_id.id
 
+def add_userstories(us_instances, form_data):
     # add the user stories (us_vn) in the us_instances object to the database
     for us_vn in us_instances:
         # each user story has a functional role part, a means part and a means_main part.
@@ -57,39 +60,15 @@ def poster(us_instances, output_ontobj, output_prologobj, m, form_data):
         # with this sprint ID in the sprints-userstories association table
         us_entry.sprints.append(sprint)
 
+    session.commit()
+
+
+def add_concepts(output_ontobj, m, starting_id):
+
     # Now find the user story with the highest ID in the database
     # and use this ID as a startingpoint for new UserStory.ID's
     highest_id = session.query(UserStoryVN).order_by(UserStoryVN.id.desc()).first()
-
-    # then add relationships between concepts (ClassVNs) which will become edges
-    # if there are already entries in the database, get the highest id as
-    # a starting point for the new relationships
-    relationships_output = output_prologobj.relationships
-    for relationship in relationships_output:
-        # take a relationship
-        rel_entry = RelationShipVN(relationship_domain=relationship.domain,
-                                   relationship_name=relationship.name, relationship_range=relationship.range)
-        session.add(rel_entry)
-        session.commit()
-        # access the ontology object property "relationship.stories" which stores
-        # the user story ids in which the relationshsip occurs
-        list_of_us_ids = relationship.stories
-        # get the newwest relationship (with the highest relationship_id NOT USED?!
-        relationship_from_db = session.query(RelationShipVN).order_by(RelationShipVN.relationship_id.desc()).first()
-        relationship_id = relationship_from_db.relationship_id
-        # each relationship is part of one of more user stories
-        # this information is located in the relationship.list_of_us_ids property
-        for us_id in list_of_us_ids:
-            # find the user story that is in the list_of_us_ids by .userstory_id
-            # and find it with .id as well so we find only the stories in this particular set
-            us = session.query(UserStoryVN).filter(and_(UserStoryVN.id > starting_id, UserStoryVN.id <= highest_id.id,
-                                                        UserStoryVN.userstory_id == us_id)).first()
-            rel = session.query(RelationShipVN).get(relationship_id)
-            #  add a class to the relationship named ' classes' on the userstory table
-            # association table will automatically be filled this way
-            us.relationships.append(rel)
-    session.commit()
-
+    print('FIRST HIGHEST ID', highest_id)
     # Now add the concepts (class_vn) to a list of dicts (concepts_list) from the classes which will become nodes
 
     concepts_list = []
@@ -102,33 +81,21 @@ def poster(us_instances, output_ontobj, output_prologobj, m, form_data):
     concepts_with_weight = []
     for class_vn in output_ontobj.classes:
         one_concept = {'class_name': class_vn.name, 'parent_name': class_vn.parent,
-                             'occurs_in': occurence_list(class_vn.stories), 'weight': '0', 'group': class_vn.is_role}
+                       'occurs_in': occurence_list(class_vn.stories), 'weight': '0', 'group': class_vn.is_role}
         all_classes_list.append(one_concept)
         # if cl is not is_us:
 
         # ....else add it with the name and weight from the weights_dict
-    for key, value in weights_dict.items():
-            # if key == class_vn.name:
-        for concept in all_classes_list:
+
+        # if key == class_vn.name:
+    for concept in all_classes_list:
+        for key, value in weights_dict.items():
             if concept['class_name'] == key:
                 concept['weight'] = value
 
-                # concepts_dict2 = {'class_name': class_vn.name, 'parent_name': class_vn.parent,
-                #                       'occurs_in': occurence_list(class_vn.stories), 'weight': value,
-                #                       'group': class_vn.is_role}
-                # concepts_list.append(concepts_dict2)
-                # concepts_with_weight.append(concepts_dict2)
-
-            # if a concept's name is not yet a key in the weights_dict dictionary, add it with a weight of 0...
-            # else:
-            # if class_vn.name not in weights_dict.keys():
-            #     concepts_dict = {'class_name': class_vn.name, 'parent_name': class_vn.parent,
-            #                      'occurs_in': occurence_list(class_vn.stories), 'weight': '0',
-            #                      'group': class_vn.is_role}
-            #     concepts_list.append(concepts_dict)
-
     # now add the concepts from the concepts_list to the database
-    # print(concepts_list)
+    print('ALL_CLASSES_LIST', all_classes_list)
+
     for class_vn in all_classes_list:
 
         class_entry = ClassVN(class_name=class_vn['class_name'],
@@ -136,18 +103,19 @@ def poster(us_instances, output_ontobj, output_prologobj, m, form_data):
                               cluster='')
 
         session.add(class_entry)
+
         try:
             session.commit()
 
-        except exc.IntegrityError as e:
+        # except exc.IntegrityError as e:
+        except Exception as e:
+            print('EXCEPTION:', e)
             session.rollback()
             excluded_concepts_list.append(class_vn)
-            print('******EXCLUDED CONCEPTS******', excluded_concepts_list)
-            print('ROLLBACK HAPPENED')
-            return False, "rolled back due to integrity error"
+        # else:
+        #     break
 
         # session.commit()
-
 
         # WHAT HAPPENS HERE ???????????????????????????
         list_of_us_ids = class_vn['occurs_in']
@@ -173,8 +141,68 @@ def poster(us_instances, output_ontobj, output_prologobj, m, form_data):
             # association table will automatically be filled this way
 
             us.classes.append(cl)
-            # import pdb;
-            # if cl.class_id == 38:
-            #     pdb.set_trace()
+        session.commit()
+    print('******EXCLUDED CONCEPTS******', excluded_concepts_list)
+    # import pdb
+    # pdb.set_trace()
 
+def add_relationships(output_prologobj, starting_id):
+
+    highest_id = session.query(UserStoryVN).order_by(UserStoryVN.id.desc()).first()
+    # then add relationships between concepts (ClassVNs) which will become edges
+    # if there are already entries in the database, get the highest id as
+    # a starting point for the new relationships
+    relationships_output = output_prologobj.relationships
+    for relationship in relationships_output:
+        # take a relationship and add it
+        rel_entry = RelationShipVN(relationship_domain=relationship.domain,
+                                   relationship_name=relationship.name, relationship_range=relationship.range)
+        try:
+            session.add(rel_entry)
+            session.commit()
+        except Exception as e:
+            print('Exception raised', e)
+
+        # access the ontology object property "relationship.stories" which stores
+        # the user story ids in which the relationshsip occurs
+        list_of_us_ids = relationship.stories
+        # get the newest relationship (with the highest relationship_id) which should be the one just added
+        relationship_from_db = session.query(RelationShipVN).order_by(RelationShipVN.relationship_id.desc()).first()
+        relationship_id = relationship_from_db.relationship_id
+        # each relationship is part of one of more user stories
+        # this information is located in the relationship.list_of_us_ids property
+        seen = set()
+        uniq = []
+        for x in list_of_us_ids:
+            if x not in seen:
+                uniq.append(x)
+                seen.add(x)
+        for us_id in uniq:
+            # find the user story that is in the list_of_us_ids by .userstory_id
+            # and find it with .id as well so we find only the stories in this particular set
+            us = session.query(UserStoryVN).filter(and_(UserStoryVN.id > starting_id, UserStoryVN.id <= highest_id.id,
+                                                        UserStoryVN.userstory_id == us_id)).first()
+            # rel = session.query(RelationShipVN).get(relationship_id) REDUNDANT!!!
+            #  add a class to the relationship named ' classes' on the userstory table
+            # association table will automatically be filled this way
+            us.relationships.append(relationship_from_db)
+            # import pdb
+            # pdb.set_trace()
     session.commit()
+
+def add_data_to_db(us_instances, output_ontobj, output_prologobj, m, form_data):
+    # get the starting position for the new userstory IDs, based on the presence/absence of
+    # user stories already in the database
+    starting_id = session.query(UserStoryVN).order_by(UserStoryVN.id.desc()).first()
+    if starting_id is None:
+        starting_id = 0
+    else:
+        starting_id = starting_id.id
+    print('FIRST STARTING_ID', starting_id)
+
+    add_userstories(us_instances, form_data)
+    add_concepts(output_ontobj, m, starting_id)
+    add_relationships(output_prologobj, starting_id)
+
+    # import pdb;pdb.set_trace()
+    # session.commit()

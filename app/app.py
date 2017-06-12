@@ -19,7 +19,8 @@ from collections import OrderedDict
 from models import Base, User
 from form import SetInfoForm, LoginForm, RegistrationForm
 import json
-from post import poster
+# from post import poster
+from post import add_data_to_db
 
 
 # sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
@@ -177,38 +178,21 @@ def show_dash():
 
         return render_template("dashboard.html", sprints=sprints, username=username)
 
-
-@app.route("/deletedatabase")
-def delete_database():
-
-    # sprint = sqlsession.query(SprintVN).filter(SprintVN.sprint_id == '1').all()
-    # for item in sprint:
-    #     print(item)
-    #     sqlsession.delete(item)
-
-    # ust = sqlsession.query(UserStoryVN).all()
-    # for item in ust:
-    #     print(ust)
-    #     sqlsession.delete(item)
+# View for clearing the entire database
+@app.route("/cleandatabase")
+def clean_database():
+    # get all userstories and delete them one by one
+    # the cascade makes sure all sprints, relationships, classes and association table entries are deleted as well
+    userstoryVN = sqlsession.query(UserStoryVN).all()
+    for userstory in userstoryVN:
+        sqlsession.delete(userstory)
         # sqlsession.commit()
-    sqlsession.query(UserStoryVN).delete()
-    sqlsession.query(ClassVN).delete()
-    sqlsession.query(RelationShipVN).delete()
-    sqlsession.query(SprintVN).delete()
-    # rel_asso = sqlsession.query(UserStoryVN).all()
-    # for ust in rel_asso:
-    #     ust.classes = []
-    # us_rels = sqlsession.query(us_relationship_association_table).all()
-    # for pair in us_rels:
-    #     pair.userstory_id = ""
-    #     pair.relationship_id = ""
 
-    # sqlsession.query(us_class_association_table).delete()
-    # sqlsession.query(us_sprint_association_table).delete()
     try:
         sqlsession.commit()
         return redirect(url_for('show_dash'))
-    except:
+    except Exception as e:
+        print('Exception raised', e)
         sqlsession.rollback()
         return redirect(url_for('show_dash'))
 
@@ -275,7 +259,8 @@ def form2():
             # run the visual narrator back-end and obtain needed objects for visualization
                 data = VisualNarrator.run.program(set_filename)
             #  run the poster method to place the objects and their attributes in the database
-                poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
+            #     poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
+                add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
 
             # if all went well redirect the user to the visualization directly
                 return redirect(url_for('index'))
@@ -346,13 +331,16 @@ def form():
             # run the visual narrator back-end and obtain needed objects for visualization
             data = run.program(set_filename)
             #  run the poster method to place the objects and their attributes in the database
-            poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
+            # poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
+            add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
+                           form_data)
+
             # if all went well redirect the user to the visualization directly
             return redirect(url_for('index'))
 
     else:
         # flash('something went wrong, please try again')
-        print('nothing happens')
+        print('nothing was added to the database')
         return render_template('form.html', form=form)
 
     return render_template('form.html', form=form)
@@ -534,30 +522,50 @@ def concepts():
 def relationships():
     concepts_query = select([ClassVN])
     relationships_query = select([RelationShipVN])
-    relsresult = conn.execute(relationships_query)
-    concepts_query_res = conn.execute(concepts_query)
+    relationships_query_result = conn.execute(relationships_query)
+    concepts_query_result = conn.execute(concepts_query)
     edges_id_list = []
     concepts_dict = {}
     edges_id_dict = {}
     concepts_dict_list = []
+    relationshipslist = []
 
-    for concept in concepts_query_res:
+    for concept in concepts_query_result:
         concepts_dict[concept.class_id] = concept.class_name
         concepts_dict_list.append([concept.class_id, concept.class_name])
 
-    # check if a domain(from) or range(to) is part of the us concepts and if so make
+    # check if a domain(from) or range(to) is part of the userstory concepts and if so make
     # the relationship between the concepts involved
-    for re in relsresult:
-        # for sublist in concepts_dict_list:
-        for key, value in concepts_dict.items():
-            if value == re.relationship_domain:
-                x = key
-        for key, value in concepts_dict.items():
-            if value == re.relationship_range:
-                y = key
+    for rel in relationships_query_result:
+        relationshipslist.append([rel.relationship_domain, rel.relationship_range,
+                                  rel.relationship_name, rel.relationship_id])
 
-        edges_id_dict = {'id': re.relationship_id, 'from': x, 'to': y, 'label': re.relationship_name}
+        # for rel in relationships_query_result:
+        for concept in concepts_dict_list:
+            if rel.relationship_domain == concept[1]:
+                x = concept[0]
+        # for rel in relationships_query_result:
+        for concept in concepts_dict_list:
+            if rel.relationship_range == concept[1]:
+                y = concept[0]
+        # for rel in relationships_query_result:
+        #     for key, value in concepts_dict.items():
+        #         if rel.relationship_range == value:
+        #             y = key
+        #
+        # for key, value in concepts_dict.items():
+        #     if value == rel.relationship_domain:
+        #         x = key
+        # for key, value in concepts_dict.items():
+        #     if value == rel.relationship_range:
+        #         y = key
+
+        edges_id_dict = {'id': rel.relationship_id, 'from': x, 'to': y, 'label': rel.relationship_name}
+        # ELSE??
         edges_id_list.append(edges_id_dict)
+        # if rel.relationship_id == 32:
+        #     import pdb
+        #     pdb.set_trace()
 
     json_edges = json.dumps(edges_id_list)
 

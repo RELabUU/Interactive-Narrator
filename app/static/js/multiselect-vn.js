@@ -18,12 +18,12 @@ function showDataSet(data) {
     console.log(nodes_dataset);
     console.log(edges_dataset);
 
-    // updating the nodes
+    // updating the nodes //
     nodes.forEach(function (node) {
         var selected = nodes_dataset.get(node.id);
         // console.log(node.id);
         // console.log(selected);
-        // if nothing is selected, make everythin grey. NOT WORKING!
+        // if nothing is selected, make everything grey. NOT WORKING!
         if (!selected) {
 
             nodes.update({id: node.id, color: '#E8E8E8'});
@@ -48,7 +48,7 @@ function showDataSet(data) {
 
     }
 
-    // updating the edges
+    // updating the edges //
     edges.forEach(function (edge) {
         var selected = edges_dataset.get(edge.id);
         // console.log(edge.id);
@@ -56,7 +56,7 @@ function showDataSet(data) {
         if (!selected) {
             edges.update({id: edge.id, color: '#E8E8E8'});
         }
-        //else make all edegs blue
+        //else make all edges blue
         else {
             edges.update({id: edge.id, color: '#5898ED'});
         }

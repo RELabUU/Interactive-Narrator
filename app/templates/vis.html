@@ -223,6 +223,28 @@
     });
 
 </script>
+      <script>
+          $("#visualization").on('click', function() {
+              if ($(".btn-group").hasClass("open")) {
+
+                  setTimeout(function () {
+                      $('.btn-group').addClass('open');
+                  })
+              }
+});
+{#          $(document).mousedown(function(){#}
+{##}
+{#          if ($(".btn-group").hasClass("open")){#}
+{#               setTimeout(function() {#}
+{#            $('.btn-group').addClass('open');#}
+{#            });#}
+{#              $("")#}
+{#              console.log('hit');#}
+{#          }#}
+{##}
+{#          });#}
+
+      </script>
 <!-- <script type="text/javascript" src="static/js/get_json.js"></script> -->
 <div id="testarea"></div>
 </body>
