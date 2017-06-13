@@ -5,17 +5,13 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc, and_
 from models import Base, ClassVN, UserStoryVN, RelationShipVN, SprintVN, engine
 from form import SetInfoForm
-import pdb
 
 sys.path.insert(0, '/home/gjslob/Documents/environments/inarrator/VisualNarrator')
-# from post import poster # the function to add the stuff to the database
+
 form = SetInfoForm()
 # create a session with the engine from models.py
 Session = sessionmaker(bind=engine)
 session = Session()
-
-# from app.UserStory import UserStory
-
 
 # this function is defined here because it could not be properly used through importing it from
 # VisualNarrator.Utility
@@ -28,17 +24,7 @@ def occurence_list(li):
         return ', '.join(res)
     return "Doesn not occur, deducted"
 
-
-# # get the starting position for the new userstory IDs, based on the presence/absence of
-# # user stories already in the database
-# starting_id = session.query(UserStoryVN).order_by(UserStoryVN.id.desc()).first()
-# if starting_id is None:
-#     starting_id = 0
-# else:
-#     starting_id = starting_id.id
-# print('FIRST STARTING_ID', starting_id.id)
-
-
+# Function to add the userstories to the database
 def add_userstories(us_instances, form_data):
     # add the user stories (us_vn) in the us_instances object to the database
     for us_vn in us_instances:
@@ -62,7 +48,7 @@ def add_userstories(us_instances, form_data):
 
     session.commit()
 
-
+# function to add the concepts to the database
 def add_concepts(output_ontobj, m, starting_id):
 
     # Now find the user story with the highest ID in the database
@@ -143,9 +129,8 @@ def add_concepts(output_ontobj, m, starting_id):
             us.classes.append(cl)
         session.commit()
     print('******EXCLUDED CONCEPTS******', excluded_concepts_list)
-    # import pdb
-    # pdb.set_trace()
 
+# funtction to add the relationships to the database
 def add_relationships(output_prologobj, starting_id):
 
     highest_id = session.query(UserStoryVN).order_by(UserStoryVN.id.desc()).first()
@@ -168,26 +153,27 @@ def add_relationships(output_prologobj, starting_id):
         list_of_us_ids = relationship.stories
         # get the newest relationship (with the highest relationship_id) which should be the one just added
         relationship_from_db = session.query(RelationShipVN).order_by(RelationShipVN.relationship_id.desc()).first()
-        relationship_id = relationship_from_db.relationship_id
         # each relationship is part of one of more user stories
         # this information is located in the relationship.list_of_us_ids property
-        seen = set()
-        uniq = []
-        for x in list_of_us_ids:
-            if x not in seen:
-                uniq.append(x)
-                seen.add(x)
-        for us_id in uniq:
+
+        # Here, you make sure that a relationship is never associated with the same user story twice
+        # It is important to note that this CAN be the case, but is not accommodated for as of now
+        seen_twice = set()
+        unique_list_of_us_ids = []
+        for us_id in list_of_us_ids:
+            if us_id not in seen_twice:
+                unique_list_of_us_ids.append(us_id)
+                seen_twice.add(us_id)
+        for us_id in unique_list_of_us_ids:
             # find the user story that is in the list_of_us_ids by .userstory_id
             # and find it with .id as well so we find only the stories in this particular set
             us = session.query(UserStoryVN).filter(and_(UserStoryVN.id > starting_id, UserStoryVN.id <= highest_id.id,
                                                         UserStoryVN.userstory_id == us_id)).first()
-            # rel = session.query(RelationShipVN).get(relationship_id) REDUNDANT!!!
+
             #  add a class to the relationship named ' classes' on the userstory table
             # association table will automatically be filled this way
             us.relationships.append(relationship_from_db)
-            # import pdb
-            # pdb.set_trace()
+
     session.commit()
 
 def add_data_to_db(us_instances, output_ontobj, output_prologobj, m, form_data):
@@ -204,5 +190,3 @@ def add_data_to_db(us_instances, output_ontobj, output_prologobj, m, form_data):
     add_concepts(output_ontobj, m, starting_id)
     add_relationships(output_prologobj, starting_id)
 
-    # import pdb;pdb.set_trace()
-    # session.commit()

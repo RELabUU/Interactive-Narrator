@@ -16,9 +16,6 @@ This program has been and tested to run with Python 3.5.2. It has been tested to
 To easily install Ubuntu Linux or another Linux distribution on your system, use Oracle VM VirtualBox. The main dependency for the program is Visual Narrator (https://github.com/marcelrobeer/visualnarrator). 
 To run the Interactive Narrator, you need to install Visual Narrator in the same directory as the Interactive Narrator folder is in (probably the name of your virtual environment). Other dependencies can be found in requirements.txt
 
-**Running the Program on our Web Server**
-Please surf to [Interactive Narrator](http://science-vs134.science.uu.nl) and register as a new user.
-Login and start with uploading your sets of user stories per sprint!
 
 **Running the Program Locally**
 

@@ -19,9 +19,7 @@ from collections import OrderedDict
 from models import Base, User
 from form import SetInfoForm, LoginForm, RegistrationForm
 import json
-# from post import poster
 from post import add_data_to_db
-
 
 # sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
 sys.path.append('/var/www/VisualNarrator')
@@ -48,12 +46,9 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 db = SQLAlchemy(app)
 db.Model = Base
 
-# Base = declarative_base()
-# engine = create_engine('sqlite:///../VisualNarrator_v2/app.db', echo=True)
-
 # NOTE: sqlsession vs session usage!
-# session=login/logout session
-# sqlsession = Session() object
+# session is a login/logout session
+# sqlsession is a Session() object
 
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
@@ -74,6 +69,16 @@ def homepage():
 #     else:
 #         return redirect(url_for('show_dash'))
 #         # return render_template('dashboard.html')
+
+
+# a route for displaying the visualization
+@app.route('/vis', methods=['GET', 'POST'])
+def show_vis():
+    # return render_template('vis.html')
+    if session.get('logged_in'):
+        return render_template('vis.html')
+    else:
+        return redirect(url_for('homepage'))
 
 
 # registering a user
@@ -193,88 +198,24 @@ def clean_database():
         return redirect(url_for('show_dash'))
     except Exception as e:
         print('Exception raised', e)
+        import pdb
+        pdb.set_trace()
         sqlsession.rollback()
         return redirect(url_for('show_dash'))
 
 
-@app.route('/sprints/<int:sprint_id>/')
-def sprint_detail(sprint_id):
-    """Provide HTML page with a given sprint."""
-
-    # Query: get Appointment object by ID.
-    set = sqlsession.query(SprintVN).get(sprint_id)
-    if set is None:
-    # Abort with Not Found.
-        abort(404)
-
-    return render_template('set_detail.html',
-                           set=set)
-
-#  OLD! route for getting the form info (company/sprint) and putting it into the database
-@app.route('/form2', methods=['GET', 'POST'])
-def form2():
-    # use the form class from form.py
-    form = SetInfoForm(request.form)
-    try:
-
-        if request.method == 'POST' and form.validate():
-            flash('Set data Successfully added! Please wait while we process your data')
-            form_data = {}
-            form_data['company_id'] = form.company_id.data
-            form_data['company_name'] = form.company_name.data
-            form_data['sprint_id'] = form.sprint_id.data
-            form_data['sprint_name'] = form.sprint_name.data
-
-            file = request.files['file']
-            if file.filename == '':
-                flash('No selected file')
-                return redirect(url_for('form'))
-            # Check if the file is one of the allowed types/extensions
-            if file and allowed_file(file.filename):
-            #     # Make the filename safe, remove unsupported chars
-                filename = secure_filename(file.filename)
-            #     # Move the file form the temporal folder to
-            #     # the upload folder we setup
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            # set the filename so Visual Narrator can handle it
-                set_filename = 'uploads/'+file.filename
-            #  if company name and id are supplied and not yet in the DB store them in DB
-
-                company_exists = sqlsession.query(CompanyVN).filter\
-                    (CompanyVN.company_name==form.company_name.data).first()
-            # if not company_exists:
-                sqlsession.add(CompanyVN(company_id='', company_name=form.company_name.data))
-                # sqlsession.add(CompanyVN(company_id=form.company_id.data, company_name=form.company_name.data))
-
-            # check if the sprint already exists
-                sprint_exists = sqlsession.query(SprintVN).filter\
-                    (SprintVN.sprint_name==form.sprint_name.data).first()
-                sqlsession.add(SprintVN(sprint_id=form.sprint_id.data, sprint_name=form.sprint_name.data,
-                                 company_name=form.company_name.data, company_id=form.company_id.data))
-
-                succes = sqlsession.commit()
-                if succes:
-                    flash('Set data Successfully added! Please wait while we process your data')
-            # run the visual narrator back-end and obtain needed objects for visualization
-                data = VisualNarrator.run.program(set_filename)
-            #  run the poster method to place the objects and their attributes in the database
-            #     poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
-                add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
-
-            # if all went well redirect the user to the visualization directly
-                return redirect(url_for('index'))
-
-        # If the form was not valid, flash and return to the same page
-        else:
-            flash('not valid')
-
-    except:
-        flash('not valid')
-        render_template("form.html")
-
-    return render_template('form.html', form=form)
-
+# @app.route('/sprints/<int:sprint_id>/')
+# def sprint_detail(sprint_id):
+#     """Provide HTML page with a given sprint."""
+#
+#     # Query: get Appointment object by ID.
+#     set = sqlsession.query(SprintVN).get(sprint_id)
+#     if set is None:
+#     # Abort with Not Found.
+#         abort(404)
+#
+#     return render_template('set_detail.html',
+#                            set=set)
 
 @app.route('/form', methods=['GET', 'POST'])
 def form():
@@ -336,7 +277,7 @@ def form():
                            form_data)
 
             # if all went well redirect the user to the visualization directly
-            return redirect(url_for('index'))
+            return redirect(url_for('show_vis'))
 
     else:
         # flash('something went wrong, please try again')
@@ -383,9 +324,10 @@ def click_query():
     return jsonify(node_userstory_list)
     # return Response(json.dumps(node_userstory_list), mimetype='application/json')
 
+
 # this is the main query that queries the database for concepts and relationships basd on the
 # roles and sprints that were selected by the user
-#
+
 # This function returns an array of nodes that are
 # connected (i.e. occur in a user story where the role occurs in) to the selected role.
 @app.route('/query')
@@ -443,20 +385,6 @@ def get_test():
 
     return jsonify(nodes=nodes, edges=edges)
 
-
-# a route for displaying the visualization
-@app.route('/vis', methods=['GET', 'POST'])
-def index():
-    return render_template('vis.html')
-    # if session.get('logged_in'):
-    #     return render_template('index.html')
-    # else:
-    #     return redirect(url_for('home'))
-
-
-# def allowed_file(filename):
-#     return '.' in filename and \
-#            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -526,7 +454,6 @@ def relationships():
     concepts_query_result = conn.execute(concepts_query)
     edges_id_list = []
     concepts_dict = {}
-    edges_id_dict = {}
     concepts_dict_list = []
     relationshipslist = []
 
@@ -563,9 +490,6 @@ def relationships():
         edges_id_dict = {'id': rel.relationship_id, 'from': x, 'to': y, 'label': rel.relationship_name}
         # ELSE??
         edges_id_list.append(edges_id_dict)
-        # if rel.relationship_id == 32:
-        #     import pdb
-        #     pdb.set_trace()
 
     json_edges = json.dumps(edges_id_list)
 
