@@ -198,8 +198,8 @@ def clean_database():
         return redirect(url_for('show_dash'))
     except Exception as e:
         print('Exception raised', e)
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         sqlsession.rollback()
         return redirect(url_for('show_dash'))
 
