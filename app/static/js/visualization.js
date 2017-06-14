@@ -144,22 +144,28 @@ var network = new vis.Network(container, data, options);
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table
 network.on( 'click', function(properties) {
     var ids = properties.nodes;
+    // console.log(ids);
     var clickedNodes = nodes.get(ids);
     console.log('clicked nodes:', clickedNodes);
+    labelBold = clickedNodes[0].label;
+
     $.getJSON('/clickquery', {
-                    nodes: JSON.stringify(clickedNodes)
-    },function (data) {
+                    nodes: JSON.stringify(clickedNodes)},function (data) {
         console.log(data);
+
         $("#userstorytable tr").remove();
         for (var i = 0; i < data.length; i++) {
+            var s = data[i].text;
 
-            console.log(data[i].id);
-            console.log(data[i].text);
-            console.log(data[i]['in sprint']);
+            var newText = s.replace(RegExp(labelBold, "ig"), '<b>' + labelBold + '</b>');
+            console.log(labelBold);
+            // console.log(data[i].id);
+            // console.log(data[i].text);
+            // console.log(data[i]['in sprint']);
             tr = $('<tr/>');
             tr.append("<td>" + data[i]['in sprint'] + "</td>");
             tr.append("<td>" + data[i].id + "</td>");
-            tr.append("<td>" + data[i].text + "</td>");
+            tr.append("<td>" + newText + "</td>")
 
             $('#userstorytable').append(tr);
         }
