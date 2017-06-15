@@ -122,7 +122,7 @@ var options = {
         // widthConstraint: {minimum: 25, maximum: 50}
     },
     groups: {
-        Role: {color: {background: '#97C2FC'}, borderWidth: 5}
+        Role: {color: {background: '#42b3f4'}, borderWidth: 5}
     },
 
     edges: {
@@ -155,17 +155,22 @@ network.on( 'click', function(properties) {
 
         $("#userstorytable tr").remove();
         for (var i = 0; i < data.length; i++) {
+            if (i== 0){
+                console.log('succes');
+                $('#userstorytable').append("<tr><th>SP</th><th>US</th><th>User Story Text</th></tr>");
+            }
+
             var s = data[i].text;
 
             var newText = s.replace(RegExp(labelBold, "ig"), '<b>' + labelBold + '</b>');
-            console.log(labelBold);
+            // console.log(labelBold);
             // console.log(data[i].id);
             // console.log(data[i].text);
             // console.log(data[i]['in sprint']);
             tr = $('<tr/>');
             tr.append("<td>" + data[i]['in sprint'] + "</td>");
             tr.append("<td>" + data[i].id + "</td>");
-            tr.append("<td>" + newText + "</td>")
+            tr.append("<td>" + newText + "</td>");
 
             $('#userstorytable').append(tr);
         }

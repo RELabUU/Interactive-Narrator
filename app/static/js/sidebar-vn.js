@@ -88,7 +88,24 @@ $('#relationships').click(function () {
 
 });
 
+//The function for the searchfield
 $('#searchfield').change(function () {
     console.log('test');
+    var formInput = document.getElementById("searchfield").value;
+    // foundItem = null; //we'll store the matching value here
 
-});
+      if (formInput === '') {
+        alert('Please Enter a Search Term');
+        return false;
+      }
+      nodes.forEach(function(node){
+          // var selected = nodes.get(node.id);
+         if (node.label == formInput){
+             console.log("i found it!");
+             nodes.update({id: node.id, color: '#ECC348'})
+         }
+         else{
+             nodes.update({id: node.id, color: '#97C2FC'})
+         }
+      });
+    });

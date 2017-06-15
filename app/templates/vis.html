@@ -97,13 +97,13 @@
             </li>
             <!-- </li> -->
             <li>
-{#                <div id="searchinput" class="input-group">#}
-{#                    <input type="text" id="searchfield" class="form-control" placeholder="Search for...">#}
-{#                    <span class="input-group-btn">#}
-{#                      <button id="searchbutton" class="btn btn-default" type="button"><span#}
-{#                              class="glyphicon glyphicon-search" aria-hidden="true"></span></button>#}
-{#                    </span>#}
-{#                </div><!-- /input-group -->#}
+                <div id="searchinput" class="input-group">
+                    <input type="text" id="searchfield" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button id="searchbutton" class="btn btn-default" type="button"><span
+                              class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    </span>
+                </div><!-- /input-group -->
             </li>
             {#                <li>#}
             {#                    <a href="#">Epics<span class="sub_icon glyphicon glyphicon-fire" aria-hidden="true"></a>#}
@@ -134,7 +134,7 @@
 
             </li>
             <li>
-                <a id="helpitem" href="#">Help<span class="sub_icon glyphicon glyphicon-info-sign"
+                <a id="helpitem" href="#" data-toggle="modal" data-target="#helpModal">Help<span class="sub_icon glyphicon glyphicon-info-sign"
                                                        aria-hidden="true"></span></a>
             </li>
              <li>
@@ -146,6 +146,34 @@
         </ul> <!-- End .sidebar-nav-->
 
     </div><!-- End #sidebar-wrapper -->
+    <!-- Modal -->
+    <div id="helpModal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Interacitve Narrator Help</h4>
+          </div>
+          <div class="modal-body">
+            <h5>Welcome tot the Interactive Narrator.</h5>
+              <h6>Usage:</h6>
+              <p>Interactive Narrator has processed your user stories and made the visualization. The visualization
+                  consists of nodes and edges. Each node represents a concept extracted from one or more user stories, whereas
+              an edge stands for a relationship that exists inside a user story.</p>
+              <p>Click on a node to see to which user story it belongs. The larger the node is, the more it occurs within your
+              set of user stories. Nodes that have a thick blue border are concepts that have a 'role function' within a user story.
+              Theses are often the actors that carry out certain tasks.</p>
+              <p></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div> <!-- End Modal -->
 
     <div id="vis-wrapper"><!--This is the area on the right side -->
         <div class="container-fluid" id="visualization"><!-- This contains the network generated from the data -->
@@ -203,8 +231,9 @@
 
 <!-- Open the sidebar menu when clicking the hamburger/a element up top -->
 <script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
+    $("#menu-toggle").click(function () {
+{#        e.stopPropagation();#}
+{#        e.preventDefault();#}
         $("#wrapper").toggleClass("toggled");
     });
 
@@ -217,18 +246,29 @@
 <!-- Javascript to open/close the horizontal header-bar -->
 <script>
 
-    $("#topbar-button-a").click(function (e) {
-        e.preventDefault();
+    $("#topbar-button-a").click(function () {
+{#        e.preventDefault();#}
         $("nav").toggleClass("nav-up");
     });
 
 </script>
       <script>
+
+{#          $("#sidebar-wrapper").on('click', function(e) {#}
+{#              console.log("click registered");#}
+{#              e.stopPropagation();#}
+{#                            e.preventDefault();#}
+{#              $("#wrapper").toggleClass("toggled");#}
+{##}
+{#          });#}
+
           $("#visualization").on('click', function() {
+              console.log("click registered");
               if ($(".btn-group").hasClass("open")) {
 
                   setTimeout(function () {
                       $('.btn-group').addClass('open');
+
                   })
               }
 });
@@ -246,6 +286,6 @@
 
       </script>
 <!-- <script type="text/javascript" src="static/js/get_json.js"></script> -->
-<div id="testarea"></div>
+
 </body>
 </html>
