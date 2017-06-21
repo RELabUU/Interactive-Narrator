@@ -125,37 +125,40 @@ def do_register():
 def do_admin_login():
     if not session.get('logged_in'):
 
-        # try:
-        if request.method == "POST":
+        try:
+            if request.method == "POST":
 
-            # form = LoginForm(request.form)
-            POST_USERNAME = str(request.form['username'])
-            POST_PASSWORD = str(request.form['password'])
+                # form = LoginForm(request.form)
+                POST_USERNAME = str(request.form['username'])
+                POST_PASSWORD = str(request.form['password'])
 
-            # query = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]),
-            #                                       User.password.in_([POST_PASSWORD]))
-            # check if a user with the entered username exists
-            check_user = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]))
+                # query = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]),
+                #                                       User.password.in_([POST_PASSWORD]))
+                # check if a user with the entered username exists
+                check_user = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]))
 
-            user_exists = check_user.first()
-            # print(user_exists.password)
-            if user_exists:
-                # flash('Wrong username/password, please try again')
-                # if the password matches the username, log the user in
-                if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
-                    print(check_user)
-                # if check_user:
-                    session['logged_in'] = True
-                    flash('Thanks for logging in!')
-                    print('succes')
-                    return redirect(url_for('show_dash'))
+                user_exists = check_user.first()
+                # print(user_exists.password)
+                if user_exists:
+                    # flash('Wrong username/password, please try again')
+                    # if the password matches the username, log the user in
+                    if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
+                        print(check_user)
+                    # if check_user:
+                        session['logged_in'] = True
+                        flash('Thanks for logging in!')
+                        print('succes')
+                        return redirect(url_for('show_dash'))
+                    else:
+                        flash('Sorry, wrong password/username')
+                        print('failure')
+                        return render_template('login.html')
                 else:
                     flash('Sorry, wrong password/username')
-                    print('failure')
                     return render_template('login.html')
-            else:
-                flash('Sorry, wrong password/username')
-                return render_template('login.html')
+        except Exception() as e:
+            print('An Exception occured:', e)
+            return render_template('login.html')
     else:
         return redirect(url_for(show_dash))
         # return render_template('dashboard.html')
@@ -173,15 +176,21 @@ def show_dash():
     if not session.get('logged_in'):
         return render_template("login.html")
     else:
-        username = session['username']
-        # show all the sprints that are in the database on the dashboard page
-        all_sprints = sqlsession.query(SprintVN).all()
-        sprints = [dict(sprint_id=sprint.sprint_id,
-                        sprint_name=sprint.sprint_name,
-                        company_id=sprint.company_id,
-                        company_name=sprint.company_name) for sprint in all_sprints]
+        try:
 
-        return render_template("dashboard.html", sprints=sprints, username=username)
+            username = session['username']
+            # show all the sprints that are in the database on the dashboard page
+            all_sprints = sqlsession.query(SprintVN).all()
+            sprints = [dict(sprint_id=sprint.sprint_id,
+                            sprint_name=sprint.sprint_name,
+                            company_id=sprint.company_id,
+                            company_name=sprint.company_name) for sprint in all_sprints]
+
+            return render_template("dashboard.html", sprints=sprints, username=username)
+
+        except Exception() as e:
+            print('An Exception occured:', e)
+            return redirect(url_for('do_admin_login'))
 
 # View for clearing the entire database
 @app.route("/cleandatabase")
@@ -311,13 +320,15 @@ def click_query():
     node_userstory_list = []
     for one_node in clicked_nodes:
         print(one_node['id'])
+        node_concept = sqlsession.query(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
+
         node_userstory = sqlsession.query(UserStoryVN).join(us_class_association_table)\
             .join(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
         print('INFO', node_userstory)
         # node_info = sqlsession.query(ClassVN).filter(ClassVN.class_id == one_node['id']).one()
         # print('INFO', node_info)
         if node_userstory:
-            node_userstory_list = [{"id": us.userstory_id,"text":us.text,"in sprint":us.in_sprint} for us in node_userstory]
+            node_userstory_list = [{"id": us.userstory_id, "text":us.text, "in sprint":us.in_sprint} for us in node_userstory]
         else:
             node_userstory_list = []
         print('NODEINFO', node_userstory_list)
