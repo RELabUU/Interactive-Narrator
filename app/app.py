@@ -156,7 +156,7 @@ def do_admin_login():
                 else:
                     flash('Sorry, wrong password/username')
                     return render_template('login.html')
-        except Exception() as e:
+        except Exception as e:
             print('An Exception occured:', e)
             return render_template('login.html')
     else:
@@ -188,7 +188,7 @@ def show_dash():
 
             return render_template("dashboard.html", sprints=sprints, username=username)
 
-        except Exception() as e:
+        except Exception as e:
             print('An Exception occured:', e)
             return redirect(url_for('do_admin_login'))
 
