@@ -123,46 +123,47 @@ def do_register():
 # route for when the login form on the homepage is submitted
 @app.route('/login', methods=['GET', 'POST'])
 def do_login():
-    try:
-        if not session.get('logged_in'):
-            if request.method == "POST":
+    # try:
+    if not session.get('logged_in'):
+        if request.method == "POST":
 
-                # form = LoginForm(request.form)
-                POST_USERNAME = str(request.form['username'])
-                POST_PASSWORD = str(request.form['password'])
+            # form = LoginForm(request.form)
+            POST_USERNAME = str(request.form['username'])
+            POST_PASSWORD = str(request.form['password'])
 
-                # query = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]),
-                #                                       User.password.in_([POST_PASSWORD]))
-                # check if a user with the entered username exists
-                check_user = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]))
+            # query = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]),
+            #                                       User.password.in_([POST_PASSWORD]))
+            # check if a user with the entered username exists
+            check_user = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]))
 
-                user_exists = check_user.first()
-                # print(user_exists.password)
-                if user_exists:
-                    # flash('Wrong username/password, please try again')
-                    # if the password matches the username, log the user in
-                    if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
-                        print(check_user)
+            user_exists = check_user.first()
+            # print(user_exists.password)
+            if user_exists:
+                # flash('Wrong username/password, please try again')
+                # if the password matches the username, log the user in
+                if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
+                    print(check_user)
                     # if check_user:
-                        session['logged_in'] = True
-                        flash('Thanks for logging in!')
-                        print('succes')
-                        return redirect(url_for('show_dash'))
-                    else:
-                        flash('Sorry, wrong password/username')
-                        print('failure')
-                        return render_template('login.html')
+                    session['logged_in'] = True
+                    flash('Thanks for logging in!')
+                    print('succes')
+                    return redirect(url_for('show_dash'))
                 else:
                     flash('Sorry, wrong password/username')
+                    print('failure')
                     return render_template('login.html')
+            else:
+                flash('Sorry, wrong password/username')
+                return render_template('login.html')
 
-        else:
-            return redirect(url_for('show_dash'))
+    else:
+        return redirect(url_for('show_dash'))
+
             # return render_template('dashboard.html')
 
-    except Exception as e:
-        print('An exception occured:', e)
-        return render_template('login.html')
+    # except Exception as e:
+    #     print('An exception occured:', e)
+    #     return render_template('login.html')
 
 @app.route("/logout")
 def logout():
