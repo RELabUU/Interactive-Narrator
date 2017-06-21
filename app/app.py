@@ -65,7 +65,7 @@ def homepage():
 # def home():
 #     if not session.get('logged_in'):
 #         # return render_template('login.html')
-#         return redirect(url_for('do_admin_login'))
+#         return redirect(url_for('do_login'))
 #     else:
 #         return redirect(url_for('show_dash'))
 #         # return render_template('dashboard.html')
@@ -122,10 +122,9 @@ def do_register():
 
 # route for when the login form on the homepage is submitted
 @app.route('/login', methods=['GET', 'POST'])
-def do_admin_login():
-    if not session.get('logged_in'):
-
-        try:
+def do_login():
+    try:
+        if not session.get('logged_in'):
             if request.method == "POST":
 
                 # form = LoginForm(request.form)
@@ -156,15 +155,14 @@ def do_admin_login():
                 else:
                     flash('Sorry, wrong password/username')
                     return render_template('login.html')
-        except Exception as e:
-            print('An Exception occured:', e)
-            return render_template('login.html')
-    else:
-        return redirect(url_for('show_dash'))
-        # return render_template('dashboard.html')
 
-    # except:
-    return redirect(url_for('show_dash'))
+        else:
+            return redirect(url_for('show_dash'))
+            # return render_template('dashboard.html')
+
+    except Exception as e:
+        print('An exception occured:', e)
+        return render_template('login.html')
 
 @app.route("/logout")
 def logout():
@@ -176,21 +174,21 @@ def show_dash():
     if not session.get('logged_in'):
         return render_template("login.html")
     else:
-        try:
 
-            username = session['username']
-            # show all the sprints that are in the database on the dashboard page
-            all_sprints = sqlsession.query(SprintVN).all()
-            sprints = [dict(sprint_id=sprint.sprint_id,
-                            sprint_name=sprint.sprint_name,
-                            company_id=sprint.company_id,
-                            company_name=sprint.company_name) for sprint in all_sprints]
+        username = session['username']
+        # show all the sprints that are in the database on the dashboard page
+        all_sprints = sqlsession.query(SprintVN).all()
+        sprints = [dict(sprint_id=sprint.sprint_id,
+                        sprint_name=sprint.sprint_name,
+                        company_id=sprint.company_id,
+                        company_name=sprint.company_name) for sprint in all_sprints]
 
-            return render_template("dashboard.html", sprints=sprints, username=username)
+        return render_template("dashboard.html", sprints=sprints, username=username)
 
-        except Exception as e:
-            print('An Exception occured:', e)
-            return redirect(url_for('do_admin_login'))
+
+        # except Exception as e:
+        #     print('An Exception occured:', e)
+        #     return redirect(url_for('do_login'))
 
 # View for clearing the entire database
 @app.route("/cleandatabase")
