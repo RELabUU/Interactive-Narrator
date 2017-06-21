@@ -160,7 +160,7 @@ def do_admin_login():
             print('An Exception occured:', e)
             return render_template('login.html')
     else:
-        return redirect(url_for(show_dash))
+        return redirect(url_for('show_dash'))
         # return render_template('dashboard.html')
 
     # except:
