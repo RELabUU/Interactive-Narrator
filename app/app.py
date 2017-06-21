@@ -155,6 +155,8 @@ def do_login():
             else:
                 flash('Sorry, wrong password/username')
                 return render_template('login.html')
+        else:
+            return render_template('login.html')
 
     else:
         return redirect(url_for('show_dash'))
