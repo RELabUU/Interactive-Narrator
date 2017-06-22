@@ -111,13 +111,13 @@ var options = {
     },
     nodes: {
         // color:{background:'#97C2FC'},
-        color: {background: '#42b3f4', highlight: {background: '#5898ED'}},
-        hover: {
-            border: '#2B7CE9',
-            background: '#D2E5FF'
-        },
-
-        shape: 'dot'
+        color: {background: '#97C2FC', highlight: {background: '#5898ED'}},
+        hover: {border: '#2B7CE9', background: '#D2E5FF'},
+        shape: 'dot',
+        font: {
+            // size:14,
+            bold: {color: '#0077aa'}
+      }
         // size: 20,
         // widthConstraint: {minimum: 25, maximum: 50}
     },
@@ -133,7 +133,10 @@ var options = {
             to: {enabled: true, scaleFactor: 1, type: 'arrow'},
             middle: {enabled: false, scaleFactor: 1, type: 'arrow'},
             from: {enabled: false, scaleFactor: 1, type: 'arrow'}
-        }
+        },
+        font: {
+        // size: 12
+      }
     }
 
 };
@@ -157,7 +160,7 @@ network.on( 'click', function(properties) {
         for (var i = 0; i < data.length; i++) {
             if (i== 0){
                 console.log('succes');
-                $('#userstorytable').append("<tr><th>SP</th><th>US</th><th>User Story Text</th></tr>");
+                $('#userstorytable').append("<tr><th>SP</th><th>US</th><th>Text</th></tr>");
             }
 
             var s = data[i].text;
@@ -179,6 +182,11 @@ network.on( 'click', function(properties) {
     );
     // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');
 });
+
+// network.on( 'click', function(){
+//     nodes.update({id: node.id, color: '#97C2FC'});
+//     edges.update({id: node.id, color: '#97C2FC'});
+// });
 
 //CLUSTERING//
 //

@@ -84,6 +84,7 @@ function makeRoleSelector() {
         includeSelectAllOption: true,
         maxHeight: 400,
         enableCaseInsensitiveFiltering: true,
+        buttonContainer: '<div id="roleselector-btn-group" class="btn-group" />',
         buttonText: function (options, select) {
             return 'Roles';
         },
@@ -146,6 +147,7 @@ function makeSprintSelector() {
         includeSelectAllOption: true,
         maxHeight: 400,
         enableCaseInsensitiveFiltering: true,
+        buttonContainer: '<div id="sprintselector-btn-group" class="btn-group" />',
         buttonText: function (options, select) {
             return 'Sprints';
         },

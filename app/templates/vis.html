@@ -65,9 +65,9 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 {#            <li class="active"><a href="/home">Home</a></li>#}
-              {% if session.get('logged_in') %}
-                  <li><a href="/vis">Visualization</a></li>
-              {% endif %}
+{#              {% if session.get('logged_in') %}#}
+{#                  <li><a href="/vis">Visualization</a></li>#}
+{#              {% endif %}#}
 
 {#            <li><a href="/help">Help</a></li>#}
           </ul>
@@ -124,7 +124,7 @@
             </li>
 
             <li id="weight-slider-li">
-                <h5 id="threshold">Select Threshold:</h5>
+                <h5 id="threshold">Threshold:</h5>
                 <input type="range" id="weightSlider"
                        name="weightSlider" min="0" max="20" value="0"
                        oninput="weightSliderAmount.value=weightSlider.value">
@@ -246,43 +246,49 @@
 <!-- Javascript to open/close the horizontal header-bar -->
 <script>
 
-    $("#topbar-button-a").click(function () {
+    $("#topbar-button-a").click(function (e) {
 {#        e.preventDefault();#}
+{#        e.stopPropagation();#}
         $("nav").toggleClass("nav-up");
+{#        return false;#}
     });
 
 </script>
       <script>
+{#          Keep the dropdowns open if the user clicks on the  visualization#}
+          $('#visualization').click(function (e) { e.stopPropagation(); });
 
-{#          $("#sidebar-wrapper").on('click', function(e) {#}
+          $('.sidebar-nav > a').click(function (e) { e.stopPropagation(); });
+
+
+          $("#sidebar-wrapper button, .multiselect, .sub_icon").on('click', function(e) {
 {#              console.log("click registered");#}
-{#              e.stopPropagation();#}
-{#                            e.preventDefault();#}
-{#              $("#wrapper").toggleClass("toggled");#}
-{##}
+              $("#wrapper").addClass("toggled");
+
+
+          });
+{#          $("#sidebar-wrapper .multiselect .dropdown-toggle .btn .btn-default").on('click', function(e) {#}
+{#              $("#wrapper").addClass("toggled");#}
 {#          });#}
 
-          $("#visualization").on('click', function() {
-              console.log("click registered");
-              if ($(".btn-group").hasClass("open")) {
 
-                  setTimeout(function () {
-                      $('.btn-group').addClass('open');
-
-                  })
-              }
-});
-{#          $(document).mousedown(function(){#}
+{#          $("#visualization").on('click', function() {#}
+{#              console.log("click registered");#}
+{#              if ($("#roleselector-btn-group").hasClass("open")) {#}
 {##}
-{#          if ($(".btn-group").hasClass("open")){#}
-{#               setTimeout(function() {#}
-{#            $('.btn-group').addClass('open');#}
-{#            });#}
-{#              $("")#}
-{#              console.log('hit');#}
-{#          }#}
+{#                  setTimeout(function () {#}
+{#                      $("#roleselector-btn-group").addClass('open');#}
 {##}
-{#          });#}
+{#                  },)#}
+{#              }#}
+{#              if ($("#sprintselector-btn-group").hasClass("open")) {#}
+{##}
+{#                  setTimeout(function () {#}
+{#                      $("#sprintselector-btn-group").addClass('open');#}
+{##}
+{#                  },)#}
+{#              }#}
+{# });#}
 
       </script>
 <!-- <script type="text/javascript" src="static/js/get_json.js"></script> -->

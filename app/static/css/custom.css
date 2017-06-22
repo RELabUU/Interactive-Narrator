@@ -52,8 +52,15 @@
     width: 300px;
     margin: auto;
 }
+.navbar-inverse .navbar-brand{
+    color:rgb(177, 178, 177);
+}
+.navbar-inverse .navbar-nav > li > a{
+    color:rgb(177, 178, 177);
+    font-weight: 600;
+}
 
-#vis_url{
+#useraccountitems #vis_url{
     color: rgb(236, 195, 72);
     font-weight: 600;
 }
@@ -63,6 +70,7 @@
 }
 #useraccountitems a{
     font-weight: 600;
+    color:rgb(177, 178, 177);
 }
 
 #vis-wrapper {
@@ -180,6 +188,10 @@ body {
     padding: 5px 10px 0px 5px;
 
 
+}
+
+#helpModal{
+    /*z-index: 1000;*/
 }
 
 /*#userstorytable tbody{*/

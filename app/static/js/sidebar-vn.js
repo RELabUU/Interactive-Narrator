@@ -102,10 +102,27 @@ $('#searchfield').change(function () {
           // var selected = nodes.get(node.id);
          if (node.label == formInput){
              console.log("i found it!");
-             nodes.update({id: node.id, color: '#ECC348'})
+             var selected_nodes = [];
+             selected_nodes[0] = node.id;
+             console.log(selected_nodes);
+             // nodes.selectNode(node);
+             // node.color = undefined;
+            // node.trigger('click');
+             nodes.update({id: node.id, borderWidth: 3, color: '#ECC348'})
          }
          else{
              nodes.update({id: node.id, color: '#97C2FC'})
          }
       });
+      edges.forEach(function(edge){
+          if (edge.label == formInput){
+              edges.update({id: edge.id, color:'#ECC348'})
+          }
+          else{
+              edges.update({id: edge.id, color:'#97C2FC'})
+          }
+      });
     });
+// network.on("selectNode", function (params) {
+//
+// }

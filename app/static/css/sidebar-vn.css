@@ -54,7 +54,7 @@
 #sidebar_menu li a, .sidebar-nav li a {
     /*color: #999;*/
     /*color:#373737;*/
-    color: rgb(133, 134, 133);
+    color: rgb(177, 178, 177);
     display: block;
     float: left;
     text-decoration: none;
@@ -87,6 +87,9 @@
     font-family: 'Open Sans', sans-serif;
 }
 
+.sidebar-nav #relationships{
+    margin-bottom: 20px;
+}
 .sidebar-nav button {
     font-weight: 600;
     font-family: 'Open Sans', sans-serif;
@@ -111,7 +114,7 @@
 }
 
 .sidebar-nav > .sidebar-brand a {
-    color: rgb(133, 134, 133);
+    color: rgb(177, 178, 177);
     border-bottom: 0;
 }
 
@@ -127,13 +130,18 @@
 
 }
 
+input[type=text]{
+    color: rgb(177, 178, 177);
+}
+
+
 #searchbutton {
     background: none;
     border: 0;
 }
 
 .glyphicon-search {
-    color: rgb(133, 134, 133);
+    color: rgb(177, 178, 177);
     font-size: 17px;
 }
 
@@ -154,7 +162,7 @@
     padding-right: 25px;
     padding-left: 25px;
     padding-top: 10px;
-    color: rgb(133, 134, 133);
+    color: rgb(177, 178, 177);
     font-size: 17px;
 }
 
@@ -208,7 +216,7 @@
     font-weight: 600;
     text-indent: 20px;
     float: left;
-    color: rgb(133, 134, 133);
+    color: rgb(177, 178, 177);
     padding-top: 2px;
 }
 
@@ -242,7 +250,7 @@
 .multiselect-clear-filter {
     /*visibility: hidden;*/
     background-color: rgb(51, 47, 48);
-    color: rgb(133, 134, 133);
+    color: rgb(177, 178, 177);
 }
 
 /*.multiselect-clear-filter:active{*/
@@ -328,7 +336,7 @@ ul.multiselect-container > li > a {
 /*Styling for the Threshold slider*/
 #weightSlider {
     display: block;
-    color: rgb(133, 134, 133);
+    color: rgb(177, 178, 177);
     width: 63%;
     margin-left: 20px;
     margin-right: 15px;
@@ -350,7 +358,7 @@ li#weight-slider-li {
 
 h5#threshold {
     margin: 0px 5px 5px 0px;
-    color: rgb(133, 134, 133);
+    color: rgb(177, 178, 177);
     font-weight: 600;
     font-family: 'Open Sans', sans-serif;
     /*padding-top: 5px;*/
