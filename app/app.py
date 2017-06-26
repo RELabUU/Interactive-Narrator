@@ -100,9 +100,11 @@ def do_register():
                 return render_template('register.html', form=form)
             # ..else, create the new user and company
             else:
-                new_user = User(username=username, company_name=company_name, email=email, password=password)
+                sqlsession.add(CompanyVN(company_name=company_name))
+                the_company = sqlsession.query(CompanyVN).order_by(CompanyVN.id.desc()).first()
+                new_user = User(username=username, company_name=company_name, email=email, password=password,
+                                company_id=the_company.id)
                 sqlsession.add(new_user)
-                sqlsession.add(CompanyVN(company_id='', company_name=company_name))
 
                 sqlsession.commit()
                 flash('thanks for registering')
@@ -115,8 +117,10 @@ def do_register():
         return render_template("register.html", form=form)
 
     # except Exception as e:
-    except:
+    except Exception as e:
+        print('an exception occured', e)
         return render_template('register.html', form=form)
+
         # return(str(e))
 
 
@@ -143,7 +147,8 @@ def do_login():
                 # if the password matches the username, log the user in
                 if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
                     print(check_user)
-                    # if check_user:
+                    # set the username in the session to the username that was just logged in
+                    session['username'] = POST_USERNAME
                     session['logged_in'] = True
                     flash('Thanks for logging in!')
                     print('succes')
@@ -179,8 +184,12 @@ def show_dash():
     else:
 
         username = session['username']
+        print(username)
         # show all the sprints that are in the database on the dashboard page
-        all_sprints = sqlsession.query(SprintVN).all()
+        all_sprints = sqlsession.query(SprintVN)\
+            .join(CompanyVN)\
+            .join(User).filter(User.username == username).all()
+
         sprints = [dict(sprint_id=sprint.sprint_id,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
@@ -443,11 +452,23 @@ def concepts():
     for role in all_roles:
         role.group = "Role"
         sqlsession.commit()
+
+    username = session['username']
+    # show all the sprints that are in the database on the dashboard page
+    concepts_query = sqlsession.query(ClassVN) \
+        .join(us_class_association_table) \
+        .join(UserStoryVN) \
+        .join(us_sprint_association_table) \
+        .join(SprintVN) \
+        .join(CompanyVN)\
+        .join(User).filter(User.username == username)\
+        .all()
+
     # now jsonify and return the concepts to the fore-end
-    concepts_query = select([ClassVN])
+    # concepts_query = sqlsession.query(ClassVN).all()
     concept_list = []
-    concepts_query_res = conn.execute(concepts_query)
-    for c in concepts_query_res:
+    # concepts_query_res = conn.execute(concepts_query)
+    for c in concepts_query:
         weight2 = 15 + (4 * math.sqrt(c.weight))
         concept_dictionary = {'id': c.class_id, 'label': c.class_name, 'weight': c.weight, 'size': weight2,
                               'group': c.group, 'title': "", 'cid': c.cluster}
