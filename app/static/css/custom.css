@@ -336,7 +336,7 @@ padding: 20px;
 border-radius: 5px
 }
 
-button#login-submit, button#registration-submit  {
+button#login-submit, button#registration-submit, input#submit  {
   border: 2px solid transparent;
   background: #3498DB;
   color: #ffffff;
@@ -358,6 +358,10 @@ button#registration-submit{
 input#accept_tos{
     /*width: 25px;*/
     /*float: left;*/
+}
+
+input#submit{
+    width:100%;
 }
 /*DASHBOARD CSS*/
 

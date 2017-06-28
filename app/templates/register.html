@@ -23,9 +23,10 @@
 
 {#            {{ render_field(form.accept_tos, maxlength=255, placeholder="") }}#}
 
-{#            {{ form.submit }}#}
+
             <div class="form-group">
-                    <button id=registration-submit type="submit" value="Sign Up" class="btn btn-default">Sign Up</button>
+                {{ form.submit }}
+{#                    <button id=registration-submit type="submit" value="Sign Up" class="btn btn-default">Sign Up</button>#}
                 </div>
         </form>
 

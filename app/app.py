@@ -87,6 +87,7 @@ def do_register():
     try:
         form = RegistrationForm(request.form)
         if request.method == "POST" and form.validate():
+            print('success1')
             username = form.username.data
             company_name = form.company_name.data
             email = form.email.data
@@ -96,10 +97,11 @@ def do_register():
             user_exists = sqlsession.query(User).filter(User.username == username).first()
             # ... if it exists, notify the user
             if user_exists:
-                flash("That username is already taken, please choose another")
+                print("That username is already taken, please choose another")
                 return render_template('register.html', form=form)
             # ..else, create the new user and company
             else:
+                print('succes2')
                 sqlsession.add(CompanyVN(company_name=company_name))
                 the_company = sqlsession.query(CompanyVN).order_by(CompanyVN.id.desc()).first()
                 new_user = User(username=username, company_name=company_name, email=email, password=password,
