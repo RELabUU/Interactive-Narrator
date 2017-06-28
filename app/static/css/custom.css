@@ -8,6 +8,16 @@
   text-align: center;
 } */
 
+
+body {
+    background-color: #FFFFFF;
+    /*background-color: rgb(230, 230, 230);*/
+    /*background-image: url("/static/img/Blurred-Background-23.jpg");*/
+    /*background-position: right top;*/
+    height: 98vh;
+    /*padding-top: 70px;*/
+}
+
 #main-nav{
     height: 50px;
     transition: top 0.2s ease-in-out;
@@ -91,13 +101,35 @@
 
 }
 
-body {
-    background-color: rgb(230, 230, 230);
-    /*background-image: url("/static/img/Blurred-Background-23.jpg");*/
-    /*background-position: right top;*/
-    height: 98vh;
-    /*padding-top: 70px;*/
+#main{
+    background-color: #FFFFFF;
+    min-height: 100vh;
 }
+
+.container-fluid{
+ margin-top: 50px;
+}
+
+#row1{
+    margin-top: 30px;
+}
+
+#intro-left-text{
+    padding: 50px 30px 50px 70px;
+}
+
+#intro-left-text{
+    font-size: 16px;
+}
+
+#intro-left-text > ul{
+    padding-bottom: 20px;
+}
+#qus-introtext, #aqusa-introtext, #in-introtext{
+    /*border: 1px solid silver;*/
+    padding: 30px 40px 30px 40px;
+}
+
 
 #vis-wrapper {
     margin: 8px 10px 10px 10px;
@@ -112,12 +144,18 @@ body {
     margin-right: auto;
 }
 
-.content{
-    background-color: #f8f8f8;
-    box-shadow: 0px 10px 10px 10px #888888;
-    padding-bottom: 20px;
-    padding-top: 70px;
-    min-height: 100vh;
+/*.content{*/
+    /*background-color: #f8f8f8;*/
+    /*box-shadow: 0px 10px 10px 10px #888888;*/
+    /*padding-bottom: 20px;*/
+    /*padding-top: 70px;*/
+    /*min-height: 100vh;*/
+/*}*/
+
+/* ####HOMEPAGE####*/
+#intro-left{
+    /*border: 1px solid silver;*/
+    /*height: 400px;*/
 }
 
 #welcome-content .page-header{
@@ -242,12 +280,85 @@ ul.flashes li{
     /*width: 70%;*/
 /*}*/
 
-/*LOGIN PAGE*/
+/* ####LOGIN AND REGISTRATION PAGE####*/
 
-.login-form #submit{
-   width:10%
+p.error{
+    color: #b93331;
 }
 
+.registration, .login {
+margin: 100px auto;
+width: 300px;
+}
+
+.registration{
+    width:40%;
+}
+
+.registration-title, .login-title{
+    text-align: center;
+}
+
+.login-form #submit{
+   /*width:10%*/
+}
+
+.registration-form input, .login-form input {
+text-align: center;
+background-color: #ECF0F1;
+border: 2px solid transparent;
+border-radius: 3px;
+font-size: 16px;
+font-weight: 400;
+/*padding: 10px 0;*/
+width: 250px;
+transition: border .5s;
+}
+
+.registration-form input{
+    width: 300px;
+}
+
+.registration-form .form-group{
+    width: 300px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.login-form input:focus {
+border: 2px solid #3498DB;
+box-shadow: none;
+}
+
+.registration-screen, .login-screen {
+background-color: #FFF;
+padding: 20px;
+border-radius: 5px
+}
+
+button#login-submit, button#registration-submit  {
+  border: 2px solid transparent;
+  background: #3498DB;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 25px;
+  padding: 10px 0;
+  text-decoration: none;
+  text-shadow: none;
+  border-radius: 3px;
+  box-shadow: none;
+  transition: 0.25s;
+  /*display: block;*/
+  width: 250px;
+  margin: 0 auto;
+}
+button#registration-submit{
+    width: 300px;
+}
+input#accept_tos{
+    /*width: 25px;*/
+    /*float: left;*/
+}
 /*DASHBOARD CSS*/
 
 #db_records{

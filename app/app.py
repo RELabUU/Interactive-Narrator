@@ -128,10 +128,11 @@ def do_register():
 @app.route('/login', methods=['GET', 'POST'])
 def do_login():
     # try:
+    form = LoginForm(request.form)
     if not session.get('logged_in'):
         if request.method == "POST":
 
-            # form = LoginForm(request.form)
+
             POST_USERNAME = str(request.form['username'])
             POST_PASSWORD = str(request.form['password'])
 
@@ -154,14 +155,14 @@ def do_login():
                     print('succes')
                     return redirect(url_for('show_dash'))
                 else:
-                    flash('Sorry, wrong password/username')
+                    error = 'Sorry, wrong password/username'
                     print('failure')
-                    return render_template('login.html')
+                    return render_template('login.html', form=form, error=error)
             else:
-                flash('Sorry, wrong password/username')
-                return render_template('login.html')
+                error = 'Sorry, wrong password/username'
+                return render_template('login.html', form=form, error=error)
         else:
-            return render_template('login.html')
+            return render_template('login.html', form=form)
 
     else:
         return redirect(url_for('show_dash'))
@@ -175,7 +176,8 @@ def do_login():
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
-    return render_template("login.html")
+    # return render_template("login.html")
+    return redirect(url_for('do_login'))
 
 @app.route("/dashboard")
 def show_dash():

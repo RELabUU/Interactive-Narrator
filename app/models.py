@@ -25,7 +25,7 @@ class User(Base):
     active = Column(Boolean, default=True)
 
     password = Column('password', String(100))
-    company_id = Column(Integer, ForeignKey('company.company_id'))
+    company_id = Column(Integer, ForeignKey('company.id'))
     company_name = Column('company_name', String(100))
     # def _get_password(self):
     #     return self._password
@@ -62,7 +62,7 @@ class CompanyVN(Base):
     __tablename__ = 'company'
 
     id = Column(Integer, primary_key=True)
-    company_id = Column(Integer)
+    # company_id = Column(Integer)
     company_name = Column(Text)
     users = relationship("User", backref="company")
     # one to many unidirectional relationship
@@ -83,7 +83,7 @@ class SprintVN(Base):
     sprint_id = Column(Integer, primary_key=True)
     sprint_name = Column(Text)
     company_name = Column(Text)
-    company_id = Column(Integer, ForeignKey('company.company_id'))
+    company_id = Column(Integer, ForeignKey('company.id'))
 
 
 # table for the many to many relationship between userstories and concepts (classes)
