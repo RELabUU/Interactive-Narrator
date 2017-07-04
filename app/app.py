@@ -312,16 +312,30 @@ def form():
 # get the roles to populate the multiselect with javascript
 @app.route('/getroles')
 def get_roles():
-    functional_roles = sqlsession.query(UserStoryVN.functional_role.distinct().label("functional_role"))
+    username = session['username']
+
+    functional_roles = sqlsession.query(UserStoryVN.functional_role.distinct().label("functional_role"))\
+        .join(us_sprint_association_table) \
+        .join(SprintVN) \
+        .join(CompanyVN) \
+        .join(User).filter(User.username == username)
     all_roles = [row.functional_role for row in functional_roles.all()]
     print(all_roles)
     return jsonify(all_roles)
 
-
 # get the sprints to populate the multiselect with javascript
 @app.route('/getsprints')
 def get_sprints():
-    sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id"))
+    username = session['username']
+    # print(username)
+    # show all the sprints that are in the database on the dashboard page
+
+    # sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id"))
+
+    sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id")) \
+        .join(CompanyVN) \
+        .join(User).filter(User.username == username)
+
     all_sprints = [row.sprint_id for row in sprints.all()]
     print(all_sprints)
     return jsonify(all_sprints)
