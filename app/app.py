@@ -211,7 +211,14 @@ def show_dash():
 def clean_database():
     # get all userstories and delete them one by one
     # the cascade makes sure all sprints, relationships, classes and association table entries are deleted as well
-    userstoryVN = sqlsession.query(UserStoryVN).all()
+    username = session['username']
+
+    userstoryVN = sqlsession.query(UserStoryVN) \
+        .join(us_sprint_association_table) \
+        .join(SprintVN) \
+        .join(CompanyVN) \
+        .join(User).filter(User.username == username).all()
+
     for userstory in userstoryVN:
         sqlsession.delete(userstory)
         # sqlsession.commit()
