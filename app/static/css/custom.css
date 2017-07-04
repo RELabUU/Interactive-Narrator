@@ -18,10 +18,21 @@ body {
     /*padding-top: 70px;*/
 }
 
+#wrapper {
+    padding-left: 70px;
+    transition: all .4s ease 0s;
+    height: 100%;
+    margin-top: -40px;
+}
+
 #main-nav{
     height: 50px;
     transition: top 0.2s ease-in-out;
     background-color: #332f30;
+}
+
+.navbar-header > a.navbar-brand{
+    padding-left: 50px;
 }
 
 #topbar-button {

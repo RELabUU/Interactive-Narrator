@@ -60,7 +60,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Interactive Narrator</a>
+          <a class="navbar-brand" href="/">Home</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -90,11 +90,12 @@
 
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
-
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand"><a id="menu-toggle" href="#">Int. Narrator<span id="main_icon"
-                                                                                     class="glyphicon glyphicon glyphicon-menu-hamburger"></span></a>
+        <li class="sidebar-brand">
+                <a id="menu-toggle" href="#">Int. Narrator
+                    <span id="main_icon" class="glyphicon glyphicon glyphicon-menu-hamburger"></span></a>
             </li>
+        <ul class="sidebar-nav">
+
             <!-- </li> -->
             <li>
                 <div id="searchinput" class="input-group">
@@ -234,7 +235,13 @@
     $("#menu-toggle").click(function () {
 {#        e.stopPropagation();#}
 {#        e.preventDefault();#}
-        $("#wrapper").toggleClass("toggled");
+        if(!$("#wrapper").hasClass("toggled")){
+            $("#wrapper").toggleClass("toggled");
+        }
+        else{
+            $("#wrapper").removeClass("toggled");
+        }
+
     });
 
 </script>
@@ -261,10 +268,16 @@
           $('.sidebar-nav > a').click(function (e) { e.stopPropagation(); });
 
 
-          $("#sidebar-wrapper button, .multiselect, .sub_icon").on('click', function(e) {
+{#          $("#sidebar-wrapper button, .multiselect, .sub_icon").on('click', function(e) {#}
 {#              console.log("click registered");#}
-              $("#wrapper").addClass("toggled");
-
+{#              $("#wrapper").addClass("toggled");#}
+{##}
+{##}
+{#          });#}
+          $(".sidebar-nav").on('click', function (e) {
+              if(!$("#wrapper").hasClass("toggled")){
+                  $("#wrapper").addClass("toggled");
+              }
 
           });
 {#          $("#sidebar-wrapper .multiselect .dropdown-toggle .btn .btn-default").on('click', function(e) {#}
