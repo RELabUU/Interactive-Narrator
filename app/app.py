@@ -97,8 +97,8 @@ def do_register():
             user_exists = sqlsession.query(User).filter(User.username == username).first()
             # ... if it exists, notify the user
             if user_exists:
-                print("That username is already taken, please choose another")
-                return render_template('register.html', form=form)
+                error = "That username is already taken, please choose another"
+                return render_template('register.html', form=form, error=error)
             # ..else, create the new user and company
             else:
                 print('succes2')
@@ -249,72 +249,88 @@ def clean_database():
 
 @app.route('/form', methods=['GET', 'POST'])
 def form():
-    # use the form class from form.py
-    form = SetInfoForm(request.form)
-    # check who the active user is
-    active_user = sqlsession.query(User).filter(User.username == session['username']).first()
-    print(session['username'])
-    # if the active user is identified, set the company name of that of the user's company
-    if active_user:
-        active_company_name = active_user.company_name
-        active_company = sqlsession.query(CompanyVN).filter \
-            (CompanyVN.company_name == active_company_name).first()
+    if session.get('logged_in'):
+        # use the form class from form.py
+        form = SetInfoForm(request.form)
+        # check who the active user is
+        active_user = sqlsession.query(User).filter(User.username == session['username']).first()
+        print(session['username'])
+        # if the active user is identified, set the company name of that of the user's company
+        if active_user:
+            active_company_name = active_user.company_name
+            active_company = sqlsession.query(CompanyVN).filter \
+                (CompanyVN.company_name == active_company_name).first()
 
-        # flash(session['username'])
+            # flash(session['username'])
 
-    if request.method == 'POST' and form.validate():
-        form_data = {}
-        form_data['sprint_id'] = form.sprint_id.data
-        form_data['sprint_name'] = form.sprint_name.data
-        # check of the inserted sprint values already exist
-        sprint_exists = sqlsession.query(SprintVN).filter\
-            (SprintVN.sprint_name == form_data['sprint_name']).first()
-        print('this sprint exists:', sprint_exists)
-        # if the sprint already exists, notify the user...
-        if sprint_exists:
-            flash('sprint is already in the database')
-            print('sprint exists already', sprint_exists)
-            return redirect(url_for('form'))
-        # ...if it doesn't, add it to the DB
+        if request.method == 'POST' and form.validate():
+            form_data = {}
+            form_data['sprint_id'] = form.sprint_id.data
+            form_data['sprint_name'] = form.sprint_name.data
+            # check of the inserted sprint values already exist
+            sprint_exists = sqlsession.query(SprintVN).filter\
+                (SprintVN.sprint_name == form_data['sprint_name']).first()
+            print('this sprint exists:', sprint_exists)
+            # if the sprint already exists, notify the user...
+            if sprint_exists:
+                error = 'sprint is already in the database'
+                print('sprint exists already', sprint_exists)
+                return render_template('form.html', form=form, error=error)
+            # ...if it doesn't, add it to the DB
+            else:
+                sqlsession.add(SprintVN(sprint_id=form_data['sprint_id'], sprint_name=form_data['sprint_name'],
+                                        company_name=active_company_name, company_id=active_company.id))
+                print('added sprint')
+                # flash('sprint added')
+
+            # FILE UPLOAD HANDLING
+            file = request.files['file']
+            if file.filename == '':
+                error = 'No selected file'
+                return render_template('form.html', form=form, error=error)
+            # Check if the file is one of the allowed types/extensions
+            if file and allowed_file(file.filename):
+                #     # Make the filename safe, remove unsupported chars
+                filename = secure_filename(file.filename)
+                #     # Move the file form the temporal folder to
+                #     # the upload folder we setup
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                # set the filename so Visual Narrator can handle it
+                set_filename = 'uploads/' + file.filename
+                # now add the sprint to the database
+                sqlsession.commit()
+                try:
+                    # run the visual narrator back-end and obtain needed objects for visualization
+                    data = run.program(set_filename)
+                    #  run the poster method to place the objects and their attributes in the database
+                    # poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
+                    add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
+                                   form_data)
+                except Exception as e:
+                    print('Exception raised', e)
+                    error = 'Oops, there was a problem. Please try again'
+                    # import pdb
+                    # pdb.set_trace()
+                    # sqlsession.rollback()
+                    return render_template('form.html', form=form, error=error)
+
+
+                # if all went well redirect the user to the visualization directly
+                return redirect(url_for('show_vis'))
+            else:
+                error = 'There was a problem with the file (type)'
+                return render_template('form.html', form=form, error=error)
+
         else:
-            sqlsession.add(SprintVN(sprint_id=form_data['sprint_id'], sprint_name=form_data['sprint_name'],
-                                    company_name=active_company_name, company_id=active_company.id))
-            print('added sprint')
-            # flash('sprint added')
-
-        # FILE UPLOAD HANDLING
-        file = request.files['file']
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(url_for('form'))
-        # Check if the file is one of the allowed types/extensions
-        if file and allowed_file(file.filename):
-            #     # Make the filename safe, remove unsupported chars
-            filename = secure_filename(file.filename)
-            #     # Move the file form the temporal folder to
-            #     # the upload folder we setup
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            # set the filename so Visual Narrator can handle it
-            set_filename = 'uploads/' + file.filename
-
-            sqlsession.commit()
-            # run the visual narrator back-end and obtain needed objects for visualization
-            data = run.program(set_filename)
-            #  run the poster method to place the objects and their attributes in the database
-            # poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
-            add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
-                           form_data)
-
-            # if all went well redirect the user to the visualization directly
-            return redirect(url_for('show_vis'))
+            # flash('something went wrong, please try again')
+            print('nothing was added to the database')
+            return render_template('form.html', form=form)
 
     else:
-        # flash('something went wrong, please try again')
-        print('nothing was added to the database')
-        return render_template('form.html', form=form)
+        return redirect(url_for('do_login'))
 
-    return render_template('form.html', form=form)
+    # return render_template('form.html', form=form)
 
 # get the roles to populate the multiselect with javascript
 @app.route('/getroles')

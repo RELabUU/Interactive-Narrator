@@ -28,11 +28,12 @@
                 {{ form.submit }}
 {#                    <button id=registration-submit type="submit" value="Sign Up" class="btn btn-default">Sign Up</button>#}
                 </div>
+            {% if error %}
+			    <p class="error"><strong>Error: </strong>{{error}}</p>
+		    {% endif %}
         </form>
 
-        {% if error %}
-			<p class="error"><strong>Error:</strong>{{error}}</p>
-		{% endif %}
+
 
 {#    MESSAGE FLASHING#}
 {#        {% with messages = get_flashed_messages() %}#}

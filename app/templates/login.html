@@ -53,9 +53,10 @@
                 <div class="form-group">
                     <button id=login-submit type="submit" value="Log in" class="btn btn-default">Log in</button>
                 </div>
-                           {% if error %}
-			<p class="error"><strong>Error: </strong>{{error}}</p>
-		    {% endif %}
+
+                {% if error %}
+			        <p class="error"><strong>Error: </strong>{{error}}</p>
+		        {% endif %}
             </form>
 
 		</div>
