@@ -13,8 +13,6 @@ user's needs.
 ![alt tag](https://github.com/Gionimo/InteractiveNarrator/blob/master/Screenshot%20Interactive%20Narrator2.png)
 
 
-
-
 **Running the Program Locally**
 It is also possible to run the program on your local system, though we recommend using the web version.
 This program has been and tested to run with Python 3.5.2. It has been tested to work with Ubuntu 16.04 and the instructions below are based on Ubuntu being on your machine. 
