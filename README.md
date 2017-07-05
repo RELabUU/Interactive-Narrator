@@ -4,20 +4,23 @@
 Visualize your user stories to improve understanding of the project, inspect system functionality 
 and improve communication among stakeholders.
 
+Please visit [this page](http://interactivenarrator.science.uu.nl) to start using the application.
+
 This application uses the Visual Narrator (https://github.com/marcelrobeer/visualnarrator) to generate a conceptual model which is then
 visualized using Vis.js and is presented to the user in the browser from where the visualization can be adapted to cater to the 
 user's needs.
 
 ![alt tag](https://github.com/Gionimo/InteractiveNarrator/blob/master/Screenshot%20Interactive%20Narrator2.png)
 
-**Dependencies**
 
+
+
+**Running the Program Locally**
+It is also possible to run the program on your local system, though we recommend using the web version.
 This program has been and tested to run with Python 3.5.2. It has been tested to work with Ubuntu 16.04 and the instructions below are based on Ubuntu being on your machine. 
 To easily install Ubuntu Linux or another Linux distribution on your system, use Oracle VM VirtualBox. The main dependency for the program is Visual Narrator (https://github.com/marcelrobeer/visualnarrator). 
 To run the Interactive Narrator, you need to install Visual Narrator in the same directory as the Interactive Narrator folder is in (probably the name of your virtual environment). Other dependencies can be found in requirements.txt
 
-
-**Running the Program Locally**
 
 Currently, Interactive Narrator needs to be run from your local machine. I assume you have Python3 installed system wide and have pip setup tools installed too. 
 If not install pip (Linux) with: `sudo apt-get install python-setuptools python-dev build-essential`. Then, the preferred method is to create a virtual Python environment using virtualenv 
