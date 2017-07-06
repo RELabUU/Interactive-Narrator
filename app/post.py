@@ -25,7 +25,7 @@ def occurence_list(li):
     return "Doesn not occur, deducted"
 
 # Function to add the userstories to the database
-def add_userstories(us_instances, form_data):
+def add_userstories(us_instances, sprint_form_data):
     # add the user stories (us_vn) in the us_instances object to the database
     for us_vn in us_instances:
         # each user story has a functional role part, a means part and a means_main part.
@@ -36,12 +36,12 @@ def add_userstories(us_instances, form_data):
         us_entry = UserStoryVN(userstory_id=us_vn.number, text=us_vn.text, no_punct=us_vn.sentence,
                                role=us_vn.role.indicator, means=us_vn.means.indicator, means_verb=means_main_verb,
                                means_object=means_main_object, functional_role=func_role, ends=us_vn.ends.indicator,
-                               in_sprint=form_data['sprint_id'])
+                               in_sprint=sprint_form_data['sprint_id'])
         # add a new user story entry to the database
         session.add(us_entry)
         # get the sprint ID from the databse equal to the one the user has entered in the
         # sprint ID form field for this set of user stories
-        sprint = session.query(SprintVN).get(form_data['sprint_id'])
+        sprint = session.query(SprintVN).get(sprint_form_data['sprint_id'])
         #  then add the many to many relationship for this set of stories
         # with this sprint ID in the sprints-userstories association table
         us_entry.sprints.append(sprint)

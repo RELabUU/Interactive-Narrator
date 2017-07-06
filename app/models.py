@@ -71,7 +71,7 @@ class CompanyVN(Base):
 
 # table for the many to many relationship between userstories and sprints
 us_sprint_association_table = Table('us_sprint_association', Base.metadata,
-                                    Column('sprint_id', Integer, ForeignKey('sprint.sprint_id')),
+                                    Column('sprint_id', Integer, ForeignKey('sprint.id')),
                                     # Column('userstory_id', Integer, ForeignKey('userstory.userstory_id'))
                                     Column('id', Integer, ForeignKey('userstory.id'))
                                     )
@@ -80,7 +80,7 @@ us_sprint_association_table = Table('us_sprint_association', Base.metadata,
 class SprintVN(Base):
     __tablename__ = 'sprint'
 
-    sprint_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     sprint_name = Column(Text)
     company_name = Column(Text)
     company_id = Column(Integer, ForeignKey('company.id'))

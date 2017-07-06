@@ -51,10 +51,12 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="nav navbar-right"><a href="">QUS</a></li>
-                <li class="nav navbar-right"><a href="https://aqusa.nl">AQUSA</a></li>
-                <li class="nav navbar-right"><a href="/">Interactive Narrator</a></li>
-                {#<li><a href="/help">Help</a></li>#}
+                <li class="nav navbar-left"><a href="">QUS</a></li>
+                <li class="nav navbar-left"><a href="https://aqusa.nl">AQUSA</a></li>
+                <li class="nav navbar-left"><a href="https://github.com/marcelrobeer/visualnarrator">Visual Narrator</a></li>
+                <li class="nav navbar-left"><a href="/">Interactive Narrator</a></li>
+
+{#                <li><a href="/help">Help</a></li>#}
             </ul>
             <ul id="useraccountitems"class="nav navbar-nav navbar-right">
                 {% if session.get('logged_in') %}

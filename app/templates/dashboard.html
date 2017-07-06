@@ -3,33 +3,54 @@
 
 {% block title %} Dashboard {% endblock title %}
 {% block main %}
-    <div id="user_info"></div>
+<div class="row">
+    <div class="col-lg-4"></div>
 
-    <h3>Dashboard</h3>
-    <p>
-    Welcome <strong>{{ username }}</strong>
-    </p>
+    <div class="col-lg-4" id="user_info">
+            <h3>Dashboard</h3>
+        <p>
+        Welcome <strong>{{ username }}</strong>
+        </p>
 
-    <div id="db_records">
-        <h5>Your Sprints:</h5>
+        <div id="db_records">
+            <h5>Your Sprints:</h5>
 
-        {% for sprint in sprints %}
-            <div id="db_sprint">
-        <strong>Sprint ID:</strong> {{ sprint.sprint_id }} <br>
-        <strong>Sprint name:</strong> {{ sprint.sprint_name }} <br>
-        <strong>Company name:</strong> {{ sprint.company_name }} <br>
-        <strong>Company ID:</strong> {{ sprint.company_id }} <br>
-            <a class="btn btn-default" href="/vis">Show</a>
-            </div>
-        {% endfor %}
+            {% for sprint in sprints %}
+                <div id="db_sprint">
+            <strong>Sprint ID:</strong> {{ sprint.sprint_id }} <br>
+            <strong>Sprint name:</strong> {{ sprint.sprint_name }} <br>
+            <strong>Company name:</strong> {{ sprint.company_name }} <br>
+            <strong>Company ID:</strong> {{ sprint.company_id }} <br>
+                <a class="btn btn-default" href="/vis">Show</a>
+                </div>
+            {% endfor %}
+        </div>
+
+
+
     </div>
 
-    <a class="btn btn-default" href="{{ url_for('form') }}"> Upload Set</a>
-
-    <a class="btn btn-default" href="{{ url_for('clean_database') }}"> Clean Database</a>
-
-    <a class="btn btn-default" href="{{ url_for('logout') }}">Log Out</a>
 
 {#    <input id=logout type="submit" value="Logout" class="btn btn-primary btn-large btn-block" >#}
+    <div class="col-lg-4">
+          <div id="dashboard-set-buttons">
+                <a class="btn btn-default" href="{{ url_for('form') }}"> Upload Set</a>
+
+                <a class="btn btn-default" href="{{ url_for('clean_database') }}"> Clean Database</a>
+
+                <a id="logout-button" class="btn btn-default" href="{{ url_for('logout') }}">Log Out</a>
+            </div>
+
+    </div>
+
+</div>
+    <div class="row">
+    <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+
+        </div>
+    <div class="col-lg-4"></div>
+
+    </div>
 
 {% endblock main %}

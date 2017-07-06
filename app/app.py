@@ -194,7 +194,7 @@ def show_dash():
             .join(CompanyVN)\
             .join(User).filter(User.username == username).all()
 
-        sprints = [dict(sprint_id=sprint.sprint_id,
+        sprints = [dict(sprint_id=sprint.id,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
                         company_name=sprint.company_name) for sprint in all_sprints]
@@ -264,12 +264,12 @@ def form():
             # flash(session['username'])
 
         if request.method == 'POST' and form.validate():
-            form_data = {}
-            form_data['sprint_id'] = form.sprint_id.data
-            form_data['sprint_name'] = form.sprint_name.data
+            sprint_form_data = {}
+            # sprint_form_data['sprint_id'] = form.sprint_id.data
+            sprint_form_data['sprint_name'] = form.sprint_name.data
             # check of the inserted sprint values already exist
             sprint_exists = sqlsession.query(SprintVN).filter\
-                (SprintVN.sprint_name == form_data['sprint_name']).first()
+                (SprintVN.sprint_name == sprint_form_data['sprint_name']).first()
             print('this sprint exists:', sprint_exists)
             # if the sprint already exists, notify the user...
             if sprint_exists:
@@ -278,7 +278,7 @@ def form():
                 return render_template('form.html', form=form, error=error)
             # ...if it doesn't, add it to the DB
             else:
-                sqlsession.add(SprintVN(sprint_id=form_data['sprint_id'], sprint_name=form_data['sprint_name'],
+                sqlsession.add(SprintVN(sprint_name=sprint_form_data['sprint_name'],
                                         company_name=active_company_name, company_id=active_company.id))
                 print('added sprint')
                 # flash('sprint added')
@@ -300,13 +300,16 @@ def form():
                 set_filename = 'uploads/' + file.filename
                 # now add the sprint to the database
                 sqlsession.commit()
+                #find the spint that was just added, and obtain its ID
+                newest_sprint = sqlsession.query(SprintVN).order_by(SprintVN.id.desc()).first()
+                sprint_form_data['sprint_id'] = newest_sprint.id
                 try:
                     # run the visual narrator back-end and obtain needed objects for visualization
                     data = run.program(set_filename)
                     #  run the poster method to place the objects and their attributes in the database
                     # poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
                     add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
-                                   form_data)
+                                   sprint_form_data)
                 except Exception as e:
                     print('Exception raised', e)
                     error = 'Oops, there was a problem. Please try again'
@@ -355,11 +358,11 @@ def get_sprints():
 
     # sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id"))
 
-    sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id")) \
+    sprints = sqlsession.query(SprintVN.id.distinct().label("id")) \
         .join(CompanyVN) \
         .join(User).filter(User.username == username)
 
-    all_sprints = [row.sprint_id for row in sprints.all()]
+    all_sprints = [row.id for row in sprints.all()]
     print(all_sprints)
     return jsonify(all_sprints)
 
@@ -405,7 +408,7 @@ def get_test():
         .join(SprintVN) \
         .filter(and_(
         UserStoryVN.functional_role.in_(checked_roles)),
-        (SprintVN.sprint_id.in_(checked_sprints))
+        (SprintVN.id.in_(checked_sprints))
     ) \
         .all()
 
@@ -426,7 +429,7 @@ def get_test():
     ) \
         .filter(and_(
         UserStoryVN.functional_role.in_(checked_roles)),
-        (SprintVN.sprint_id.in_(checked_sprints))
+        (SprintVN.id.in_(checked_sprints))
     ) \
         .all()
 

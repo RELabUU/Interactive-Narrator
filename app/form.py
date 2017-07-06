@@ -10,7 +10,7 @@ class SetInfoForm(Form):
     # company_id = IntegerField('CompanyID', [validators.DataRequired("Please enter a valid name.")])
     # [required()])
     # company_name = StringField('Company Name', [Length(max=255), validators.DataRequired()])
-    sprint_id = IntegerField('SprintID', [validators.DataRequired()])
+    # sprint_id = IntegerField('SprintID', [validators.DataRequired()])
     sprint_name = StringField('Sprint Name', [Length(max=255), validators.DataRequired(message='Please enter a valid name')])
     submit = SubmitField("Send")
 

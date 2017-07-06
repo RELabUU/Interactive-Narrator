@@ -263,7 +263,7 @@ body {
 }
 
 #uploadform #submit{
-    width:10%
+    width:15%
 }
 
 #uploadform p{
@@ -374,8 +374,21 @@ input#accept_tos{
 input#submit{
     width:100%;
 }
-/*DASHBOARD CSS*/
+/* ####DASHBOARD#### CSS*/
 
 #db_records{
     padding: 10px 5px 5px 5px;
+}
+
+#dashboard-set-buttons{
+    padding: 50px 10px 10px 0px;
+}
+#dashboard-set-buttons > a{
+    float: left;
+    clear: left;
+    display:inline;
+    margin: 10px 10px 10px 10px;
+}
+a#logout-button{
+    margin-top: 50px;
 }

@@ -3,7 +3,12 @@
 
 {% block title %} Form {% endblock title %}
 {% block main %}
-    <div id="uploadform">
+    <div class="row">
+        <div class="col-lg-3">
+
+        </div>
+        <div class="col-lg-6">
+             <div id="uploadform">
 
         <h3>Interactive Narrator</h3>
         <br>
@@ -16,8 +21,7 @@
             Then upload your set of user stories in .txt or .csv format on this page
         </p>
         <p id="mandatory">All fields are mandatory.
-            Fields marked with a * should be a unique identifier: they can never already exist
-            in the database.
+
         </p>
 
         <br>
@@ -26,7 +30,7 @@
 {#            {{ render_field(form.company_id, maxlength=255, placeholder="the ID of your company") }}#}
             {{ render_field(form.sprint_name, maxlength=255, placeholder="the name of your sprint") }}
 
-            {{ render_field(form.sprint_id, maxlength=255, placeholder="the ID of your sprint") }}
+{#            {{ render_field(form.sprint_id, maxlength=255, placeholder="the ID of your sprint") }}#}
 
 
             <br>
@@ -64,5 +68,12 @@
 
         <br>
         <br>
-</div>
+    </div>
+
+        </div>
+        <div class="col-lg-3">
+
+        </div>
+    </div>
+
 {% endblock main %}

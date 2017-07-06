@@ -3,7 +3,7 @@
 
 {% block title %} Register {% endblock title %}
 {% block main %}
-    <div class="registration">
+<div class="registration">
     <div class="registration-screen">
         <h3>Interactive Narrator</h3>
         <br>
@@ -21,31 +21,37 @@
 
             {{ render_field(form.confirm, maxlength=255, placeholder="enter your password again") }}
 
-{#            {{ render_field(form.accept_tos, maxlength=255, placeholder="") }}#}
+            {# {{ render_field(form.accept_tos, maxlength=255, placeholder="") }}#}
 
 
             <div class="form-group">
                 {{ form.submit }}
-{#                    <button id=registration-submit type="submit" value="Sign Up" class="btn btn-default">Sign Up</button>#}
-                </div>
+                {#
+                <button id=registration-submit type="submit" value="Sign Up" class="btn btn-default">Sign Up</button>
+                #}
+            </div>
             {% if error %}
-			    <p class="error"><strong>Error: </strong>{{error}}</p>
-		    {% endif %}
+            <p class="error"><strong>Error: </strong>{{error}}</p>
+            {% endif %}
         </form>
 
 
+        {# MESSAGE FLASHING#}
+        {# {% with messages = get_flashed_messages() %}#}
+        {# {% if messages %}#}
+        {#
+        <ul class=flashes>#}
+            {# {% for message in messages %}#}
+            {#
+            <li>{{ message }}</li>
+            #}
+            {# {% endfor %}#}
+            {#
+        </ul>
+        #}
+        {# {% endif %}#}
+        {# {% endwith %}#}
 
-{#    MESSAGE FLASHING#}
-{#        {% with messages = get_flashed_messages() %}#}
-{#            {% if messages %}#}
-{#                <ul class=flashes>#}
-{#                {% for message in messages %}#}
-{#                    <li>{{ message }}</li>#}
-{#                {% endfor %}#}
-{#                </ul>#}
-{#            {% endif %}#}
-{#        {% endwith %}#}
-
-</div>
     </div>
+</div>
 {% endblock main %}
