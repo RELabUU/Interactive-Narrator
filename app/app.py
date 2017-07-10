@@ -55,6 +55,9 @@ Session = sessionmaker(bind=engine)
 sqlsession = Session()
 conn = engine.connect()
 
+@app.route('/mobile')
+def mobilepage():
+    return render_template('mobile.html')
 
 @app.route('/')
 def homepage():
