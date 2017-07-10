@@ -63,52 +63,50 @@ var data = {
 };
 var options = {
     interaction:{
-    dragNodes:true,
-    dragView: true,
-    hideEdgesOnDrag: false,
-    hideNodesOnDrag: false,
-    hover: false,
-    hoverConnectedEdges: true,
+        dragNodes:true,
+        dragView: true,
+        hideEdgesOnDrag: false,
+        hideNodesOnDrag: false,
+        hover: false,
+        hoverConnectedEdges: true,
     keyboard: {
-      enabled: false,
-      speed: {x: 10, y: 10, zoom: 0.02},
-      bindToWindow: true
+        enabled: false,
+        speed: {x: 10, y: 10, zoom: 0.02},
+        bindToWindow: true
     },
-    multiselect: true,
-    navigationButtons: true,
-    selectable: true,
-    selectConnectedEdges: true,
-    // tooltipDelay: 300,
-    zoomView: true
+        multiselect: false,
+        navigationButtons: true,
+        selectable: true,
+        selectConnectedEdges: true,
+        // tooltipDelay: 300,
+        zoomView: true
   },
 
-    //      physics:{
-    //        enabled:true,
-    // //        adaptiveTimestep:true,
+         physics:{
+           enabled:true,
+           adaptiveTimestep:false,
     // //      //   minVelocity:0.75,
-    //        maxVelocity:15,
-    // //      //   barnesHut: {gravitationalConstant: 0,
-    // //      //       centralGravity: 0, springConstant: 0},
+           maxVelocity:5
+          //   barnesHut: {gravitationalConstant: 0,
+         //       centralGravity: 0, springConstant: 0},
     //        stabilization: {
     //            enabled: true,
-    // //          //   iterations: 1000,
-    // //          //   updateInterval: 100,
-    // //          //   onlyDynamicEdges: false,
+              //   iterations: 1000,
+              //   updateInterval: 100,
+              //   onlyDynamicEdges: false,
     //            fit: true
     //  }
-    // //
-    //      },
+         },
     //
-    // layout:{
-    //   improvedLayout:true,
-    //  //  randomSeed:83040,
-    //  randomSeed:undefined,
-    //   hierarchical: {
-    //    enabled:false}},
-
-    scaling: {
-        label: {enabled: true}
+    layout:{
+        improvedLayout:true,
+        //  randomSeed:83040,
+        //  randomSeed:undefined,
+        hierarchical: {
+             enabled:false
+          }
     },
+
     nodes: {
         // color:{background:'#97C2FC'},
         color: {background: '#97C2FC', highlight: {background: '#5898ED'}},
@@ -141,6 +139,31 @@ var options = {
 
 };
 
+var options2 = {
+    physics:{
+        adaptiveTimestep:false,
+        enabled:true,
+        maxVelocity:5
+    },
+
+   layout:{
+        improvedLayout:true,
+        hierarchical: {
+        enabled:false}
+    },
+
+   scaling:{
+     label:{enabled:true}
+   },
+   nodes:{
+     shape:'dot'
+   },
+   edges:{
+     labelHighlightBold:true,
+	 length:100 //the lenght of the edges is set here. standard:undefined
+   }
+
+   };
 
 var network = new vis.Network(container, data, options);
 
