@@ -75,7 +75,7 @@ var options = {
       bindToWindow: true
     },
     multiselect: true,
-    navigationButtons: true,
+    navigationButtons: false,
     selectable: true,
     selectConnectedEdges: true,
     // tooltipDelay: 300,
