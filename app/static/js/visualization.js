@@ -145,43 +145,43 @@ var options = {
 var network = new vis.Network(container, data, options);
 
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table
-network.on( 'click', function(properties) {
-    var ids = properties.nodes;
-    // console.log(ids);
-    var clickedNodes = nodes.get(ids);
-    console.log('clicked nodes:', clickedNodes);
-    labelBold = clickedNodes[0].label;
-
-    $.getJSON('/clickquery', {
-                    nodes: JSON.stringify(clickedNodes)},function (data) {
-        console.log(data);
-
-        $("#userstorytable tr").remove();
-        for (var i = 0; i < data.length; i++) {
-            if (i== 0){
-                console.log('succes');
-                $('#userstorytable').append("<tr><th>SP</th><th>US</th><th>Text</th></tr>");
-            }
-
-            var s = data[i].text;
-
-            var newText = s.replace(RegExp(labelBold, "ig"), '<b>' + labelBold + '</b>');
-            // console.log(labelBold);
-            // console.log(data[i].id);
-            // console.log(data[i].text);
-            // console.log(data[i]['in sprint']);
-            tr = $('<tr/>');
-            tr.append("<td>" + data[i]['in sprint'] + "</td>");
-            tr.append("<td>" + data[i].id + "</td>");
-            tr.append("<td>" + newText + "</td>");
-
-            $('#userstorytable').append(tr);
-        }
-
-        }
-    );
-    // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');
-});
+// network.on( 'click', function(properties) {
+//     var ids = properties.nodes;
+//     // console.log(ids);
+//     var clickedNodes = nodes.get(ids);
+//     console.log('clicked nodes:', clickedNodes);
+//     labelBold = clickedNodes[0].label;
+//
+//     $.getJSON('/clickquery', {
+//                     nodes: JSON.stringify(clickedNodes)},function (data) {
+//         console.log(data);
+//
+//         $("#userstorytable tr").remove();
+//         for (var i = 0; i < data.length; i++) {
+//             if (i== 0){
+//                 console.log('succes');
+//                 $('#userstorytable').append("<tr><th>SP</th><th>US</th><th>Text</th></tr>");
+//             }
+//
+//             var s = data[i].text;
+//
+//             var newText = s.replace(RegExp(labelBold, "ig"), '<b>' + labelBold + '</b>');
+//             // console.log(labelBold);
+//             // console.log(data[i].id);
+//             // console.log(data[i].text);
+//             // console.log(data[i]['in sprint']);
+//             tr = $('<tr/>');
+//             tr.append("<td>" + data[i]['in sprint'] + "</td>");
+//             tr.append("<td>" + data[i].id + "</td>");
+//             tr.append("<td>" + newText + "</td>");
+//
+//             $('#userstorytable').append(tr);
+//         }
+//
+//         }
+//     );
+//     // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');
+// });
 
 // network.on( 'click', function(){
 //     nodes.update({id: node.id, color: '#97C2FC'});
