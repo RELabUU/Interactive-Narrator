@@ -68,7 +68,7 @@
           </ul>
             <ul id="useraccountitems"class="nav navbar-nav navbar-right">
                 {% if session.get('logged_in') %}
-                    <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>#}
+                    <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
                 {% else %}
                 <li><a id="signupbtn" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -181,9 +181,7 @@
             </div><!-- End .row -->
             <div id="userstoryinfo">
                 <table id="userstorytable">
-{#                    <tr>#}
-{#                        <th>SP</th><th>US</th><th>Userstory</th>#}
-{#                    </tr>#}
+
                 </table>
             </div>
         </div><!-- End .container-fluid-->
@@ -295,7 +293,19 @@
 {# });#}
 
       </script>
-<!-- <script type="text/javascript" src="static/js/get_json.js"></script> -->
+<script>
+{#    document.body.addEventListener('touchmove', function(event) {#}
+{#        event.preventDefault();#}
+{#        }, false);#}
+    function startup() {
+  var el = document.getElementsByTagName("canvas")[0];
+  el.addEventListener("touchstart", handleStart, false);
+  el.addEventListener("touchend", handleEnd, false);
+  el.addEventListener("touchcancel", handleCancel, false);
+  el.addEventListener("touchmove", handleMove, false);
+{#  log("initialized.");#}
+}
+</script>
 
 </body>
 </html>

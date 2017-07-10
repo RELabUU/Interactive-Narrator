@@ -47,6 +47,13 @@
     <div class="row">
     <div class="col-lg-4"></div>
         <div class="col-lg-4">
+            {% for user in registered_users %}
+                <div id="registered_users">
+                <h3>Registered Users:</h3>
+            <strong>username</strong> {{ user.username }} <br>
+
+                </div>
+            {% endfor %}
 
         </div>
     <div class="col-lg-4"></div>

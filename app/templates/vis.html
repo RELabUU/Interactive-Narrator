@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0 user-scalable=no">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <meta name="description" content="">
@@ -68,7 +68,7 @@
           </ul>
             <ul id="useraccountitems"class="nav navbar-nav navbar-right">
                 {% if session.get('logged_in') %}
-                    <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>#}
+                    <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
                 {% else %}
                 <li><a id="signupbtn" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -181,9 +181,7 @@
             </div><!-- End .row -->
             <div id="userstoryinfo">
                 <table id="userstorytable">
-{#                    <tr>#}
-{#                        <th>SP</th><th>US</th><th>Userstory</th>#}
-{#                    </tr>#}
+
                 </table>
             </div>
         </div><!-- End .container-fluid-->
@@ -252,8 +250,9 @@
     });
 
 </script>
+      <!--          Keep the dropdowns open if the user clicks on the  visualization -->
       <script>
-{#          Keep the dropdowns open if the user clicks on the  visualization#}
+
 {#          $('#visualization').click(function (e) { e.stopPropagation(); });#}
 
           $('.sidebar-nav > a').click(function (e) { e.stopPropagation(); });
@@ -295,7 +294,9 @@
 {# });#}
 
       </script>
-<!-- <script type="text/javascript" src="static/js/get_json.js"></script> -->
+
+
+
 
 </body>
 </html>

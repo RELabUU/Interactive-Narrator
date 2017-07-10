@@ -201,8 +201,12 @@ def show_dash():
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
                         company_name=sprint.company_name) for sprint in all_sprints]
+        if username == 'govertjan':
+            registered_users = sqlsession.query(User).all()
+        else:
+            registered_users = ''
 
-        return render_template("dashboard.html", sprints=sprints, username=username)
+        return render_template("dashboard.html", sprints=sprints, username=username, registered_users=registered_users)
 
 
         # except Exception as e:
