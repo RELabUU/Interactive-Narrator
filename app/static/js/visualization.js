@@ -157,16 +157,45 @@ var options = {
    scaling:{
      label:{enabled:true}
    },
-   nodes:{
-     shape:'dot'
-   },
-   edges:{
-     labelHighlightBold:true,
-	 length:100 //the lenght of the edges is set here. standard:undefined
-   }
+   // nodes:{
+   //   shape:'dot'
+   // },
+   // edges:{
+   //   labelHighlightBold:true,
+	//  length:100 //the lenght of the edges is set here. standard:undefined
+   // }
+          nodes: {
+        // color:{background:'#97C2FC'},
+        color: {background: '#97C2FC', highlight: {background: '#5898ED'}},
+        hover: {border: '#2B7CE9', background: '#D2E5FF'},
+        shape: 'dot',
+        font: {
+            // size:14,
+            bold: {color: '#0077aa'}
+      }
+        // size: 20,
+        // widthConstraint: {minimum: 25, maximum: 50}
+    },
+    groups: {
+        Role: {color: {background: '#42b3f4'}, borderWidth: 5}
+    },
+
+    edges: {
+        labelHighlightBold: true,
+        width: 1,
+        length:200, //the lenght of the edges is set here. standard:undefined
+        arrows: {
+            to: {enabled: true, scaleFactor: 1, type: 'arrow'},
+            middle: {enabled: false, scaleFactor: 1, type: 'arrow'},
+            from: {enabled: false, scaleFactor: 1, type: 'arrow'}
+        },
+        font: {
+        // size: 12
+      }
+    }
 
    };
-var network = new vis.Network(container, data, options);
+var network = new vis.Network(container, data, options2);
 
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table
 network.on( 'click', function(properties) {
