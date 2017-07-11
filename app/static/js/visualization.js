@@ -166,7 +166,7 @@ var options = {
    }
 
    };
-var network = new vis.Network(container, data, options2);
+var network = new vis.Network(container, data, options);
 
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table
 network.on( 'click', function(properties) {
