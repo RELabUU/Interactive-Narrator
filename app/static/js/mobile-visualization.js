@@ -26,7 +26,9 @@
      };
       var options = {
         physics:{
-          adaptiveTimestep:false
+          adaptiveTimestep:false,
+            enabled:true,
+            maxVelocity:5
         },
 
    layout:{
@@ -43,94 +45,91 @@
    edges:{
      labelHighlightBold:true,
 	 length:100 //the lenght of the edges is set here. standard:undefined
-   },
-   physics:{
-     enabled:true,maxVelocity:5
    }
 
    };
      var network = new vis.Network(container, data, options);
 
 
-     // set the first initial zoom level
-     network.once('initRedraw', function() {
-         if (lastClusterZoomLevel === 0) {
-             lastClusterZoomLevel = network.getScale();
-         }
-     });
+     // // set the first initial zoom level
+     // network.once('initRedraw', function() {
+     //     if (lastClusterZoomLevel === 0) {
+     //         lastClusterZoomLevel = network.getScale();
+     //     }
+     // });
 
-     // we use the zoom event for our clustering
-     network.on('zoom', function (params) {
-         if (params.direction == '-') {
-             if (params.scale < lastClusterZoomLevel*clusterFactor) {
- 				var totalCID = 8;
- 				for (var i = 1; i <= totalCID; i++) {
- 					makeClusters(params.scale, i);
- 				}
-                 lastClusterZoomLevel = params.scale;
-             }
-         }
-         else {
-             openClusters(params.scale);
-         }
-     });
-
-     // if we click on a node, we want to open it up!
-     network.on("selectNode", function (params) {
-         if (params.nodes.length == 1) {
-             if (network.isCluster(params.nodes[0]) == true) {
-                 network.openCluster(params.nodes[0])
-             }
-         }
-     });
-
-
-     // make the clusters
-     function makeClusters(scale, clusterIndex) {
-         var clusterOptionsByData = {
-             processProperties: function (clusterOptions, childNodes) {
-                 var childrenCount = 0;
-                 for (var i = 0; i < childNodes.length; i++) {
-                     childrenCount += childNodes[i].childrenCount || 1;
-                 }
-                 clusterOptions.childrenCount = childrenCount;
-                 clusterOptions.label = "cid: " + clusterIndex + " (" + childrenCount + ")";
-                 clusterOptions.font = {size: childrenCount*3+10}  //size of the label is calculated based on number of childnodes
-				 clusterOptions.size = childrenCount*2+10; //size of the node is calculated based on number of childnodes
-                 clusterOptions.id = 'cluster:' + clusterIndex;
-                 clusters.push({id:'cluster:' + clusterIndex, scale:scale});
-                 return clusterOptions;
-             },
- 			joinCondition:function(childOptions) {
- 				return childOptions.cid == clusterIndex;
- 			},
-             clusterNodeProperties: {borderWidth: 3, shape: 'dot', font: {size: 30}}
-         }
-         network.cluster(clusterOptionsByData);
-        //  if (document.getElementById('stabilizeCheckbox').checked === true) {
-        //      network.stabilize();
-        //  }
-     }
-
-     // open them back up!
-     function openClusters(scale) {
-         var newClusters = [];
-         var declustered = false;
-         for (var i = 0; i < clusters.length; i++) {
-             if (clusters[i].scale < scale) {
-                 network.openCluster(clusters[i].id);
-                 lastClusterZoomLevel = scale;
-                 declustered = true;
-             }
-             else {
-                 newClusters.push(clusters[i])
-             }
-         }
-         clusters = newClusters;
-         if (declustered === true) {
-             network.stabilize();
-         }
-     }
+     // // we use the zoom event for our clustering
+     // network.on('zoom', function (params) {
+     //     if (params.direction == '-') {
+     //         if (params.scale < lastClusterZoomLevel*clusterFactor) {
+ 		// 		var totalCID = 8;
+ 		// 		for (var i = 1; i <= totalCID; i++) {
+ 		// 			makeClusters(params.scale, i);
+ 		// 		}
+     //             lastClusterZoomLevel = params.scale;
+     //         }
+     //     }
+     //     else {
+     //         openClusters(params.scale);
+     //     }
+     // });
+     //
+     // // if we click on a node, we want to open it up!
+     // network.on("selectNode", function (params) {
+     //     if (params.nodes.length == 1) {
+     //         if (network.isCluster(params.nodes[0]) == true) {
+     //             network.openCluster(params.nodes[0])
+     //         }
+     //     }
+     // });
+     //
+     //
+     // // make the clusters
+     // function makeClusters(scale, clusterIndex) {
+     //     var clusterOptionsByData = {
+     //         processProperties: function (clusterOptions, childNodes) {
+     //             var childrenCount = 0;
+     //             for (var i = 0; i < childNodes.length; i++) {
+     //                 childrenCount += childNodes[i].childrenCount || 1;
+     //             }
+     //             clusterOptions.childrenCount = childrenCount;
+     //             clusterOptions.label = "cid: " + clusterIndex + " (" + childrenCount + ")";
+     //             clusterOptions.font = {size: childrenCount*3+10}  //size of the label is calculated based on number of childnodes
+		// 		 clusterOptions.size = childrenCount*2+10; //size of the node is calculated based on number of childnodes
+     //             clusterOptions.id = 'cluster:' + clusterIndex;
+     //             clusters.push({id:'cluster:' + clusterIndex, scale:scale});
+     //             return clusterOptions;
+     //         },
+ 		// 	joinCondition:function(childOptions) {
+ 		// 		return childOptions.cid == clusterIndex;
+ 		// 	},
+     //         clusterNodeProperties: {borderWidth: 3, shape: 'dot', font: {size: 30}}
+     //     }
+     //     network.cluster(clusterOptionsByData);
+     //    //  if (document.getElementById('stabilizeCheckbox').checked === true) {
+     //    //      network.stabilize();
+     //    //  }
+     // }
+     //
+     // // open them back up!
+     // function openClusters(scale) {
+     //     var newClusters = [];
+     //     var declustered = false;
+     //     for (var i = 0; i < clusters.length; i++) {
+     //         if (clusters[i].scale < scale) {
+     //             network.openCluster(clusters[i].id);
+     //             lastClusterZoomLevel = scale;
+     //             declustered = true;
+     //         }
+     //         else {
+     //             newClusters.push(clusters[i])
+     //         }
+     //     }
+     //     clusters = newClusters;
+     //     if (declustered === true) {
+     //         network.stabilize();
+     //     }
+     // }
 
      //function for selecting node with theme 10
      //function selectTheme(){

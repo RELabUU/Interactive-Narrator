@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+    <!-- iOS safari optimization -->
+    <script type="text/javascript">
+        document.ontouchmove = function(event){
+        event.preventDefault();
+        }
+    </script>
+
     <meta name="description" content="">
     <meta name="author" content="Utrecht University">
     <title>Interactive Narrator</title>
@@ -294,17 +301,18 @@
 
       </script>
 <script>
-{#    document.body.addEventListener('touchmove', function(event) {#}
+    {#    document.body.addEventListener('touchmove', function(event) {#}
 {#        event.preventDefault();#}
 {#        }, false);#}
-    function startup() {
-  var el = document.getElementsByTagName("canvas")[0];
-  el.addEventListener("touchstart", handleStart, false);
-  el.addEventListener("touchend", handleEnd, false);
-  el.addEventListener("touchcancel", handleCancel, false);
-  el.addEventListener("touchmove", handleMove, false);
+
+{#    function startup() {#}
+{#  var el = document.getElementsByTagName("canvas")[0];#}
+{#  el.addEventListener("touchstart", handleStart, false);#}
+{#  el.addEventListener("touchend", handleEnd, false);#}
+{#  el.addEventListener("touchcancel", handleCancel, false);#}
+{#  el.addEventListener("touchmove", handleMove, false);#}
 {#  log("initialized.");#}
-}
+{# } #}
 </script>
 
 </body>

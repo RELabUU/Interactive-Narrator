@@ -63,50 +63,53 @@ var data = {
 };
 var options = {
     interaction:{
-        dragNodes:true,
-        dragView: true,
-        hideEdgesOnDrag: false,
-        hideNodesOnDrag: false,
-        hover: false,
-        hoverConnectedEdges: true,
+    dragNodes:true,
+    dragView: true,
+    hideEdgesOnDrag: false,
+    hideNodesOnDrag: false,
+    hover: false,
+    hoverConnectedEdges: true,
     keyboard: {
-        enabled: false,
-        speed: {x: 10, y: 10, zoom: 0.02},
-        bindToWindow: true
+      enabled: false,
+      speed: {x: 10, y: 10, zoom: 0.02},
+      bindToWindow: true
     },
-        multiselect: false,
-        navigationButtons: true,
-        selectable: true,
-        selectConnectedEdges: true,
-        // tooltipDelay: 300,
-        zoomView: true
+    multiselect: true,
+    navigationButtons: true,
+    selectable: true,
+    selectConnectedEdges: true,
+    // tooltipDelay: 300,
+    zoomView: true
   },
 
          physics:{
            enabled:true,
            adaptiveTimestep:false,
-    // //      //   minVelocity:0.75,
-           maxVelocity:5
-          //   barnesHut: {gravitationalConstant: 0,
-         //       centralGravity: 0, springConstant: 0},
+    //      //   minVelocity:0.75,
+           maxVelocity:15
+    // //      //   barnesHut: {gravitationalConstant: 0,
+    // //      //       centralGravity: 0, springConstant: 0},
     //        stabilization: {
     //            enabled: true,
-              //   iterations: 1000,
-              //   updateInterval: 100,
-              //   onlyDynamicEdges: false,
+    // //          //   iterations: 1000,
+    // //          //   updateInterval: 100,
+    // //          //   onlyDynamicEdges: false,
     //            fit: true
     //  }
+    // //
          },
     //
     layout:{
-        improvedLayout:true,
-        //  randomSeed:83040,
-        //  randomSeed:undefined,
-        hierarchical: {
-             enabled:false
-          }
-    },
+      improvedLayout:true
+    //  //  randomSeed:83040,
+    //  randomSeed:undefined,
+    //   hierarchical: {
+    //    enabled:true}
+        },
 
+    scaling: {
+        label: {enabled: true}
+    },
     nodes: {
         // color:{background:'#97C2FC'},
         color: {background: '#97C2FC', highlight: {background: '#5898ED'}},
@@ -139,18 +142,17 @@ var options = {
 
 };
 
-var options2 = {
-    physics:{
-        adaptiveTimestep:false,
-        enabled:true,
-        maxVelocity:5
-    },
+      var options2 = {
+        physics:{
+          adaptiveTimestep:false,
+            enabled:true,
+            maxVelocity:5
+        },
 
    layout:{
-        improvedLayout:true,
-        hierarchical: {
-        enabled:false}
-    },
+     improvedLayout:true,
+     hierarchical: {
+      enabled:false}},
 
    scaling:{
      label:{enabled:true}
@@ -164,8 +166,7 @@ var options2 = {
    }
 
    };
-
-var network = new vis.Network(container, data, options);
+var network = new vis.Network(container, data, options2);
 
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table
 network.on( 'click', function(properties) {
