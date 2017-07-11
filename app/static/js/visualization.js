@@ -169,7 +169,7 @@ var options = {
 var network = new vis.Network(container, data, options);
 
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table
-network.on( 'hold', function(properties) {
+network.on( 'doubleClick', function(properties) {
     var ids = properties.nodes;
     // console.log(ids);
     var clickedNodes = nodes.get(ids);
