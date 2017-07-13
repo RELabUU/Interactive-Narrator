@@ -116,7 +116,7 @@ var options = {
         hover: {border: '#2B7CE9', background: '#D2E5FF'},
         shape: 'dot',
         font: {
-            // size:14,
+            size:18,
             bold: {color: '#0077aa'}
       }
         // size: 20,
@@ -136,7 +136,7 @@ var options = {
             from: {enabled: false, scaleFactor: 1, type: 'arrow'}
         },
         font: {
-        // size: 12
+        size: 16
       }
     }
 
@@ -155,7 +155,10 @@ var options = {
       enabled:false}},
 
    scaling:{
-     label:{enabled:true}
+     label:{
+         enabled:true,
+         // min: 24
+     }
    },
    nodes:{
      shape:'dot'
