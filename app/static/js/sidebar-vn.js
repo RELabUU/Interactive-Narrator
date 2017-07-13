@@ -1,12 +1,12 @@
-// insert the names of the roles into the checkbox labels
+// insert the names of the roles into the checkbox labels of the ROLE and SPRINT MULTI-SELECTS
 $(document).ready(function () {
     $.getJSON('/getroles', {}, function (data) {
         console.log(data);
         var i;
         for (i = 0; i < data.length; i++) {
-            console.log(data[i]);
+            // console.log(data[i]);
             var roleValue = data[i];
-            $("#roleselector").append($("<option></option>").attr("value", roleValue).text(roleValue));
+            $("#roleselector").append($("<option></option>").attr("value", roleValue).attr('selected','selected').text(roleValue));
 
         }
 
@@ -17,9 +17,9 @@ $(document).ready(function () {
         console.log(data);
         var i;
         for (i = 0; i < data.length; i++) {
-            console.log(data[i]);
+            // console.log(data[i]);
             var sprintValue = data[i];
-            $("#sprintselector").append($("<option></option>").attr("value", sprintValue).text(sprintValue));
+            $("#sprintselector").append($("<option></option>").attr("value", sprintValue).attr('selected','selected').text(sprintValue));
 
         }
         makeSprintSelector();
