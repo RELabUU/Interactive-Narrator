@@ -522,7 +522,7 @@ def concepts():
     for c in concepts_query:
         weight2 = 15 + (4 * math.sqrt(c.weight))
         concept_dictionary = {'id': c.class_id, 'label': c.class_name, 'weight': c.weight, 'size': weight2,
-                              'group': c.group, 'title': "", 'cid': c.cluster}
+                              'group': c.group, 'cid': c.cluster}
 
         concept_list.append(concept_dictionary)
 

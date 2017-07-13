@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <!-- iOS safari optimization -->
+    <!-- iOS safari optimization for zooming -->
     <script type="text/javascript">
         document.ontouchmove = function(event){
         event.preventDefault();
@@ -48,7 +48,7 @@
 
     <!-- Custom CSS for the sidebar navigation -->
     <link href="static/css/sidebar-vn.css" rel="stylesheet">
-    <link href="static/css/rangeslider.css" rel="stylesheet">
+{#    <link href="static/css/rangeslider.css" rel="stylesheet">#}
 
     <!-- Custom styles for this template -->
     <link href="static/css/custom.css" rel="stylesheet">
@@ -72,7 +72,7 @@
           <ul class="nav navbar-nav">
 
           </ul>
-            <ul id="useraccountitems"class="nav navbar-nav navbar-right">
+            <ul id="useraccountitems" class="nav navbar-nav navbar-right">
                 {% if session.get('logged_in') %}
                     <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
                 {% else %}
@@ -150,7 +150,7 @@
     </div><!-- End #sidebar-wrapper -->
     <!-- Modal -->
     <div id="helpModal" class="modal fade" role="dialog">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-md">
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -208,9 +208,6 @@
 
 <!-- Include the Javascript for the dropdown enhancer-->
 {#    <script src="static/js/dropdowns-enhancement.js"></script>#}
-
-<!--Inlcude the Javascript for the zoom scrollbar-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.0.0/bootstrap-slider.js"></script>
 
 
 <!-- Load the JS for the bootstrap-select plugin -->
