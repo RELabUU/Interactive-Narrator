@@ -10,11 +10,13 @@
 
 
 body {
-    background-color: #FFFFFF;
+    /*background-color: #FFFFFF;*/
+    background-color:#332F30;
     /*background-color: rgb(230, 230, 230);*/
     /*background-image: url("/static/img/Blurred-Background-23.jpg");*/
     /*background-position: right top;*/
     height: 98vh;
+    /*font-family: "Open Sans", sans-serif;*/
     /*padding-top: 70px;*/
 }
 
@@ -33,6 +35,7 @@ body {
 
 .navbar-header > a.navbar-brand{
     padding-left: 50px;
+    font-weight: 400;
 }
 #main-navbar-header{
     padding-left: 40px;
@@ -77,7 +80,8 @@ body {
     margin: auto;
 }
 .navbar-inverse .navbar-brand{
-    color:rgb(177, 178, 177);
+    color:#ECC348;
+
 }
 .navbar-inverse .navbar-nav > li > a{
     color:rgb(177, 178, 177);
@@ -147,7 +151,8 @@ body {
 }
 
 #main{
-    background-color: #FFFFFF;
+    /*background-color: #FFFFFF;*/
+    background-color: #332F30;
     min-height: 100vh;
 }
 
@@ -155,26 +160,82 @@ body {
  /*margin-top: 50px;*/
 }
 
-#row1{
+#showcase-row{
     margin-top: 30px;
+    background-color:#332F30;
+}
+#slogan-row{
+    background-color:#332F30;
+    height: 50px;
+    margin: 30px 0px 30px 0px;
+}
+h2#slogan{
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+    font-weight: 500;
+    color: #ECC348;
+    text-align: center;
+
+}
+#intro-left{
+    color: #FFFFFF;
+    padding-right:10px;
+}
+#intro-text-left{
+    padding: 50px 10px 50px 50px;
+}
+h2#intro-text-left-slogan{
+    color: #ECC348;
 }
 
-#intro-left-text{
-    padding: 50px 30px 50px 70px;
+#intro-text-left ul > li{
+    padding-right: 0;
 }
 
-#intro-left-text{
+#intro-text-left{
     font-size: 16px;
+    font-weight: 600;
 }
 
-#intro-left-text > ul{
+#intro-text-left > ul{
     padding-bottom: 20px;
 }
-#qus-introtext, #aqusa-introtext, #in-introtext{
+#introtext-row{
+    /*display: flex;*/
+    margin-top: 20px;
+}
+#introtext-row p{
+    color: #FFFFFF;
+    font-weight: 600;
+}
+#introtext-row .btn{
+        background-color: #332F30;
+    color: #ECC348;
+
+
+}
+#introtext-row h3{
+    color: #FFFFFF;
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+    font-weight: 600;
+    margin-top: 0;
+}
+#qus-introtext, #aqusa-introtext, #vn-introtext, #in-introtext{
     /*border: 1px solid silver;*/
     padding: 30px 40px 30px 40px;
+    /*align-items: stretch;*/
 }
-
+#qus-introtext{
+    background-color: #ECC348;
+}
+#aqusa-introtext{
+    background-color: #378CFF;
+}
+#vn-introtext{
+    background-color: #ECC348;
+}
+#in-introtext{
+    background-color: #378CFF;
+}
 
 #vis-wrapper {
     margin: 8px 10px 10px 10px;

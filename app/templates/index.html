@@ -3,18 +3,20 @@
 
 {% block title %} GRIMM - Home {% endblock title %}
 {% block main %}
-    <div id="row1" class="row">
+    <div id="showcase-row" class="row">
         <div id="intro-left" class="col-lg-4">
-            <div id="intro-left-text">
-            <h2>Welcome to GRIMM</h2>
+            <div id="intro-text-left">
+            <h2 id="intro-text-left-slogan">Welcome to GRIMM</h2>
             <p>GRIMM is your go-to method for creating high quality user stories.
                 It offers guidelines and
                 two software tools specifically engineered to help you
-                create, update and present your software requirements.</p>
+                create, update and present your software requirements. Use it as a
+                process or pick any of the four tools.</p>
                 <h4>GRIMM is:</h4>
-                <ul>
-                    <li>QUS</li>
-                    <li>AQUSA</li>
+                <ul class="list-inline">
+                    <li>QUS <span class="glyphicon glyphicon-chevron-right"></span></li>
+                    <li>AQUSA <span class="glyphicon glyphicon-chevron-right"></span> </li>
+                    <li>Visual Narrator <span class="glyphicon glyphicon-chevron-right"></span></li>
                     <li>Interactive Narrator</li>
                 </ul>
             <a href="/register" class="btn btn-md btn-success">Sign Up</a>
@@ -69,30 +71,44 @@
             </div> <!-- End #welcome-content -->
         </div> <!-- End col-8-->
     </div> <!-- End Row-->
-    <div class="row">
-        <div id="qus-introtext" class="col-lg-4">
-            <h4>QUS</h4>
+    <div id="slogan-row" class="row">
+        <h2 id="slogan">"Percect, Update and Visualize Your User Stories with GRIMM"</h2>
+    </div>
+    <div id="introtext-row" class="row row-eq-height">
+        <div id="qus-introtext" class="col-lg-3">
+            <h3>QUS</h3>
+            <i><h6>A User Story Framework</h6></i>
             <p>Quality User Story Framework is a collection of quality criteria for
 individual user stories as well as sets of user stories. Prevent ambiguity from turning into wrong
 assumptions by teaching this simple framework to the entire software development team.</p>
-            <a href="/register" class="btn btn-md btn-success">Read More</a>
+            <a href="/register" class="btn btn-md">Read More</a>
         </div>
-        <div id="aqusa-introtext" class="col-lg-4">
-            <h4>AQUSA</h4>
+        <div id="aqusa-introtext" class="col-lg-3">
+            <h3>AQUSA</h3>
+            <i><h6>Automated Syntacical User Story Analysis</h6></i>
             <p>Our first tool, AQUSA, helps you apply the QUS-framework
                 by analyzing your user stories and providing feedback. It highlights your areas of improvement.
                 With AQUSA, you will really make the perfect user stories.
             </p>
-            <a href="https://aqusa.nl" class="btn btn-md btn-success">Start Using AQUSA</a>
+            <a href="https://aqusa.nl" class="btn btn-md">Start Using AQUSA</a>
         </div>
-        <div id="in-introtext" class="col-lg-4">
-            <h4>Interactive Narrator</h4>
+        <div id="vn-introtext" class="col-lg-3">
+            <h3>Visual Narrator</h3>
+            <i><h6>Conceptual Model Generation</h6></i>
+            <p>At the centre of the GRIMM toolkit is Visual Narrator, which uses Natural Language processing techniques
+                to analyze your user stories. The tool can generate functional models in the form of HTML-reports and Ontologies.
+            </p>
+            <a href="https://github.com/MarcelRobeer/VisualNarrator/" class="btn btn-md">GitHub</a>
+        </div>
+        <div id="in-introtext" class="col-lg-3">
+            <h3>Interactive Narrator</h3>
+            <i><h6>Interactive Conceptual Models</h6></i>
             <p>
                 Interactive Narrator represents the final stage of the GRIMM-process. It visualizes your user stories into
                 a touch screen friendly interactive diagram. Interactive Narrator helps initiate
                 communication about software requirements.
             </p>
-            <a href="/register" class="btn btn-md btn-success">Start Using IN</a>
+            <a href="/register" class="btn btn-md btn">Start Using IN</a>
         </div>
     </div>
 {% endblock main %}
