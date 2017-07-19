@@ -10,16 +10,17 @@
             <h3>Dashboard</h3>
         <p>Welcome <strong>{{ username }}</strong</p>
 
-        <div id="db_records">
+        <div id="db-records">
+            <a class="btn btn-default" href="/vis">Show Visualization</a>
             <h5>Your Sprints:</h5>
 
             {% for sprint in sprints %}
-                <div id="db_sprint">
+                <div id="db-sprint">
             <strong>Sprint ID:</strong> {{ sprint.sprint_id }} <br>
             <strong>Sprint name:</strong> {{ sprint.sprint_name }} <br>
             <strong>Company name:</strong> {{ sprint.company_name }} <br>
             <strong>Company ID:</strong> {{ sprint.company_id }} <br>
-                <a class="btn btn-default" href="/vis">Show</a>
+
                 </div>
             {% endfor %}
         </div>

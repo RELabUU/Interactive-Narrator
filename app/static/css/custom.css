@@ -89,12 +89,20 @@ body {
     font-weight: 600;
 }
 
+/*#vis_url a:hover{*/
+    /*color: #FFFFFF;*/
+/*}*/
+
 #useraccountitems{
     padding-right: 75px;
 }
 #useraccountitems a{
     font-weight: 600;
     color:rgb(177, 178, 177);
+}
+
+#useraccountitems a:hover{
+    color: #FFFFFF;
 }
 
 #vis-wrapper {
@@ -402,8 +410,12 @@ input#submit{
 }
 /* ####DASHBOARD#### CSS*/
 
-#db_records{
+#db-records{
     padding: 10px 5px 5px 5px;
+}
+
+#db-sprint{
+    margin-top: 20px;
 }
 
 #dashboard-set-buttons{

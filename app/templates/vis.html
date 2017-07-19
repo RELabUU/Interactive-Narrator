@@ -92,9 +92,8 @@
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <li class="sidebar-brand">
-                <a id="menu-toggle" href="#">Int. Narrator
-                    <span id="main_icon" class="glyphicon glyphicon glyphicon-menu-hamburger"></span></a>
-            </li>
+            <a id="menu-toggle" href="#">Interactive Narrator<span id="main_icon" class="glyphicon glyphicon glyphicon-menu-hamburger"></span></a>
+        </li>
         <ul class="sidebar-nav">
 
             <!-- </li> -->
@@ -156,17 +155,19 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Interacitve Narrator Help</h4>
+            <h4 class="modal-title">Interactive Narrator Help</h4>
           </div>
           <div class="modal-body">
             <h5>Welcome tot the Interactive Narrator.</h5>
               <h6>Usage:</h6>
               <p>Interactive Narrator has processed your user stories and made the visualization. The visualization
-                  consists of nodes and edges. Each node represents a concept extracted from one or more user stories, whereas
-              an edge stands for a relationship that exists inside a user story.</p>
-              <p>Click on a node to see to which user story it belongs. The larger the node is, the more it occurs within your
-              set of user stories. Nodes that have a thick blue border are concepts that have a 'role function' within a user story.
-              Theses are often the actors that carry out certain tasks.</p>
+                  consists of nodes and edges: each node represents a concept extracted from one or more user stories, whereas
+              an edge stands for a relationship that exists between two concepts inside a user story. A relationship can also
+              be of a 'generalization' type, in in which the relationships respresents a child-parent hierarchy. These relationships
+              can span across user stories.</p>
+              <p>Double click on a node to see to which user story its concept belongs. The larger the node is, the more often it occurs within your
+              set of user stories. Use the slider to hide nodes below a certain weight limit. Nodes that have a thick blue border are concepts that have a 'role function' within a user story.
+              Theses are often the actors that carry out certain tasks/behavior that is modeled by the user stories.</p>
               <p></p>
           </div>
           <div class="modal-footer">
