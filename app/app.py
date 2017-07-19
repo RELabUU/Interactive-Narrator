@@ -532,22 +532,43 @@ def concepts():
 
 @app.route('/relationships')
 def relationships():
-    concepts_query = select([ClassVN])
-    relationships_query = select([RelationShipVN])
-    relationships_query_result = conn.execute(relationships_query)
-    concepts_query_result = conn.execute(concepts_query)
+    username = session['username']
+    # show all the sprints that are in the database on the dashboard page
+    concepts_query = sqlsession.query(ClassVN) \
+        .join(us_class_association_table) \
+        .join(UserStoryVN) \
+        .join(us_sprint_association_table) \
+        .join(SprintVN) \
+        .join(CompanyVN) \
+        .join(User).filter(User.username == username) \
+        .all()
+
+    # show all the sprints that are in the database on the dashboard page
+    relationships_query = sqlsession.query(RelationShipVN) \
+        .join(us_relationship_association_table) \
+        .join(UserStoryVN) \
+        .join(us_sprint_association_table) \
+        .join(SprintVN) \
+        .join(CompanyVN) \
+        .join(User).filter(User.username == username) \
+        .all()
+    # concepts_query = select([ClassVN])
+    # relationships_query = select([RelationShipVN])
+    # relationships_query_result = conn.execute(relationships_query)
+    # concepts_query_result = conn.execute(concepts_query)
+
     edges_id_list = []
     concepts_dict = {}
     concepts_dict_list = []
     relationshipslist = []
 
-    for concept in concepts_query_result:
+    for concept in concepts_query:
         concepts_dict[concept.class_id] = concept.class_name
         concepts_dict_list.append([concept.class_id, concept.class_name])
 
     # check if a domain(from) or range(to) is part of the userstory concepts and if so make
     # the relationship between the concepts involved
-    for rel in relationships_query_result:
+    for rel in relationships_query:
         relationshipslist.append([rel.relationship_domain, rel.relationship_range,
                                   rel.relationship_name, rel.relationship_id])
 
