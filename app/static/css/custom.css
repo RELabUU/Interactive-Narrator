@@ -355,7 +355,7 @@ h2#intro-text-left-slogan{
 /*FORM CSS*/
 
 #uploadform{
-
+    color:white;
     margin: auto;
     width: 80%;
 }
