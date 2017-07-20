@@ -213,8 +213,8 @@ h2#intro-text-left-slogan{
     font-weight: 600;
 }
 #introtext-row .btn{
-    background-color: #332F30;
-    color: #ECC348;
+    background-color: #ECC348;
+    color: #332F30;
 }
 
 #introtext-row a:hover{
@@ -227,22 +227,32 @@ h2#intro-text-left-slogan{
     font-weight: 600;
     margin-top: 0;
 }
+
+#introtext-row h5, h6{
+    color:#FFFFFF;
+}
+
 #qus-introtext, #aqusa-introtext, #vn-introtext, #in-introtext{
     /*border: 1px solid silver;*/
     padding: 30px 40px 30px 40px;
     /*align-items: stretch;*/
 }
 #qus-introtext{
-    background-color: #ECC348;
+    /*background-color: #ECC348;*/
+    border-top: 8px solid #ECC348;
 }
 #aqusa-introtext{
-    background-color: #378CFF;
+
+    border-top: 8px solid #378CFF;
+    /*background-color: #378CFF;*/
 }
 #vn-introtext{
-    background-color: #ECC348;
+    /*background-color: #ECC348;*/
+    border-top: 8px solid #ECC348;
 }
 #in-introtext{
-    background-color: #378CFF;
+    /*background-color: #378CFF;*/
+    border-top: 8px solid #378CFF;
 }
 
 #vis-wrapper {
