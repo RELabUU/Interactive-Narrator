@@ -196,6 +196,11 @@ h2#intro-text-left-slogan{
     font-weight: 600;
 }
 
+#intro-text-left a.btn-info{
+    background-image: linear-gradient(to bottom, #378CFF 0px, #2aabd2 100%);
+    background-color: #378CFF;
+}
+
 #intro-text-left > ul{
     padding-bottom: 20px;
 }
@@ -208,11 +213,14 @@ h2#intro-text-left-slogan{
     font-weight: 600;
 }
 #introtext-row .btn{
-        background-color: #332F30;
+    background-color: #332F30;
     color: #ECC348;
-
-
 }
+
+#introtext-row a:hover{
+    color: #FFFFFF;
+}
+
 #introtext-row h3{
     color: #FFFFFF;
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
@@ -490,4 +498,8 @@ input#submit{
 }
 a#logout-button{
     margin-top: 50px;
+}
+
+#user-info {
+    color: #FFFFFF;
 }
