@@ -59,7 +59,8 @@
                         <li><a href="https://github.com/marcelrobeer/visualnarrator">Visual Narrator</a></li>
                         <li><a href="/register">Interactive Narrator</a></li>
                     </ul>
-{#                <li class="nav navbar-left"><a href="">QUS</a></li>#}
+
+                <li class="nav navbar-left"><a href="/demo">Demo</a></li>
 {#                <li class="nav navbar-left"><a href="https://aqusa.nl">AQUSA</a></li>#}
 {#                <li class="nav navbar-left"><a href="https://github.com/marcelrobeer/visualnarrator">Visual Narrator</a></li>#}
 {#                <li class="nav navbar-left"><a href="/">Interactive Narrator</a></li>#}
@@ -70,8 +71,10 @@
                     <li><a id="vis_url" href="/vis">Visualization</a></li>
                 {% endif %}
                 {% if session.get('logged_in') %}
+{#                    {% if (session.get('username') != 'demoman') %}#}
                     <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
                     <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+{#                    {% endif %}#}
                 {% else %}
                 <li><a id="signupbtn" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>

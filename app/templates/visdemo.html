@@ -1,3 +1,4 @@
+{# Demo page that gets the data for the 'demoman' user. #}
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -73,15 +74,15 @@
               <li><a href="/">Home</a> </li>
 
           </ul>
-            <ul id="useraccountitems" class="nav navbar-nav navbar-right">
-                {% if session.get('logged_in') %}
-                    <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
-                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                {% else %}
-                <li><a id="signupbtn" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                {% endif %}
-            </ul>
+{#            <ul id="useraccountitems" class="nav navbar-nav navbar-right">#}
+{#                {% if session.get('logged_in') %}#}
+{#                    <li><a href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>#}
+{#                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>#}
+{#                {% else %}#}
+{#                <li><a id="signupbtn" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>#}
+{#                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>#}
+{#                {% endif %}#}
+{#            </ul>#}
         </div><!--/.nav-collapse -->
       </div>
       <div id="topbar-button">
@@ -108,6 +109,9 @@
                     </span>
                 </div><!-- /input-group -->
             </li>
+            {#                <li>#}
+            {#                    <a href="#">Epics<span class="sub_icon glyphicon glyphicon-fire" aria-hidden="true"></a>#}
+            {#                </li>#}
             <li>
                 <select id="roleselector" multiple="multiple">
 

@@ -25,7 +25,10 @@ from post import add_data_to_db
 sys.path.append('/var/www/VisualNarrator')
 
 from VisualNarrator import run
-import VisualNarrator.run
+
+# preload Spacey NLP
+spacy_nlp = run.initialize_nlp()
+
 from models import UserStoryVN, RelationShipVN, ClassVN, CompanyVN, \
     SprintVN, engine, us_class_association_table, \
     us_relationship_association_table, \
@@ -55,9 +58,12 @@ Session = sessionmaker(bind=engine)
 sqlsession = Session()
 conn = engine.connect()
 
-@app.route('/mobile')
-def mobilepage():
-    return render_template('mobile.html')
+@app.route('/demo')
+def demo():
+    username = 'demoman'
+    # session['logged_in'] = True
+    session['username'] = username
+    return render_template('visdemo.html')
 
 @app.route('/')
 def homepage():
@@ -125,7 +131,6 @@ def do_register():
     except Exception as e:
         print('an exception occured', e)
         return render_template('register.html', form=form)
-
         # return(str(e))
 
 
@@ -136,7 +141,6 @@ def do_login():
     form = LoginForm(request.form)
     if not session.get('logged_in'):
         if request.method == "POST":
-
 
             POST_USERNAME = str(request.form['username'])
             POST_PASSWORD = str(request.form['password'])
@@ -172,11 +176,6 @@ def do_login():
     else:
         return redirect(url_for('show_dash'))
 
-            # return render_template('dashboard.html')
-
-    # except Exception as e:
-    #     print('An exception occured:', e)
-    #     return render_template('login.html')
 
 @app.route("/logout")
 def logout():
@@ -184,10 +183,13 @@ def logout():
     # return render_template("login.html")
     return redirect(url_for('do_login'))
 
+
 @app.route("/dashboard")
 def show_dash():
     if not session.get('logged_in'):
-        return render_template("login.html")
+            return render_template("login.html")
+    if session['username'] == 'demoman':
+        return redirect(url_for("demo"))
     else:
 
         username = session['username']
@@ -201,21 +203,26 @@ def show_dash():
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
                         company_name=sprint.company_name) for sprint in all_sprints]
+        # extra data for admin
         if username == 'govertjan':
             registered_users = sqlsession.query(User).all()
         else:
             registered_users = ''
+        # check what company name is regeistered for this user
+        company_present = sqlsession.query(CompanyVN).join(User).filter(User.username == username).first()
 
-        return render_template("dashboard.html", sprints=sprints, username=username, registered_users=registered_users)
+        if company_present:
+            company_name = company_present.company_name
+        else:
+            company_name = ''
+
+        return render_template("dashboard.html", sprints=sprints, username=username, company_name=company_name, registered_users=registered_users)
 
 
-        # except Exception as e:
-        #     print('An Exception occured:', e)
-        #     return redirect(url_for('do_login'))
 
 # View for clearing the entire database
-@app.route("/cleandatabase")
-def clean_database():
+@app.route("/delete_all")
+def delete_all():
     # get all userstories and delete them one by one
     # the cascade makes sure all sprints, relationships, classes and association table entries are deleted as well
     username = session['username']
@@ -276,61 +283,64 @@ def form():
             sprint_form_data['sprint_name'] = form.sprint_name.data
             # check of the inserted sprint values already exist
             sprint_exists = sqlsession.query(SprintVN).filter\
-                (SprintVN.sprint_name == sprint_form_data['sprint_name']).first()
-            print('this sprint exists:', sprint_exists)
+                (SprintVN.sprint_name == sprint_form_data['sprint_name'])\
+                .join(CompanyVN)\
+                .join(User).filter(User.username == active_user.username)\
+                .first()
+
             # if the sprint already exists, notify the user...
             if sprint_exists:
-                error = 'sprint is already in the database'
+                error = 'could not add: this sprint is already in the database. Please choose a different name'
                 print('sprint exists already', sprint_exists)
                 return render_template('form.html', form=form, error=error)
             # ...if it doesn't, add it to the DB
             else:
-                sqlsession.add(SprintVN(sprint_name=sprint_form_data['sprint_name'],
-                                        company_name=active_company_name, company_id=active_company.id))
-                print('added sprint')
-                # flash('sprint added')
-
-            # FILE UPLOAD HANDLING
-            file = request.files['file']
-            if file.filename == '':
-                error = 'No selected file'
-                return render_template('form.html', form=form, error=error)
-            # Check if the file is one of the allowed types/extensions
-            if file and allowed_file(file.filename):
-                #     # Make the filename safe, remove unsupported chars
-                filename = secure_filename(file.filename)
-                #     # Move the file form the temporal folder to
-                #     # the upload folder we setup
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-                # set the filename so Visual Narrator can handle it
-                set_filename = 'uploads/' + file.filename
-                # now add the sprint to the database
-                sqlsession.commit()
-                #find the spint that was just added, and obtain its ID
-                newest_sprint = sqlsession.query(SprintVN).order_by(SprintVN.id.desc()).first()
-                sprint_form_data['sprint_id'] = newest_sprint.id
-                try:
-                    # run the visual narrator back-end and obtain needed objects for visualization
-                    data = run.program(set_filename)
-                    #  run the poster method to place the objects and their attributes in the database
-                    # poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
-                    add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
-                                   sprint_form_data)
-                except Exception as e:
-                    print('Exception raised', e)
-                    error = 'Oops, there was a problem. Please try again'
-                    # import pdb
-                    # pdb.set_trace()
-                    # sqlsession.rollback()
+                # FILE UPLOAD HANDLING
+                file = request.files['file']
+                if file.filename == '':
+                    error = 'No file was selected'
                     return render_template('form.html', form=form, error=error)
+                # Check if the file is one of the allowed types/extensions
+                if file and allowed_file(file.filename):
+                    # Make the filename safe, remove unsupported chars
+                    filename = secure_filename(file.filename)
+                    # Move the file form the temporal folder to...
+                    # ...the upload folder we setup
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                    # set the filename so Visual Narrator can handle it
+                    set_filename = 'uploads/' + file.filename
+
+                    try:
+                        sqlsession.add(SprintVN(sprint_name=sprint_form_data['sprint_name'],
+                                                company_name=active_company_name, company_id=active_company.id))
+                        print('added sprint')
+                        # now add the sprint to the database
+                        sqlsession.commit()
+                        # find the spint that was just added, and obtain its ID
+                        newest_sprint = sqlsession.query(SprintVN).order_by(SprintVN.id.desc()).first()
+                        sprint_form_data['sprint_id'] = newest_sprint.id
+                        # flash('sprint added')
+
+                        # run the visual narrator back-end and obtain needed objects for visualization
+                        # import pdb;pdb.set_trace()
+                        data = run.call(set_filename, spacy_nlp)
+                        #  run the poster method to place the objects and their attributes in the database
+                        # poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
+                        add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
+                                       sprint_form_data)
+                    except Exception as e:
+                        print('Exception raised', e)
+                        error = 'Oops, there was a problem. Please try again'
+
+                        return render_template('form.html', form=form, error=error)
 
 
-                # if all went well redirect the user to the visualization directly
-                return redirect(url_for('show_vis'))
-            else:
-                error = 'There was a problem with the file (type)'
-                return render_template('form.html', form=form, error=error)
+                    # if all went well redirect the user to the visualization directly
+                    return redirect(url_for('show_vis'))
+                else:
+                    error = 'There was a problem with the file (type)'
+                    return render_template('form.html', form=form, error=error)
 
         else:
             # flash('something went wrong, please try again')
@@ -361,7 +371,7 @@ def get_roles():
 def get_sprints():
     username = session['username']
     # print(username)
-    # show all the sprints that are in the database on the dashboard page
+    # show all the sprints that are in the database for this user on the dashboard page
 
     # sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id"))
 
@@ -600,6 +610,11 @@ def relationships():
 
     return json_edges
 
+
+# custom error pages
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('server_error.html'), 500
 
 if __name__ == '__main__':
     app.run()

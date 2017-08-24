@@ -86,22 +86,25 @@ var options = {
            enabled:true,
            adaptiveTimestep:false,
     //      //   minVelocity:0.75,
-           maxVelocity:15
-    // //      //   barnesHut: {gravitationalConstant: 0,
-    // //      //       centralGravity: 0, springConstant: 0},
+           maxVelocity:15,
+           barnesHut: {gravitationalConstant: -10000,
+               avoidOverlap: 0.9
+                // centralGravity: 0
+               // springConstant: 0
+               // damping: 0
     //        stabilization: {
     //            enabled: true,
     // //          //   iterations: 1000,
     // //          //   updateInterval: 100,
     // //          //   onlyDynamicEdges: false,
     //            fit: true
-    //  }
+            }
     // //
          },
     //
     layout:{
-      improvedLayout:true
-    //  //  randomSeed:83040,
+      improvedLayout:true,
+      randomSeed:1
     //  randomSeed:undefined,
     //   hierarchical: {
     //    enabled:true}
@@ -116,7 +119,7 @@ var options = {
         hover: {border: '#2B7CE9', background: '#D2E5FF'},
         shape: 'dot',
         font: {
-            // size:14,
+            size:16,
             bold: {color: '#0077aa'}
       }
         // size: 20,
@@ -129,45 +132,46 @@ var options = {
     edges: {
         labelHighlightBold: true,
         width: 1,
-        length:200, //the lenght of the edges is set here. standard:undefined
+        length: undefined, //the lenght of the edges is set here. standard:undefined
         arrows: {
             to: {enabled: true, scaleFactor: 1, type: 'arrow'},
             middle: {enabled: false, scaleFactor: 1, type: 'arrow'},
             from: {enabled: false, scaleFactor: 1, type: 'arrow'}
         },
         font: {
-        // size: 12
+        size: 16,
+            bold: true
       }
     }
 
 };
 
-      var options2 = {
-        physics:{
-          adaptiveTimestep:false,
-            enabled:true,
-            maxVelocity:5
-        },
-
-   layout:{
-     improvedLayout:true,
-     hierarchical: {
-      enabled:false}},
-
-   scaling:{
-     label:{
-         enabled:true,
-     }
-   },
-   nodes:{
-     shape:'dot'
-   },
-   edges:{
-     labelHighlightBold:true,
-	 length:100 //the lenght of the edges is set here. standard:undefined
-   }
-
-   };
+   //    var options2 = {
+   //      physics:{
+   //        adaptiveTimestep:false,
+   //          enabled:true,
+   //          maxVelocity:5
+   //      },
+   //
+   // layout:{
+   //   improvedLayout:true,
+   //   hierarchical: {
+   //    enabled:false}},
+   //
+   // scaling:{
+   //   label:{
+   //       enabled:true
+   //   }
+   // },
+   // nodes:{
+   //   shape:'dot'
+   // },
+   // edges:{
+   //   labelHighlightBold:true,
+	//  length:100 //the lenght of the edges is set here. standard:undefined
+   // }
+   //
+   // };
 var network = new vis.Network(container, data, options);
 
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table

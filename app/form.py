@@ -11,10 +11,11 @@ class SetInfoForm(Form):
     # [required()])
     # company_name = StringField('Company Name', [Length(max=255), validators.DataRequired()])
     # sprint_id = IntegerField('SprintID', [validators.DataRequired()])
-    sprint_name = StringField('Sprint Name', [Length(max=255), validators.DataRequired(message='Please enter a valid name')])
+    sprint_name = StringField('Sprint Name', [Length(max=255),
+                                              validators.DataRequired(message='Please enter a valid name')])
     submit = SubmitField("Send")
-
-
+    # Regexp(r'^[\w.@+-]+$')
+    # validators.Regexp(r'^[a-zA-Z0-9_ ]*$'),
 class LoginForm(Form):
     username = StringField('Username', [Length(max=255), validators.DataRequired()])
     password = PasswordField('Password', [Length(max=255), validators.DataRequired(message='wrong')])

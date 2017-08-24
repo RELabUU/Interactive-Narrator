@@ -8,18 +8,18 @@
 
     <div class="col-lg-4 col-md-6 col-sm-7 col-xs-6" id="user-info">
             <h3>Dashboard</h3>
-        <p>Welcome <strong>{{ username }}</strong</p>
+        <p>Welcome <strong>{{ username }}</strong> from <strong> {{ company_name }}</strong></p>
 
         <div id="db-records">
-            <a class="btn btn-default" href="/vis">Show Visualization</a>
-            <h5>Your Sprints:</h5>
 
-            {% for sprint in sprints %}
+            <h4>Your Sprints:</h4>
+
+            {% for sprint in sprints | sort(attribute='sprint_id', reverse = True) %}
                 <div id="db-sprint">
-            <strong>Sprint ID:</strong> {{ sprint.sprint_id }} <br>
-            <strong>Sprint name:</strong> {{ sprint.sprint_name }} <br>
-            <strong>Company name:</strong> {{ sprint.company_name }} <br>
-            <strong>Company ID:</strong> {{ sprint.company_id }} <br>
+                    <strong>Sprint ID:</strong> {{ sprint.sprint_id }} <br>
+                    <strong>Sprint name:</strong> {{ sprint.sprint_name }} <br>
+{#                    <strong>Company name:</strong> {{ sprint.company_name }} <br>#}
+{#                    <strong>Company ID:</strong> {{ sprint.company_id }} <br>#}
 
                 </div>
             {% endfor %}
@@ -29,13 +29,10 @@
 {#    <input id=logout type="submit" value="Logout" class="btn btn-primary btn-large btn-block" >#}
     <div class="col-lg-4 col-md-4 col-sm-3 col-xs-5"><!-- buttons column -->
           <div id="dashboard-set-buttons">
+                <a class="btn btn-default" href="/vis">Show Visualization</a>
                 <a class="btn btn-success" href="{{ url_for('form') }}"> Upload Set</a>
-
-                <a class="btn btn-warning" href="{{ url_for('clean_database') }}"> Clean Database</a>
-
-{#                <a id="logout-button" class="btn btn-default" href="{{ url_for('logout') }}">Log Out</a>#}
-            </div>
-
+                <a class="btn btn-warning" href="{{ url_for('delete_all') }}"> Delete All</a>
+          </div>
     </div>
 
 </div>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% from 'fields.html' import render_field %}
+
+{% block title %} Dashboard {% endblock title %}
+{% block main %}
+<div class="row"><!-- first row -->
+    <div class="col-lg-4 col-md-2 col-sm-2 col-xs-1"></div><!-- empty column -->
+
+    <div class="col-lg-4 col-md-6 col-sm-7 col-xs-6" id="user-info">
+        <h3>Sorry, it appears there was an error with our system. Please return to the homepage here.</h3>
+
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-5"><!-- buttons column -->
+
+    </div>
+
+</div>
+    <div class="row"><!-- second row -->
+    <div class="col-lg-4 col-md-2 col-sm-2 col-xs-1"></div><!-- empty column -->
+
+
+
+        <div class="col-lg-4 col-md-6 col-sm-7 col-xs-6"><!-- user names column -->
+
+
+        </div>
+    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-5"></div><!-- empty column -->
+
+    </div>
+
+{% endblock main %}
