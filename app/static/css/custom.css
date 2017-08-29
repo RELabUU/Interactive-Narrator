@@ -412,6 +412,10 @@ ul.flashes li{
 
 /* ####LOGIN AND REGISTRATION PAGE####*/
 
+.login h1, h2, h3, h4, h5, h6, .registration h1, h2, h3, h4, h5, h6{
+    color: #332F30;
+}
+
 p.error{
     color: #b93331;
 }

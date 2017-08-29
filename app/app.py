@@ -187,7 +187,7 @@ def logout():
 @app.route("/dashboard")
 def show_dash():
     if not session.get('logged_in'):
-            return render_template("login.html")
+        return render_template("login.html")
     if session['username'] == 'demoman':
         return redirect(url_for("demo"))
     else:
@@ -331,7 +331,8 @@ def form():
                                        sprint_form_data)
                     except Exception as e:
                         print('Exception raised', e)
-                        error = 'Oops, there was a problem. Please try again'
+                        error = 'Oops, there was a problem. Please try again' \
+                                'Does your file have a strange encoding?'
 
                         return render_template('form.html', form=form, error=error)
 
@@ -375,12 +376,11 @@ def get_sprints():
 
     # sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id"))
 
-    sprints = sqlsession.query(SprintVN.id.distinct().label("id")) \
+    sprints = sqlsession.query(SprintVN) \
         .join(CompanyVN) \
         .join(User).filter(User.username == username)
-
-    all_sprints = [row.id for row in sprints.all()]
-    print(all_sprints)
+    all_sprints = [row.sprint_name for row in sprints.all()]
+    print("THIS IS SPRINTS", all_sprints)
     return jsonify(all_sprints)
 
 # this route displays the userstories to which a node belongs when you click on the node
