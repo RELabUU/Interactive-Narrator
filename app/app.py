@@ -376,11 +376,12 @@ def get_sprints():
 
     # sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id"))
 
-    sprints = sqlsession.query(SprintVN) \
+    sprints = sqlsession.query(SprintVN.id.distinct().label("id")) \
         .join(CompanyVN) \
         .join(User).filter(User.username == username)
-    all_sprints = [row.sprint_name for row in sprints.all()]
-    print("THIS IS SPRINTS", all_sprints)
+
+    all_sprints = [row.id for row in sprints.all()]
+    print(all_sprints)
     return jsonify(all_sprints)
 
 # this route displays the userstories to which a node belongs when you click on the node
