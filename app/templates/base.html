@@ -60,7 +60,12 @@
                         <li><a href="/register">Interactive Narrator</a></li>
                     </ul>
 
-                <li class="nav navbar-left"><a href="/demo">Demo</a></li>
+                 {% if session['username'] == '' or session['username'] == 'demoman' %}
+                     <li class="nav navbar-left"><a href="/demo">Demo</a></li>
+                    {% else %}
+
+                {% endif %}
+{#                <li class="nav navbar-left"><a href="/demo">Demo</a></li>#}
 {#                <li class="nav navbar-left"><a href="https://aqusa.nl">AQUSA</a></li>#}
 {#                <li class="nav navbar-left"><a href="https://github.com/marcelrobeer/visualnarrator">Visual Narrator</a></li>#}
 {#                <li class="nav navbar-left"><a href="/">Interactive Narrator</a></li>#}
