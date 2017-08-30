@@ -60,7 +60,7 @@
                         <li><a href="/register">Interactive Narrator</a></li>
                     </ul>
 
-                 {% if session['username']== False or session['username'] == '' or session['username'] == 'demoman' %}
+                 {% if not session['username'] or session['username'] == '' or session['username'] == 'demoman' %}
                      <li class="nav navbar-left"><a href="/demo">Demo</a></li>
                     {% else %}
 
