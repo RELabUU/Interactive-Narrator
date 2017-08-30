@@ -60,10 +60,14 @@ conn = engine.connect()
 
 @app.route('/demo')
 def demo():
-    username = 'demoman'
-    # session['logged_in'] = True
-    session['username'] = username
-    return render_template('visdemo.html')
+    if session['logged_in'] and session['username'] !='demoman':
+        return redirect(url_for('homepage'))
+
+    else:
+        username = 'demoman'
+        # session['logged_in'] = True
+        session['username'] = username
+        return render_template('visdemo.html')
 
 @app.route('/')
 def homepage():
@@ -180,6 +184,7 @@ def do_login():
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
+    session['username'] = ''
     # return render_template("login.html")
     return redirect(url_for('do_login'))
 

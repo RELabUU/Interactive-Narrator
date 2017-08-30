@@ -26,16 +26,16 @@ function showDataSet(data) {
         // if nothing is selected, make everything grey. NOT WORKING!
         if (!selected) {
 
-            nodes.update({id: node.id, color: '#E8E8E8'});
+            nodes.update({id: node.id, color: '#E8E8E8', font:{color:'#E8E8E8'}});
         }
         // else if a node is selected make it blue
         else {
             if (node.group == 'Role') {
-                nodes.update({id: node.id, color: '#97C2FC'});
+                nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
 
             }
             else {
-                nodes.update({id: node.id, color: '#97C2FC'});
+                nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
             }
         }
     });
@@ -43,7 +43,7 @@ function showDataSet(data) {
     // if no roles are selected, return to the default appearance
     if (nodes_dataset.length == 0) {
         nodes.forEach(function (node) {
-            nodes.update({id: node.id, color: '#97C2FC'});
+            nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
         });
 
     }
@@ -52,13 +52,13 @@ function showDataSet(data) {
     edges.forEach(function (edge) {
         var selected = edges_dataset.get(edge.id);
         // console.log(edge.id);
-        // if no edges are part of the selection, make them grey
+        // if edges are not part of the selection, make them grey
         if (!selected) {
-            edges.update({id: edge.id, color: '#E8E8E8'});
+            edges.update({id: edge.id, color: '#E8E8E8', font:{color:'#E8E8E8'} });
         }
         //else make all edges blue
         else {
-            edges.update({id: edge.id, color: '#5898ED'});
+            edges.update({id: edge.id, color: '#5898ED', font:{color:'#343434'}} );
         }
 
     });
@@ -66,7 +66,7 @@ function showDataSet(data) {
     // if no roles are selected or a selected role has no relationships, return to the default appearance
     if (edges_dataset.length == 0 && nodes_dataset.length == 0) {
         edges.forEach(function (edge) {
-            edges.update({id: edge.id, color: '#5898ED'});
+            edges.update({id: edge.id, color: '#5898ED', font:{color:'#343434'}});
         });
 
     }
