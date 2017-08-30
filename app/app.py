@@ -58,12 +58,12 @@ Session = sessionmaker(bind=engine)
 sqlsession = Session()
 conn = engine.connect()
 
-@app.route('/demo')
+@app.route('/demo', methods=['GET', 'POST'])
 def demo():
-    if session['logged_in'] and session['username'] !='demoman':
-        return redirect(url_for('homepage'))
-
-    else:
+    # if session['logged_in'] and session['username'] !='demoman':
+    #     return redirect(url_for('homepage'))
+    #
+    # else:
         username = 'demoman'
         # session['logged_in'] = True
         session['username'] = username
