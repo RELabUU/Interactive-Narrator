@@ -174,6 +174,39 @@ var options = {
    // };
 var network = new vis.Network(container, data, options);
 
+// network.on( 'doubleClick', function(properties) {
+//     //determine the position where the popup window should appear.
+//     console.log("dit werkt dus wel");
+// 	var position = $('#userstorytable').offset();
+// 	var positionTop = position.top-360;
+// 	var positionLeft = position.left+36;
+//
+// 	//set the content of the popup window. If your content comes from an array or database use the 'id' variable to get this content first.
+// 	var content = "test";
+//
+// 	//add the close button
+// 	content = content + "<div onclick='closeWindow()' class='closeWindow'>X</div>";
+//
+// 	//put the window on the screen
+// 	$("body").append('<div class="window" style="top:'+positionTop+'px; left:'+positionLeft+'px;">'+content+'</div>');
+//
+//    //make the window draggable
+// 	$( function() {
+// 	    console.log('hier komt hij ook');
+// 		$( ".window" ).draggable();
+//
+// 	});
+//
+// });
+//
+// function closeWindow() {
+// 	$(".window").css('display', 'none');
+// }
+
+function closeWindow(id) {
+	$("#userstorytable").css('display', 'none');
+}
+
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table
 network.on( 'doubleClick', function(properties) {
     var ids = properties.nodes;
@@ -187,10 +220,12 @@ network.on( 'doubleClick', function(properties) {
         console.log(data);
 
         $("#userstorytable tr").remove();
+
         for (var i = 0; i < data.length; i++) {
             if (i== 0){
                 console.log('succes');
                 $('#userstorytable').append("<tr><th>SP</th><th>US</th><th>Text</th></tr>");
+
             }
 
             var s = data[i].text;
@@ -206,8 +241,13 @@ network.on( 'doubleClick', function(properties) {
             tr.append("<td>" + newText + "</td>");
 
             $('#userstorytable').append(tr);
-        }
+            $("#userstorytable").css('display', 'block');
 
+        }
+                //remove the close button
+                $('.closeWindow').remove();
+                //add the close button
+                $('#userstorytable').append("<div onclick='closeWindow()' class='closeWindow'>X</div>");
         }
     );
     // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');

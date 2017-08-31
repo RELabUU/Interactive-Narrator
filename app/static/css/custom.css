@@ -353,9 +353,21 @@ h2#intro-text-left-slogan{
 #userstorytable tr, td, th{
     /*margin: 10px;*/
     padding: 5px 10px 0px 5px;
-
-
 }
+
+.closeWindow {
+		position:absolute;
+		cursor:pointer;
+		right:8px;
+		top:8px;
+		border-radius: 68px;
+		background-color:#000000;
+		padding:4px 9px 4px 9px;
+		color:#FFFFFF;
+		font-size:12px;
+		font-family:arial;
+	}
+
 
 #helpModal{
     /*z-index: 1000;*/
@@ -496,6 +508,10 @@ input#accept_tos{
 
 input#submit{
     width:100%;
+}
+
+input#submit:hover{
+    background-color:#4f81bd;
 }
 /* ####DASHBOARD#### CSS*/
 

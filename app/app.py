@@ -379,13 +379,17 @@ def get_sprints():
     # print(username)
     # show all the sprints that are in the database for this user on the dashboard page
 
-    # sprints = sqlsession.query(SprintVN.sprint_id.distinct().label("sprint_id"))
-
-    sprints = sqlsession.query(SprintVN.id.distinct().label("id")) \
+    sprints = sqlsession.query(SprintVN) \
         .join(CompanyVN) \
-        .join(User).filter(User.username == username)
+        .join(User).filter(User.username == username).all()
 
-    all_sprints = [row.id for row in sprints.all()]
+    # sprints = sqlsession.query(SprintVN.id.distinct().label("id")) \
+    #     .join(CompanyVN) \
+    #     .join(User).filter(User.username == username)
+
+    all_sprints = [[sprint.sprint_name, sprint.id] for sprint in sprints]
+    # import pdb
+    # pdb.set_trace()
     print(all_sprints)
     return jsonify(all_sprints)
 
