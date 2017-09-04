@@ -329,15 +329,16 @@ h2#intro-text-left-slogan{
 }
 
 #userstorytable{
-    margin:5px;
+    /*margin:5px;*/
     empty-cells: hide;
-    display: block;
+    display: none;
     width: auto;
     max-height:20%;
     overflow: scroll;
     overflow-x: hidden;
     bottom: 15px;
     margin: 0px 20px 5px 10px;
+    padding: 5px 10px 5px 0px;
     position: absolute;
     /*font: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;*/
     font-weight: 500;
@@ -347,7 +348,7 @@ h2#intro-text-left-slogan{
     -moz-border-radius:6px;
     /*background-color: rgba(45, 174, 248, 0.17);*/
     background-color: rgb(212,239,255);
-    padding: 5px 10px 0px 0px;
+
 }
 
 #userstorytable tr, td, th{
@@ -355,16 +356,17 @@ h2#intro-text-left-slogan{
     padding: 5px 10px 0px 5px;
 }
 
+
 .closeWindow {
 		position:absolute;
 		cursor:pointer;
 		right:8px;
-		top:8px;
-		border-radius: 68px;
-		background-color:#000000;
-		padding:4px 9px 4px 9px;
-		color:#FFFFFF;
-		font-size:12px;
+		top:4px;
+		/*border-radius: 68px;*/
+		/*background-color:#000000;*/
+		padding:2px 2px 2px 2px;
+		/*color:#FFFFFF;*/
+		font-size:28px;
 		font-family:arial;
 	}
 

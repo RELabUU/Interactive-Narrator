@@ -2,9 +2,9 @@
 import sys
 import os
 import math
+import json
 # from _operator import and_
 
-# sys.path.append('/home/gjslob/Documents/environments/inarrator')
 sys.path.append('/var/www/interactivenarrator')
 
 from sqlalchemy import create_engine, select, update, func
@@ -16,12 +16,9 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename, redirect
 from passlib.hash import sha256_crypt
 from collections import OrderedDict
-from models import Base, User
 from form import SetInfoForm, LoginForm, RegistrationForm
-import json
 from post import add_data_to_db
 
-# sys.path.append('/home/gjslob/Documents/environments/inarrator/VisualNarrator')
 sys.path.append('/var/www/VisualNarrator')
 
 from VisualNarrator import run
@@ -29,7 +26,8 @@ from VisualNarrator import run
 # preload Spacey NLP
 spacy_nlp = run.initialize_nlp()
 
-from models import UserStoryVN, RelationShipVN, ClassVN, CompanyVN, \
+# import the database models
+from models import Base, User, UserStoryVN, RelationShipVN, ClassVN, CompanyVN, \
     SprintVN, engine, us_class_association_table, \
     us_relationship_association_table, \
     us_sprint_association_table
@@ -49,9 +47,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 db = SQLAlchemy(app)
 db.Model = Base
 
-# NOTE: sqlsession vs session usage!
-# session is a login/logout session
-# sqlsession is a Session() object
+# NOTE: sqlsession vs session usage: session is a login/logout browser session while sqlsession is a Session() object
 
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
@@ -72,16 +68,6 @@ def demo():
 @app.route('/')
 def homepage():
     return render_template('index.html')
-
-# # Homepage
-# @app.route('/')
-# def home():
-#     if not session.get('logged_in'):
-#         # return render_template('login.html')
-#         return redirect(url_for('do_login'))
-#     else:
-#         return redirect(url_for('show_dash'))
-#         # return render_template('dashboard.html')
 
 
 # a route for displaying the visualization
@@ -149,8 +135,6 @@ def do_login():
             POST_USERNAME = str(request.form['username'])
             POST_PASSWORD = str(request.form['password'])
 
-            # query = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]),
-            #                                       User.password.in_([POST_PASSWORD]))
             # check if a user with the entered username exists
             check_user = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]))
 
@@ -253,19 +237,6 @@ def delete_all():
         return redirect(url_for('show_dash'))
 
 
-# @app.route('/sprints/<int:sprint_id>/')
-# def sprint_detail(sprint_id):
-#     """Provide HTML page with a given sprint."""
-#
-#     # Query: get Appointment object by ID.
-#     set = sqlsession.query(SprintVN).get(sprint_id)
-#     if set is None:
-#     # Abort with Not Found.
-#         abort(404)
-#
-#     return render_template('set_detail.html',
-#                            set=set)
-
 @app.route('/form', methods=['GET', 'POST'])
 def form():
     if session.get('logged_in'):
@@ -330,8 +301,7 @@ def form():
                         # run the visual narrator back-end and obtain needed objects for visualization
                         # import pdb;pdb.set_trace()
                         data = run.call(set_filename, spacy_nlp)
-                        #  run the poster method to place the objects and their attributes in the database
-                        # poster(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'], form_data)
+                        #  run the poster.add_data_to_db method to place the objects and their attributes in the database
                         add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
                                        sprint_form_data)
                     except Exception as e:
@@ -383,13 +353,8 @@ def get_sprints():
         .join(CompanyVN) \
         .join(User).filter(User.username == username).all()
 
-    # sprints = sqlsession.query(SprintVN.id.distinct().label("id")) \
-    #     .join(CompanyVN) \
-    #     .join(User).filter(User.username == username)
-
     all_sprints = [[sprint.sprint_name, sprint.id] for sprint in sprints]
-    # import pdb
-    # pdb.set_trace()
+
     print(all_sprints)
     return jsonify(all_sprints)
 
@@ -572,10 +537,6 @@ def relationships():
         .join(CompanyVN) \
         .join(User).filter(User.username == username) \
         .all()
-    # concepts_query = select([ClassVN])
-    # relationships_query = select([RelationShipVN])
-    # relationships_query_result = conn.execute(relationships_query)
-    # concepts_query_result = conn.execute(concepts_query)
 
     edges_id_list = []
     concepts_dict = {}
@@ -621,10 +582,15 @@ def relationships():
     return json_edges
 
 
-# custom error pages
+# custom error for 500
 @app.errorhandler(500)
 def internal_server_error(error):
     return render_template('server_error.html'), 500
+
+# custom error for 404
+@app.errorhandler(404)
+def page_not_found_error(error):
+    return render_template('not_found_error.html'), 404
 
 if __name__ == '__main__':
     app.run()

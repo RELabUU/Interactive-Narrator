@@ -5,13 +5,6 @@
     //this file helps obtaining the json data from the app **??
 
 
-// $.getJSON('/clusters',
-//     function (data) {
-//     console.log(data.nodes);
-//
-// });
-
-
 //Create an object for a HTTP-request
 var HttpClient = function () {
         this.get = function (aUrl, aCallback) {
@@ -126,7 +119,7 @@ var options = {
         // widthConstraint: {minimum: 25, maximum: 50}
     },
     groups: {
-        Role: {color: {background: '#42b3f4'}, borderWidth: 5}
+        Role: {color: {background: '#4A87F4'}, borderWidth: 5}
     },
 
     edges: {
@@ -146,62 +139,9 @@ var options = {
 
 };
 
-   //    var options2 = {
-   //      physics:{
-   //        adaptiveTimestep:false,
-   //          enabled:true,
-   //          maxVelocity:5
-   //      },
-   //
-   // layout:{
-   //   improvedLayout:true,
-   //   hierarchical: {
-   //    enabled:false}},
-   //
-   // scaling:{
-   //   label:{
-   //       enabled:true
-   //   }
-   // },
-   // nodes:{
-   //   shape:'dot'
-   // },
-   // edges:{
-   //   labelHighlightBold:true,
-	//  length:100 //the lenght of the edges is set here. standard:undefined
-   // }
-   //
-   // };
+
 var network = new vis.Network(container, data, options);
 
-// network.on( 'doubleClick', function(properties) {
-//     //determine the position where the popup window should appear.
-//     console.log("dit werkt dus wel");
-// 	var position = $('#userstorytable').offset();
-// 	var positionTop = position.top-360;
-// 	var positionLeft = position.left+36;
-//
-// 	//set the content of the popup window. If your content comes from an array or database use the 'id' variable to get this content first.
-// 	var content = "test";
-//
-// 	//add the close button
-// 	content = content + "<div onclick='closeWindow()' class='closeWindow'>X</div>";
-//
-// 	//put the window on the screen
-// 	$("body").append('<div class="window" style="top:'+positionTop+'px; left:'+positionLeft+'px;">'+content+'</div>');
-//
-//    //make the window draggable
-// 	$( function() {
-// 	    console.log('hier komt hij ook');
-// 		$( ".window" ).draggable();
-//
-// 	});
-//
-// });
-//
-// function closeWindow() {
-// 	$(".window").css('display', 'none');
-// }
 
 function closeWindow(id) {
 	$("#userstorytable").css('display', 'none');
@@ -247,7 +187,7 @@ network.on( 'doubleClick', function(properties) {
                 //remove the close button
                 $('.closeWindow').remove();
                 //add the close button
-                $('#userstorytable').append("<div onclick='closeWindow()' class='closeWindow'>X</div>");
+                $('#userstorytable').append("<div onclick='closeWindow()' class='closeWindow'><span class='glyphicon glyphicon-remove-circle'></span></div>");
         }
     );
     // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');
@@ -346,3 +286,40 @@ network.on( 'doubleClick', function(properties) {
 //function selectTheme(){
 //}
 //nodes.get({filter: function(node) {return node.group == "theme1"}});
+
+
+
+// obtain de clusters from the back-end
+// $.getJSON('/clusters',
+//     function (data) {
+//     console.log(data.nodes);
+//
+// });
+
+// ANOTHER OPTIONS VARIABLE FOR THE VISUALIZATION
+ //    var options2 = {
+   //      physics:{
+   //        adaptiveTimestep:false,
+   //          enabled:true,
+   //          maxVelocity:5
+   //      },
+   //
+   // layout:{
+   //   improvedLayout:true,
+   //   hierarchical: {
+   //    enabled:false}},
+   //
+   // scaling:{
+   //   label:{
+   //       enabled:true
+   //   }
+   // },
+   // nodes:{
+   //   shape:'dot'
+   // },
+   // edges:{
+   //   labelHighlightBold:true,
+	//  length:100 //the lenght of the edges is set here. standard:undefined
+   // }
+   //
+   // };

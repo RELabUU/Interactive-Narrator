@@ -14,25 +14,21 @@
         <br>
         <h5>Instructions:</h5>
         <p>
-            Welcome to the Interactive Narrator. To begin using the tool, please
-            follow these instructions. .
+            Welcome to the Interactive Narrator.
 
-            Please supply some information about your set of user stories below.
-            Then upload your set of user stories in .txt or .csv format on this page
+            Please supply a name for your set of user stories below. This name should be a unique identifier
+            for this particular set of stories. Example: Sprint3 or Sprint2017-3-21.
+
+            Then upload your set of user stories in .txt or .csv format on this page and click send.
         </p>
-        <p id="mandatory">supplying a name is mandatory. Only alphanumeric characters and
-            white spaces are allowed.
+        <p id="mandatory">
 
         </p>
 
         <br>
         <form class="" action="" method="post" enctype=multipart/form-data name="submit">
-{#            {{ render_field(form.company_name, maxlength=255, placeholder="the name of your company") }}#}
-{#            {{ render_field(form.company_id, maxlength=255, placeholder="the ID of your company") }}#}
+
             {{ render_field(form.sprint_name, maxlength=255, placeholder="the name of your sprint") }}
-
-{#            {{ render_field(form.sprint_id, maxlength=255, placeholder="the ID of your sprint") }}#}
-
 
             <br>
             <br>
@@ -61,6 +57,7 @@
 {#              {% endif %}#}
 
             {{ form.submit }}
+
            {% if error %}
                 <p class="error"><strong>Error: </strong>{{error}}</p>
 		   {% endif %}

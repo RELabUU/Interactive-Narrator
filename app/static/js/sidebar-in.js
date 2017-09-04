@@ -13,12 +13,13 @@ $(document).ready(function () {
         makeRoleSelector();
     });
 
+    // populate the dropdown multiselect for sprints with spritn name + ID
     $.getJSON('/getsprints', {}, function (data) {
         console.log(data);
         var i;
         for (i = 0; i < data.length; i++) {
             var sprintValue = data[i];
-            $("#sprintselector").append($("<option></option>").attr("value", sprintValue[1]).attr('selected','selected').text(sprintValue[0]));
+            $("#sprintselector").append($("<option></option>").attr("value", sprintValue[1]).attr('selected','selected').text(sprintValue[0] + " (" + sprintValue[1] + ")"));
 
         }
         makeSprintSelector();
@@ -162,7 +163,7 @@ function showDataSet(data) {
         // else if a node is selected make it blue
         else {
             if (node.group == 'Role') {
-                nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
+                nodes.update({id: node.id, color: '#4A87F4', font:{color:'#343434'}});
 
             }
             else {
@@ -175,6 +176,11 @@ function showDataSet(data) {
     if (nodes_dataset.length == 0) {
         nodes.forEach(function (node) {
             nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
+
+            if (node.group == 'Role') {
+                nodes.update({id: node.id, color: '#4A87F4', font:{color:'#343434'}});
+
+            }
         });
 
     }
