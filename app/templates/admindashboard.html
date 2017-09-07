@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% from 'fields.html' import render_field %}
 
-{% block title %} Dashboard {% endblock title %}
+{% block title %} Admin {% endblock title %}
 {% block main %}
 <div class="row"><!-- first row -->
     <div class="col-lg-4 col-md-2 col-sm-2 col-xs-1"></div><!-- empty column -->
@@ -30,7 +30,7 @@
           <div id="dashboard-set-buttons">
                 <a class="btn btn-default" href="/vis">Show Visualization</a>
                 <a class="btn btn-success" href="{{ url_for('form') }}"> Upload Set</a>
-{#                <a class="btn btn-warning" href="{{ url_for('delete_all') }}"> Delete All</a>#}
+                <a class="btn btn-warning" href="{{ url_for('delete_all') }}"> Delete All</a>
           </div>
     </div>
 
@@ -38,6 +38,18 @@
     <div class="row"><!-- second row -->
     <div class="col-lg-4 col-md-2 col-sm-2 col-xs-1"></div><!-- empty column -->
         <div class="col-lg-4 col-md-6 col-sm-7 col-xs-6"><!-- user names column -->
+            <h3>Registered Users:</h3>
+            {% for user in registered_users %}
+                <div id="registered_users">
+                    <div id="admin-user-list">
+                    <strong>username:</strong> {{ user.username }} <br>
+                    <strong>registered at:</strong> {{ user.created }} <br>
+                    <strong>modified at:</strong> {{ user.modified }} <br>
+                        <strong>modified at:</strong> {{ user.email }} <br>
+
+                    </div>
+                </div>
+            {% endfor %}
 
         </div>
     <div class="col-lg-4 col-md-4 col-sm-3 col-xs-5"></div><!-- empty column -->

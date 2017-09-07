@@ -541,3 +541,13 @@ a#logout-button{
 #user-info {
     color: #FFFFFF;
 }
+
+#admin-user-list{
+    color: #FFFFFF;
+    margin-bottom: 10px;
+}
+
+/* ERROR PAGES*/
+#error-message h1, h2, h3, h4, h5, h6{
+    color: #FFFFFF;
+}

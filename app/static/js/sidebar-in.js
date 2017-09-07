@@ -298,10 +298,11 @@ function makeSprintSelector() {
             var selectedSprints = $(sprint_values).map(function (index, option) {
                 return $(option).val();
             });
+            console.log('SELECTED SPRINTS FIRST TIME', selectedSprints);
             // Array to keep track of selected checkboxes i.e. selected themes
             selectedRoles = selectedRoles.toArray();
             selectedSprints = selectedSprints.toArray();
-
+            console.log('SELECTED SPRINTS SECOND TIME', selectedSprints);
             $.getJSON('/query', {
                     roles: JSON.stringify(selectedRoles),
                     sprints: JSON.stringify(selectedSprints)
@@ -329,7 +330,7 @@ function makeSprintSelector() {
 
             //an array that keeps track of the selected chechboxes
             selectedSprints = selectedSprints.toArray();
-            console.log(selectedSprints);
+            console.log('SELECTED SPRINTS THIRD TIME', selectedSprints);
             // function(){
 
             $.getJSON('/query', {

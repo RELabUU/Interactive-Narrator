@@ -7,49 +7,19 @@
 <p>You're logged in already!</p>
 {% else %}
 
-{#    <form class="" action="/login" method="post" enctype=multipart/form-data name="loginform">#}
-{#        {{ render_field(form.username, maxlength=255, placeholder="your e-mail adress") }}#}
-{#        {{ render_field(form.password, maxlength=255, placeholder="your password") }}#}
-{#        {{ form.submit }}#}
-{#     <div class="form-group">#}
-{#  <dt><label for="Username">Username</label>#}
-{#  <dd><input id="username" maxlength="255" name="username" placeholder="your e-mail" type="text" value="">#}
-{##}
-{#  </dd>#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#  <dt><label for="password">Password</label>#}
-{#  <dd><input id="password" maxlength="255" name="password" placeholder="your password" type="text" value="">#}
-{##}
-{#  </dd>#}
-{#    </div>#}
-{#        <input id="submit" name="submit" type="submit" value="Login">#}
     <div class="login">
 		<div class="login-screen">
 			<div class="login-title">
 				<h1>Login</h1>
 			</div>
+        <p id="-technical-problems-message" style="color: #3e8f3e">Tip: If you  have experienced problems with Interactive Narrator
+            lately, try ceating a new account.</p>
 
 			<form class="login-form" action="/login" method="post" enctype=multipart/form-data name="loginform">
 				    {{ render_field(form.username, maxlength=255, placeholder="your username") }}
                     {{ render_field(form.password, maxlength=255, placeholder="your password") }}
 
-{#                <div class="form-group">#}
-{#                    <label class="login-field-icon fui-user" for="login-name">Username</label>#}
-{#				    <input type="text" class="form-control login-field" value="" placeholder="username, not email" name="username">#}
-{#				</div>#}
-{##}
-{#				<div class="form-group">#}
-{#				    <label class="login-field-icon fui-lock" for="login-pass">Password</label>#}
-{#                    <input type="password" class="form-control login-field" value="" placeholder="password" name="password">#}
-{##}
-{#				</div>#}
-{#                <div class="form-group">#}
-{#                    <div class="checkbox">#}
-{#                        <label><input type="checkbox"> Remember me</label>#}
-{#                    </div>#}
-{#                </div>#}
+
                 <div class="form-group">
                     <button id=login-submit type="submit" value="Log in" class="btn btn-default">Log in</button>
                 </div>

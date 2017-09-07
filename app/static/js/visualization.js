@@ -164,7 +164,7 @@ network.on( 'doubleClick', function(properties) {
         for (var i = 0; i < data.length; i++) {
             if (i== 0){
                 console.log('succes');
-                $('#userstorytable').append("<tr><th>SP</th><th>US</th><th>Text</th></tr>");
+                $('#userstorytable').append("<tr><th>Spr.</th><th>US</th><th>Text</th></tr>");
 
             }
 

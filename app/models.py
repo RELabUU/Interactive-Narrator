@@ -59,6 +59,7 @@ class User(Base):
 
 
 class CompanyVN(Base):
+    """ The company to which a registered user belongs """
     __tablename__ = 'company'
 
     id = Column(Integer, primary_key=True)
@@ -78,6 +79,7 @@ us_sprint_association_table = Table('us_sprint_association', Base.metadata,
 
 
 class SprintVN(Base):
+    """ A set of multiple userstories """
     __tablename__ = 'sprint'
 
     id = Column(Integer, primary_key=True)
@@ -128,6 +130,7 @@ class UserStoryVN(Base):
 
 
 class ClassVN(Base):
+    """ A concept from a userstory """
     __tablename__ = 'class'
 
     class_id = Column(Integer, primary_key=True)

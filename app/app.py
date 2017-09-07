@@ -3,7 +3,6 @@ import sys
 import os
 import math
 import json
-# from _operator import and_
 
 sys.path.append('/var/www/interactivenarrator')
 
@@ -15,7 +14,6 @@ from flask import flash, send_from_directory, Response, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename, redirect
 from passlib.hash import sha256_crypt
-from collections import OrderedDict
 from form import SetInfoForm, LoginForm, RegistrationForm
 from post import add_data_to_db
 
@@ -54,6 +52,7 @@ Session = sessionmaker(bind=engine)
 sqlsession = Session()
 conn = engine.connect()
 
+# route for the demopage. Not accessible to users that are logged in
 @app.route('/demo', methods=['GET', 'POST'])
 def demo():
     # if session['logged_in'] and session['username'] !='demoman':
@@ -65,12 +64,14 @@ def demo():
         session['username'] = username
         return render_template('visdemo.html')
 
+
+# route for reaching the homepage
 @app.route('/')
 def homepage():
     return render_template('index.html')
 
 
-# a route for displaying the visualization
+# route for displaying the visualization
 @app.route('/vis', methods=['GET', 'POST'])
 def show_vis():
     # return render_template('vis.html')
@@ -117,7 +118,6 @@ def do_register():
 
         return render_template("register.html", form=form)
 
-    # except Exception as e:
     except Exception as e:
         print('an exception occured', e)
         return render_template('register.html', form=form)
@@ -150,7 +150,10 @@ def do_login():
                     session['logged_in'] = True
                     flash('Thanks for logging in!')
                     print('succes')
-                    return redirect(url_for('show_dash'))
+                    if session['username'] == 'admin':
+                        return redirect(url_for('admin_dashboard'))
+                    else:
+                        return redirect(url_for('show_dash'))
                 else:
                     error = 'Sorry, wrong password/username'
                     print('failure')
@@ -164,19 +167,53 @@ def do_login():
     else:
         return redirect(url_for('show_dash'))
 
-
+# route for logging out the user. This resets the username to empty and status to not logged in
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
     session['username'] = ''
-    # return render_template("login.html")
     return redirect(url_for('do_login'))
 
+# admin page
+@app.route("/admindashboard")
+def admin_dashboard():
+    if not session.get('logged_in'):
+        return redirect(url_for('do_login'))
+    if session['username'] == 'demoman':
+        return redirect(url_for("demo"))
+    if session.get('logged_in') and session['username'] == 'admin':
 
+        username = session['username']
+        print(username)
+        # show all the sprints that are in the database on the dashboard page
+        all_sprints = sqlsession.query(SprintVN)\
+            .join(CompanyVN)\
+            .join(User).filter(User.username == username).all()
+
+        sprints = [dict(sprint_id=sprint.id,
+                        sprint_name=sprint.sprint_name,
+                        company_id=sprint.company_id,
+                        company_name=sprint.company_name) for sprint in all_sprints]
+
+        registered_users = sqlsession.query(User).all()
+
+        # check what company name is regeistered for this user
+        company_present = sqlsession.query(CompanyVN).join(User).filter(User.username == username).first()
+
+        if company_present:
+            company_name = company_present.company_name
+        else:
+            company_name = ''
+
+        return render_template("admindashboard.html", sprints=sprints, username=username, company_name=company_name, registered_users=registered_users)
+
+    return redirect(url_for('do_login'))
+
+# route for reaching the dashboard page for logged in users
 @app.route("/dashboard")
 def show_dash():
     if not session.get('logged_in'):
-        return render_template("login.html")
+        return redirect(url_for('do_login'))
     if session['username'] == 'demoman':
         return redirect(url_for("demo"))
     else:
@@ -209,20 +246,34 @@ def show_dash():
 
 
 
-# View for clearing the entire database
+# View for clearing all sets for a particular user
 @app.route("/delete_all")
 def delete_all():
     # get all userstories and delete them one by one
     # the cascade makes sure all sprints, relationships, classes and association table entries are deleted as well
     username = session['username']
 
-    userstoryVN = sqlsession.query(UserStoryVN) \
+    # user_sprints = sqlsession.query(SprintVN)\
+    #         .join(CompanyVN)\
+    #         .join(User).filter(User.username == username).all()
+    #
+    # user_sprints_ids = [sprint.id for sprint in user_sprints]
+
+    # userstories = sqlsession.query(UserStoryVN) \
+    #     .join(us_sprint_association_table) \
+    #     .join(SprintVN) \
+    #     .join(CompanyVN) \
+    #     .join(User).filter(and_(User.username == username), (SprintVN.id.in_(user_sprints_ids))).all()
+
+
+    userstories = sqlsession.query(UserStoryVN) \
         .join(us_sprint_association_table) \
         .join(SprintVN) \
         .join(CompanyVN) \
         .join(User).filter(User.username == username).all()
 
-    for userstory in userstoryVN:
+
+    for userstory in userstories:
         sqlsession.delete(userstory)
         # sqlsession.commit()
 
@@ -231,12 +282,35 @@ def delete_all():
         return redirect(url_for('show_dash'))
     except Exception as e:
         print('Exception raised', e)
-        # import pdb
-        # pdb.set_trace()
         sqlsession.rollback()
         return redirect(url_for('show_dash'))
 
 
+@app.route('/delete_sprint/<int:id>', methods=['GET', 'POST'])
+def delete_sprint(id):
+    username = session['username']
+
+    userstories = sqlsession.query(UserStoryVN) \
+        .join(us_sprint_association_table) \
+        .join(SprintVN) \
+        .join(CompanyVN) \
+        .join(User).filter(and_(SprintVN.id == id), (User.username == username)).all()
+
+
+    for userstory in userstories:
+        sqlsession.delete(userstory)
+        # sqlsession.commit()
+
+    try:
+        sqlsession.commit()
+        return redirect(url_for('show_dash'))
+    except Exception as e:
+        print('Exception raised', e)
+        sqlsession.rollback()
+        return redirect(url_for('show_dash'))
+
+
+# route for the form that enables uploading of files containing user stories
 @app.route('/form', methods=['GET', 'POST'])
 def form():
     if session.get('logged_in'):
@@ -366,32 +440,30 @@ def click_query():
     node_userstory_list = []
     for one_node in clicked_nodes:
         print(one_node['id'])
-        node_concept = sqlsession.query(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
+        # node_concept = sqlsession.query(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
 
         node_userstory = sqlsession.query(UserStoryVN).join(us_class_association_table)\
             .join(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
         print('INFO', node_userstory)
-        # node_info = sqlsession.query(ClassVN).filter(ClassVN.class_id == one_node['id']).one()
-        # print('INFO', node_info)
+
         if node_userstory:
             node_userstory_list = [{"id": us.userstory_id, "text":us.text, "in sprint":us.in_sprint} for us in node_userstory]
         else:
             node_userstory_list = []
         print('NODEINFO', node_userstory_list)
     return jsonify(node_userstory_list)
-    # return Response(json.dumps(node_userstory_list), mimetype='application/json')
 
 
 # this is the main query that queries the database for concepts and relationships basd on the
-# roles and sprints that were selected by the user
-
+# roles and sprints that were selected by the user.
 # This function returns an array of nodes that are
 # connected (i.e. occur in a user story where the role occurs in) to the selected role.
 @app.route('/query')
-def get_test():
+def get_nodes_edges():
+    # retrieve the sprints and roles to look up, based on the user's selection
     checked_roles = json.loads(request.args.get('roles'))
     checked_sprints = json.loads(request.args.get('sprints'))
-    # checked_sprints.append(1)
+    # retrieve all the classes belonging to the selection
     print(checked_roles)
     classes = sqlsession.query(ClassVN) \
         .join(us_class_association_table) \
@@ -403,12 +475,14 @@ def get_test():
         (SprintVN.id.in_(checked_sprints))
     ) \
         .all()
-
+    # put all the classes in a list of dicts
     nodes = [{"label": cl.class_name, "weight": cl.weight, "id": cl.class_id} for cl in classes]
-
+    print('THE NODES ARE HERE', nodes, len(nodes))
+    # find all the unique class names
     class_names = [cl.class_name for cl in classes]
-
+    # make a list of all class names and ids
     class_name_id_map = {cl.class_name: cl.class_id for cl in classes}
+    print('CLASS_NAME_ID_MAP', len(class_names), len(class_name_id_map))
 
     class_relationships = sqlsession.query(RelationShipVN) \
         .join(us_relationship_association_table) \
@@ -424,8 +498,9 @@ def get_test():
         (SprintVN.id.in_(checked_sprints))
     ) \
         .all()
-
+    print('HERE ARE THE RELATIONSHIPS', len(class_relationships), [{"id": rel.relationship_id, "domain": rel.relationship_domain, "range": rel.relationship_range} for rel in class_relationships])
     edges = []
+
     for class_relationship in class_relationships:
         try:
             edges.append({
@@ -435,10 +510,11 @@ def get_test():
                 "label": class_relationship.relationship_name
             })
         except KeyError:
-            print("Impossible relationship: %s -> %s -> %s" % (
+            print("Impossible relationship: %s : %s -> %s -> %s" % (class_relationship.relationship_id,
             class_relationship.relationship_domain, class_relationship.relationship_name,
             class_relationship.relationship_range))
             pass
+
 
     return jsonify(nodes=nodes, edges=edges)
 
@@ -447,10 +523,6 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# redirect the user to the uploaded file
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory('uploads', filename)
 
 # a route for clustering
 # @app.route('/clusters')
@@ -591,6 +663,7 @@ def internal_server_error(error):
 @app.errorhandler(404)
 def page_not_found_error(error):
     return render_template('not_found_error.html'), 404
+
 
 if __name__ == '__main__':
     app.run()
