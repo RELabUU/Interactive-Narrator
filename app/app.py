@@ -114,7 +114,10 @@ def do_register():
                 session['logged_in'] = True
                 session['username'] = username
 
-                return redirect(url_for('show_dash'))
+                if session['username'] == 'admin':
+                    return redirect(url_for('admin_dashboard'))
+                else:
+                    return redirect(url_for('show_dash'))
 
         return render_template("register.html", form=form)
 
@@ -216,6 +219,8 @@ def show_dash():
         return redirect(url_for('do_login'))
     if session['username'] == 'demoman':
         return redirect(url_for("demo"))
+    if session.get('logged_in') and session['username'] == 'admin':
+        return redirect(url_for('admin_dashboard'))
     else:
 
         username = session['username']
