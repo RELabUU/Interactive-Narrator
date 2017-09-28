@@ -19,6 +19,7 @@ class SetInfoForm(Form):
 class LoginForm(Form):
     username = StringField('Username', [Length(max=255), validators.DataRequired()])
     password = PasswordField('Password', [Length(max=255), validators.DataRequired(message='wrong')])
+    remember = BooleanField('Remember me', default=False)
     submit = SubmitField("Login")
 
 

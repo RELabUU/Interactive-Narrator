@@ -18,7 +18,7 @@
 			<form class="login-form" action="/login" method="post" enctype=multipart/form-data name="loginform">
 				    {{ render_field(form.username, maxlength=255, placeholder="your username") }}
                     {{ render_field(form.password, maxlength=255, placeholder="your password") }}
-
+{#                    {{ render_field(form.remember) }}#}
 
                 <div class="form-group">
                     <button id=login-submit type="submit" value="Log in" class="btn btn-default">Log in</button>

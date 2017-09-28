@@ -323,3 +323,20 @@ network.on( 'doubleClick', function(properties) {
    // }
    //
    // };
+
+
+// canvas.onload = function () {
+//     var canvas = document.getElementsByTagName('canvas');
+//     var link = canvas.toDataURL("image/png");
+//     document.write("<img src='link' alt='from canvas'/>");
+//     console.log('canvas onload');
+// };
+
+// var canvas = document.getElementsByTagName('canvas');
+//     var link = canvas.toDataURL("image/png");
+// function downloadCanvas() {
+//     console.log('canvas image test', link);
+
+    // document.write("<img src='link' alt='from canvas'/>");
+//     alert('canvas');
+// }

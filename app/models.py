@@ -9,6 +9,44 @@ from werkzeug import generate_password_hash
 
 Base = declarative_base()
 
+# from flask_security import UserMixin, RoleMixin
+
+# class RolesUsers(Base):
+#     __tablename__ = 'roles_users'
+#     id = Column(Integer(), primary_key=True)
+#     user_id = Column('user_id', Integer(), ForeignKey('user.id'))
+#     role_id = Column('role_id', Integer(), ForeignKey('role.id'))
+#
+# class Role(Base, RoleMixin):
+#     __tablename__ = 'role'
+#     id = Column(Integer(), primary_key=True)
+#     name = Column(String(80), unique=True)
+#     description = Column(String(255))
+#
+# class User(Base, UserMixin):
+#     __tablename__ = 'user'
+#     id = Column(Integer, primary_key=True)
+#     email = Column(String(255), unique=True)
+#     username = Column(String(255))
+#     password = Column(String(255))
+#     last_login_at = Column(DateTime())
+#     current_login_at = Column(DateTime())
+#     last_login_ip = Column(String(100))
+#     current_login_ip = Column(String(100))
+#     login_count = Column(Integer)
+#     active = Column(Boolean())
+#     confirmed_at = Column(DateTime())
+#     roles = relationship('Role', secondary='roles_users',
+#                          backref='users', lazy='dynamic')
+#
+#     # from old User class
+#     created = Column(DateTime, default=datetime.now)
+#     modified = Column(DateTime, default=datetime.now,
+#                       onupdate=datetime.now)
+#     company_id = Column(Integer, ForeignKey('company.id'))
+#     company_name = Column('company_name', String(100))
+
+
 
 # Flask/SQLAlchemy ORM mappings for the objects we store in the DB
 
@@ -27,6 +65,11 @@ class User(Base):
     password = Column('password', String(100))
     company_id = Column(Integer, ForeignKey('company.id'))
     company_name = Column('company_name', String(100))
+
+    user_classes = relationship("ClassVN", backref="class")
+    user_relationships = relationship("RelationShipVN", backref="relationship")
+    sprints = relationship("SprintVN", backref="user")
+
     # def _get_password(self):
     #     return self._password
     #
@@ -83,9 +126,11 @@ class SprintVN(Base):
     __tablename__ = 'sprint'
 
     id = Column(Integer, primary_key=True)
+    sprint_id_user = Column(Integer)
     sprint_name = Column(Text)
     company_name = Column(Text)
     company_id = Column(Integer, ForeignKey('company.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
 
 
 # table for the many to many relationship between userstories and concepts (classes)
@@ -134,11 +179,13 @@ class ClassVN(Base):
     __tablename__ = 'class'
 
     class_id = Column(Integer, primary_key=True)
-    class_name = Column(Text, unique=True)
+    # class_name = Column(Text, unique=True)
+    class_name = Column(Text)
     parent_name = Column(Text)
     weight = Column(Integer)
     group = Column(Text)
     cluster = Column(Integer)
+    user = Column(Integer, ForeignKey('user.id'))
 
 
 class RelationShipVN(Base):
@@ -149,6 +196,7 @@ class RelationShipVN(Base):
     relationship_domain = Column(Text)
     relationship_name = Column(Text)
     relationship_range = Column(Text)
+    user = Column(Integer, ForeignKey('user.id'))
 
 
 from sqlalchemy import create_engine

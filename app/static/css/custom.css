@@ -138,6 +138,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .vis-network>canvas{
+    background-color: #FFFFFF;
     outline: none;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
     border: 1px solid white;
@@ -155,6 +156,10 @@ h1, h2, h3, h4, h5, h6{
     /*border-style:;*/
 }
 
+canvas{
+    background-color: #FFFFFF;
+
+}
 #main{
     /*background-color: #FFFFFF;*/
     background-color: #332F30;
@@ -450,7 +455,9 @@ width: 300px;
 .login-form #submit{
    /*width:10%*/
 }
-
+#login-submit:hover{
+    background-color:#4f81bd;
+}
 .registration-form input, .login-form input {
 text-align: center;
 background-color: #ECF0F1;
@@ -482,6 +489,10 @@ box-shadow: none;
 background-color: #FFF;
 padding: 20px;
 border-radius: 5px
+}
+
+.registration-screen p{
+    text-align: center;
 }
 
 button#login-submit, button#registration-submit, input#submit  {

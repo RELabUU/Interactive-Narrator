@@ -90,7 +90,7 @@ $('#relationships').click(function () {
 
 //The function for the searchfield
 $('#searchfield').change(function () {
-    console.log('test');
+    console.log('testing of the search field');
     var formInput = document.getElementById("searchfield").value;
     // foundItem = null; //we'll store the matching value here
 
@@ -404,3 +404,4 @@ $(document).ready(function () {
 
 
 });
+

@@ -30,6 +30,7 @@ from models import Base, User, UserStoryVN, RelationShipVN, ClassVN, CompanyVN, 
     us_relationship_association_table, \
     us_sprint_association_table
 
+
 # configuration
 app = Flask(__name__)
 
@@ -37,6 +38,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 UPLOAD_FOLDER = 'uploads/'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # set the secret key.  keep this really secret:
@@ -51,6 +53,31 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 sqlsession = Session()
 conn = engine.connect()
+
+# FLASK SECURITY
+
+# from flask_security import Security, login_required,\
+#     SQLAlchemySessionUserDatastore
+# from flask_login import LoginManager, UserMixin
+# from models import User, Role
+#
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+#
+# # user_datastore = SQLAlchemySessionUserDatastore(sqlsession, User, Role)
+#
+# @app.before_first_request
+# def create_user():
+#     # init_db()
+#     # user_datastore.create_user(email='govertjan@msn.com', password='qwerty')
+#     sqlsession.commit()
+#
+# # Views
+# @app.route('/flasksec')
+# @login_required
+# def flask_sec():
+#     return render_template('index.html')
+# END FLASK SECURITY
 
 # route for the demopage. Not accessible to users that are logged in
 @app.route('/demo', methods=['GET', 'POST'])
@@ -87,7 +114,7 @@ def do_register():
     try:
         form = RegistrationForm(request.form)
         if request.method == "POST" and form.validate():
-            print('success1')
+            print('validating was a success')
             username = form.username.data
             company_name = form.company_name.data
             email = form.email.data
@@ -101,7 +128,7 @@ def do_register():
                 return render_template('register.html', form=form, error=error)
             # ..else, create the new user and company
             else:
-                print('succes2')
+                print('success, user does not exist yet')
                 sqlsession.add(CompanyVN(company_name=company_name))
                 the_company = sqlsession.query(CompanyVN).order_by(CompanyVN.id.desc()).first()
                 new_user = User(username=username, company_name=company_name, email=email, password=password,
@@ -109,7 +136,7 @@ def do_register():
                 sqlsession.add(new_user)
 
                 sqlsession.commit()
-                flash('thanks for registering')
+                # flash('thanks for registering')
 
                 session['logged_in'] = True
                 session['username'] = username
@@ -119,11 +146,18 @@ def do_register():
                 else:
                     return redirect(url_for('show_dash'))
 
-        return render_template("register.html", form=form)
+        else:
+            return render_template("register.html", form=form)
 
     except Exception as e:
         print('an exception occured', e)
-        return render_template('register.html', form=form)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+
+        error = 'Sorry, we could not register you'
+
+        return render_template('register.html', form=form, error=error)
         # return(str(e))
 
 
@@ -256,39 +290,40 @@ def show_dash():
 def delete_all():
     # get all userstories and delete them one by one
     # the cascade makes sure all sprints, relationships, classes and association table entries are deleted as well
-    username = session['username']
 
-    # user_sprints = sqlsession.query(SprintVN)\
-    #         .join(CompanyVN)\
-    #         .join(User).filter(User.username == username).all()
-    #
-    # user_sprints_ids = [sprint.id for sprint in user_sprints]
+    active_user = sqlsession.query(User).filter(User.username == session['username']).first()
 
-    # userstories = sqlsession.query(UserStoryVN) \
-    #     .join(us_sprint_association_table) \
-    #     .join(SprintVN) \
-    #     .join(CompanyVN) \
-    #     .join(User).filter(and_(User.username == username), (SprintVN.id.in_(user_sprints_ids))).all()
-
-
+    # find and delete all user stories and the classes, relationships connected to them
     userstories = sqlsession.query(UserStoryVN) \
         .join(us_sprint_association_table) \
-        .join(SprintVN) \
+        .join(SprintVN).filter(SprintVN.user_id == active_user.id) \
         .join(CompanyVN) \
-        .join(User).filter(User.username == username).all()
+        .join(User).filter(User.username == active_user.username).all()
 
 
     for userstory in userstories:
         sqlsession.delete(userstory)
         # sqlsession.commit()
 
+    # find orphan sprints and delete them if necessary
+    sprints = sqlsession.query(SprintVN).filter(SprintVN.user_id == active_user.id).all()
+
+    for sprint in sprints:
+        sqlsession.delete(sprint)
+
     try:
         sqlsession.commit()
         return redirect(url_for('show_dash'))
     except Exception as e:
         print('Exception raised', e)
+
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+
         sqlsession.rollback()
         return redirect(url_for('show_dash'))
+
 
 
 @app.route('/delete_sprint/<int:id>', methods=['GET', 'POST'])
@@ -311,13 +346,17 @@ def delete_sprint(id):
         return redirect(url_for('show_dash'))
     except Exception as e:
         print('Exception raised', e)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+
         sqlsession.rollback()
         return redirect(url_for('show_dash'))
 
 
 # route for the form that enables uploading of files containing user stories
-@app.route('/form', methods=['GET', 'POST'])
-def form():
+@app.route('/uploadform', methods=['GET', 'POST'])
+def upload_form():
     if session.get('logged_in'):
         # use the form class from form.py
         form = SetInfoForm(request.form)
@@ -342,70 +381,147 @@ def form():
                 .join(CompanyVN)\
                 .join(User).filter(User.username == active_user.username)\
                 .first()
+            #check if the user already has sprints, regardless of their name, and apply a user speficic id to it
+            newest_user_sprint = sqlsession.query(SprintVN).order_by(SprintVN.sprint_id_user.desc())\
+                .join(CompanyVN)\
+                .join(User).filter(User.username == active_user.username)\
+                .first()
+            if newest_user_sprint:
+                highest_user_sprint_id = newest_user_sprint.sprint_id_user
+            else:
+                highest_user_sprint_id = 0
 
-            # if the sprint already exists, notify the user...
+                # if the sprint already exists, notify the user...
             if sprint_exists:
-                error = 'could not add: this sprint is already in the database. Please choose a different name'
+                error = 'This sprint name is already in the database. Please choose a different name'
                 print('sprint exists already', sprint_exists)
-                return render_template('form.html', form=form, error=error)
+                return render_template('uploadform.html', form=form, error=error)
             # ...if it doesn't, add it to the DB
             else:
                 # FILE UPLOAD HANDLING
                 file = request.files['file']
                 if file.filename == '':
-                    error = 'No file was selected'
-                    return render_template('form.html', form=form, error=error)
+                    error = 'No file was selected for uploading'
+                    return render_template('uploadform.html', form=form, error=error)
                 # Check if the file is one of the allowed types/extensions
                 if file and allowed_file(file.filename):
-                    # Make the filename safe, remove unsupported chars
+                    # Make the filename safe, remove unsupported chars and spaces
                     filename = secure_filename(file.filename)
                     # Move the file form the temporal folder to...
                     # ...the upload folder we setup
+                    print('SECURE FILENAME', filename)
+
                     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
                     # set the filename so Visual Narrator can handle it
-                    set_filename = 'uploads/' + file.filename
+                    set_filename = 'uploads/' + filename
+
 
                     try:
-                        sqlsession.add(SprintVN(sprint_name=sprint_form_data['sprint_name'],
-                                                company_name=active_company_name, company_id=active_company.id))
+                        sqlsession.add(SprintVN(sprint_id_user=highest_user_sprint_id + 1, sprint_name=sprint_form_data['sprint_name'],
+                                                company_name=active_company_name, company_id=active_company.id, user_id=active_user.id))
                         print('added sprint')
                         # now add the sprint to the database
                         sqlsession.commit()
-                        # find the spint that was just added, and obtain its ID
-                        newest_sprint = sqlsession.query(SprintVN).order_by(SprintVN.id.desc()).first()
+                        # find the sprint that was just added,
+                        newest_sprint = sqlsession.query(SprintVN).filter(and_(
+                            SprintVN.sprint_name == sprint_form_data['sprint_name']), (SprintVN.user_id == active_user.id)) \
+                            .order_by(SprintVN.id.desc())\
+                            .first()
+                        # import pdb
+                        # pdb.set_trace()
+                        # and obtain its ID
                         sprint_form_data['sprint_id'] = newest_sprint.id
                         # flash('sprint added')
 
                         # run the visual narrator back-end and obtain needed objects for visualization
-                        # import pdb;pdb.set_trace()
+
                         data = run.call(set_filename, spacy_nlp)
                         #  run the poster.add_data_to_db method to place the objects and their attributes in the database
                         add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
                                        sprint_form_data)
-                    except Exception as e:
-                        print('Exception raised', e)
-                        error = 'Oops, there was a problem. Please try again' \
-                                'Does your file have a strange encoding?'
+                    except UnicodeDecodeError:
+                        error = 'Sorry, the file was not accepted by our system. ' \
+                                'It might be ASCII encoded, Please try UTF-8 Unicode encoding for your file'
+                        if newest_sprint:
+                            sqlsession.delete(newest_sprint)
+                            sqlsession.commit()
+                        else:
+                            pass
+                        return render_template('uploadform.html', form=form, error=error)
 
-                        return render_template('form.html', form=form, error=error)
+                    except TypeError:
+                        error = 'Sorry, datatype of the file was not accepted by our system. ' \
+                                'Please try UTF-8 UNICODE in .txt or .csv files'
+                        if newest_sprint:
+                            sqlsession.delete(newest_sprint)
+                            sqlsession.commit()
+                        else:
+                            pass
+                        return render_template('uploadform.html', form=form, error=error)
+
+
+                    except IndexError:
+                        error = 'Sorry, the file was not accepted by our system. ' \
+                                'Does it really contain user stories in the format "as a (role) I want to (goal)"?'
+                        if newest_sprint:
+                            # sqlsession.query(SprintVN).filter(SprintVN.sprint_name == newest_sprint.sprint_name).delete()
+                            sqlsession.delete(newest_sprint)
+                            sqlsession.commit()
+                            print('the newest sprint is deleted because of content')
+                        else:
+                            pass
+                        return render_template('uploadform.html', form=form, error=error)
+
+                    except Exception as e:
+                        print('Exception raised at file processing', e)
+                        exc_type, exc_obj, exc_tb = sys.exc_info()
+                        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                        print(exc_type, fname, exc_tb.tb_lineno)
+
+                        if newest_sprint:
+                            sqlsession.delete(newest_sprint)
+                            sqlsession.commit()
+                        else:
+                            pass
+                        error = 'Sorry, the file could not be processed. ' \
+                                'Please try UNICODE in .txt or .csv files'
+
+                        return render_template('uploadform.html', form=form, error=error)
 
 
                     # if all went well redirect the user to the visualization directly
                     return redirect(url_for('show_vis'))
                 else:
-                    error = 'There was a problem with the file (type)'
-                    return render_template('form.html', form=form, error=error)
+                    error = 'Sorry, the app could not accept and process your file.'
+
+                    newest_sprint = sqlsession.query(SprintVN).filter(and_(
+                        SprintVN.sprint_name == sprint_form_data['sprint_name']), (SprintVN.user_id == active_user.id)) \
+                        .order_by(SprintVN.id.desc()) \
+                        .first()
+
+                    if newest_sprint:
+                        sqlsession.delete(newest_sprint)
+                        sqlsession.commit()
+                    else:
+                        pass
+
+                    return render_template('uploadform.html', form=form, error=error)
 
         else:
-            # flash('something went wrong, please try again')
-            print('nothing was added to the database')
-            return render_template('form.html', form=form)
+            # print('nothing was added to the database')
+            return render_template('uploadform.html', form=form)
 
     else:
         return redirect(url_for('do_login'))
 
-    # return render_template('form.html', form=form)
+    # return render_template('uploadform.html', form=form)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # get the roles to populate the multiselect with javascript
 @app.route('/getroles')
@@ -524,9 +640,7 @@ def get_nodes_edges():
     return jsonify(nodes=nodes, edges=edges)
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 
 # a route for clustering
