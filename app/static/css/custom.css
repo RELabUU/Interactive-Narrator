@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .navbar-header > a.navbar-brand{
-    padding-left: 50px;
+    padding-left: 30px;
     font-weight: 400;
     font-size: 28px;
 }
@@ -177,7 +177,7 @@ canvas{
 #slogan-row{
     background-color:#332F30;
     height: 50px;
-    margin: 30px 0px 30px 0px;
+    margin: 20px 0px 30px 0px;
 }
 h2#slogan{
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
@@ -315,6 +315,11 @@ h2#intro-text-left-slogan{
     margin: 0 auto;
 }
 
+img#UU-logo{
+    float: left;
+    padding-left: 5px;
+}
+
 #userstoryinfo{
     /*display: none;*/
     /*width: auto;*/
@@ -376,15 +381,18 @@ h2#intro-text-left-slogan{
 	}
 
 
-#helpModal{
+/* MODAL CSS*/
+
+#helpModal * {
+    color: #0f0f0f;
+
     /*z-index: 1000;*/
 }
 
-/*#userstorytable tbody{*/
-    /*display: block;*/
-    /*max-height: 15%;*/
-    /*overflow-y: scroll;*/
-/*}*/
+.modal-header{
+    text-align: center;
+}
+
 
 /*FORM CSS*/
 
@@ -440,21 +448,16 @@ p.error{
 }
 
 .registration, .login {
-margin: 100px auto;
-width: 300px;
-}
-
-.registration{
-    width:40%;
+    margin: 100px auto;
+    min-width: 350px;
+    width: 40%;
 }
 
 .registration-title, .login-title{
     text-align: center;
 }
 
-.login-form #submit{
-   /*width:10%*/
-}
+
 #login-submit:hover{
     background-color:#4f81bd;
 }
@@ -466,15 +469,19 @@ border-radius: 3px;
 font-size: 16px;
 font-weight: 400;
 /*padding: 10px 0;*/
-width: 250px;
+/*width: 250px;*/
 transition: border .5s;
 }
 
-.registration-form input{
+.login-form, .registration-form{
+    margin-bottom: 40px;
+}
+
+.registration-form input, .login-form input{
     width: 300px;
 }
 
-.registration-form .form-group{
+.registration-form .form-group, .login-form .form-group{
     width: 300px;
     margin-left:auto;
     margin-right:auto;
@@ -508,12 +515,12 @@ button#login-submit, button#registration-submit, input#submit  {
   box-shadow: none;
   transition: 0.25s;
   /*display: block;*/
-  width: 250px;
+  width: 300px;
   margin: 0 auto;
 }
-button#registration-submit{
-    width: 300px;
-}
+/*button#registration-submit{*/
+    /*width: 300px;*/
+/*}*/
 input#accept_tos{
     /*width: 25px;*/
     /*float: left;*/

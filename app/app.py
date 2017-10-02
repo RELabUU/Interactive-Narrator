@@ -16,7 +16,7 @@ from werkzeug import secure_filename, redirect
 from passlib.hash import sha256_crypt
 from form import SetInfoForm, LoginForm, RegistrationForm
 from post import add_data_to_db
-
+import config
 sys.path.append('/var/www/VisualNarrator')
 
 from VisualNarrator import run
@@ -33,16 +33,7 @@ from models import Base, User, UserStoryVN, RelationShipVN, ClassVN, CompanyVN, 
 
 # configuration
 app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-
-ALLOWED_EXTENSIONS = set(['txt', 'csv'])
-UPLOAD_FOLDER = 'uploads/'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# set the secret key.  keep this really secret:
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+app.config.from_object(config)
 
 db = SQLAlchemy(app)
 db.Model = Base
@@ -520,7 +511,7 @@ def upload_form():
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 
 # get the roles to populate the multiselect with javascript
