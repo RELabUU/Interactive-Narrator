@@ -155,8 +155,25 @@ network.on( 'doubleClick', function(properties) {
     console.log('clicked nodes:', clickedNodes);
     labelBold = clickedNodes[0].label;
 
+    var role_values = $('#roleselector option:selected');//add the selected options to a var
+    var sprint_values = $('#sprintselector option:selected');
+
+    var selectedRoles = $(role_values).map(function (index, option) {
+        return $(option).val();		//put the values in the array
+            });
+    var selectedSprints = $(sprint_values).map(function (index, option) {
+        return $(option).val();
+            });
+                // Array to keep track of selected checkboxes i.e. selected themes
+    selectedRoles = selectedRoles.toArray();
+    selectedSprints = selectedSprints.toArray();
+
+    console.log('selectedroles and sprints', selectedRoles, selectedSprints);
     $.getJSON('/clickquery', {
-                    nodes: JSON.stringify(clickedNodes)},function (data) {
+                    nodes: JSON.stringify(clickedNodes),
+                    roles: JSON.stringify(selectedSprints),
+                    sprints: JSON.stringify(selectedRoles)
+    },function (data) {
         console.log(data);
 
         $("#userstorytable tr").remove();
