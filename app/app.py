@@ -556,7 +556,7 @@ def click_query():
     active_user = sqlsession.query(User).filter(User.username == session['username']).first()
 
     for one_node in clicked_nodes:
-        print('NODE ID', one_node['id'])
+        print('CLICKED NODE/CONCEPT ID', one_node['id'])
         # node_concept = sqlsession.query(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
 
         node_userstories = sqlsession.query(UserStoryVN)\
@@ -574,7 +574,7 @@ def click_query():
             node_userstory_list = [{"id": us.userstory_id, "text":us.text, "in sprint":us.in_sprint} for us in node_userstories]
         else:
             node_userstory_list = []
-        print('NODEINFO', node_userstory_list)
+        print('ALL THE SELECTED USERSTORIES', node_userstory_list)
     return jsonify(node_userstory_list)
 
 
