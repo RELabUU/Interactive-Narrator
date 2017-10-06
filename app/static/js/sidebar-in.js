@@ -95,7 +95,13 @@ $('#searchfield').change(function () {
     // foundItem = null; //we'll store the matching value here
 
       if (formInput === '') {
-        alert('Please Enter a Search Term');
+        edges.forEach(function(node){
+            nodes.update({id: node.id, color: '#97C2FC'})
+        });
+        edges.forEach(function(edge) {
+            edges.update({id: edge.id, color: '#97C2FC'})
+        });
+          alert('Please Enter a Search Term');
         return false;
       }
       nodes.forEach(function(node){

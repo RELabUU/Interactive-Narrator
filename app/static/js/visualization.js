@@ -171,8 +171,8 @@ network.on( 'doubleClick', function(properties) {
     console.log('selectedroles and sprints', selectedRoles, selectedSprints);
     $.getJSON('/clickquery', {
                     nodes: JSON.stringify(clickedNodes),
-                    roles: JSON.stringify(selectedSprints),
-                    sprints: JSON.stringify(selectedRoles)
+                    roles: JSON.stringify(selectedRoles),
+                    sprints: JSON.stringify(selectedSprints)
     },function (data) {
         console.log(data);
 

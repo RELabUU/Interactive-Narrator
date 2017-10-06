@@ -242,8 +242,8 @@ def admin_dashboard():
 def show_dash():
     if not session.get('logged_in'):
         return redirect(url_for('do_login'))
-    if session['username'] == 'demoman':
-        return redirect(url_for("demo"))
+    # if session['username'] == 'demoman':
+    #     return redirect(url_for("demo"))
     if session.get('logged_in') and session['username'] == 'admin':
         return redirect(url_for('admin_dashboard'))
     else:
@@ -539,7 +539,7 @@ def get_sprints():
         .join(CompanyVN) \
         .join(User).filter(User.username == username).all()
 
-    all_sprints = [[sprint.sprint_name, sprint.id] for sprint in sprints]
+    all_sprints = [[sprint.sprint_name, sprint.sprint_id_user] for sprint in sprints]
 
     print(all_sprints)
     return jsonify(all_sprints)
@@ -548,18 +548,30 @@ def get_sprints():
 @app.route('/clickquery')
 def click_query():
     clicked_nodes = json.loads(request.args.get('nodes'))
-    print('NODES', clicked_nodes)
+    checked_roles = json.loads(request.args.get('roles'))
+    checked_sprints = json.loads(request.args.get('sprints'))
+
+    print('SELECETD ROLES AND SPRINTS', checked_roles, checked_sprints)
     node_userstory_list = []
+    active_user = sqlsession.query(User).filter(User.username == session['username']).first()
+
     for one_node in clicked_nodes:
-        print(one_node['id'])
+        print('NODE ID', one_node['id'])
         # node_concept = sqlsession.query(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
 
-        node_userstory = sqlsession.query(UserStoryVN).join(us_class_association_table)\
-            .join(ClassVN).filter(ClassVN.class_id == one_node['id']).all()
-        print('INFO', node_userstory)
+        node_userstories = sqlsession.query(UserStoryVN)\
+            .join(us_class_association_table)\
+            .join(ClassVN) \
+            .filter(and_(ClassVN.class_id == one_node['id']),
+                    (ClassVN.user == active_user.id)) \
+            .filter(and_(UserStoryVN.functional_role.in_(checked_roles),(SprintVN.id.in_(checked_sprints))))\
+            .all()
 
-        if node_userstory:
-            node_userstory_list = [{"id": us.userstory_id, "text":us.text, "in sprint":us.in_sprint} for us in node_userstory]
+
+        print('THE USER STORIES THAT SHOULD BE PRINTED', node_userstories)
+
+        if node_userstories:
+            node_userstory_list = [{"id": us.userstory_id, "text":us.text, "in sprint":us.in_sprint} for us in node_userstories]
         else:
             node_userstory_list = []
         print('NODEINFO', node_userstory_list)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from datetime import datetime
 from sqlalchemy import Column, Table, DateTime, Boolean
+from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy import Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship, synonym
 from sqlalchemy.ext.declarative import declarative_base
@@ -186,6 +187,7 @@ class ClassVN(Base):
     group = Column(Text)
     cluster = Column(Integer)
     user = Column(Integer, ForeignKey('user.id'))
+    __table_args__ = (UniqueConstraint('class_name', 'user', name='_class_user_uc'),)
 
 
 class RelationShipVN(Base):

@@ -97,7 +97,8 @@ def add_concepts(output_ontobj, m, starting_id):
 
         sqlsession.add(class_entry)
 
-        # Try to add to class to the DB. It will cause an exception with Integrity Constraint if it is already present
+        # Try to add to class to the DB.
+        # It will cause an exception with Integrity Constraint if it is already present
         try:
             sqlsession.commit()
 
