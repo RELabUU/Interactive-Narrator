@@ -98,11 +98,56 @@ def add_concepts(output_ontobj, m, starting_id):
         sqlsession.add(class_entry)
 
         # Try to add to class to the DB.
-        # It will cause an exception with Integrity Constraint if it is already present
+        # It will cause an exception with Integrity Constraint if it is already present for this user
         try:
             sqlsession.commit()
 
         # except exc.IntegrityError as e:
+
+        # except Exception as e:
+        #     print('EXCEPTION on adding class to DB:', e)
+        #     exc_type, exc_obj, exc_tb = sys.exc_info()
+        #     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        #     print(exc_type, fname, exc_tb.tb_lineno)
+        #
+        #     sqlsession.rollback()
+        #     excluded_concepts_list.append(class_vn)
+
+        # else:
+        #     break
+
+        # sqlsession.commit()
+
+        # WHAT HAPPENS HERE ???????????????????????????
+            list_of_us_ids = class_vn['occurs_in']
+            # class_from_db = sqlsession.query(ClassVN).filter_by(class_name=class_vn['class_name']).first()
+            class_from_db = sqlsession.query(ClassVN).order_by(ClassVN.class_id.desc()) \
+                .join(User).filter(User.id == the_user.id) \
+                .first()
+
+            class_id = class_from_db.class_id
+            print('#########', class_id, class_from_db.class_name)
+
+            #  check all user story ids in the list
+
+            print('$$$$$$$$$$$$', list_of_us_ids)
+            # each class/concept is part of one of more user stories
+            # this information is located in the relationship.list_of_us_ids property
+            for us_id in list_of_us_ids.split(', '):
+                # find the user story that is in the list_of_us_ids by .userstory_id
+                # and find it with .id as well so we find only the stories in this particular set
+                us = sqlsession.query(UserStoryVN).filter(and_(UserStoryVN.id > starting_id, UserStoryVN.id <= highest_id.id,
+                                                            UserStoryVN.userstory_id == us_id)).first()
+                print('%%%%%%%%%%', us.id, us.no_punct)
+                print('^^^^HIGHEST_ID', highest_id.id, highest_id.no_punct)
+                cl = sqlsession.query(ClassVN).get(class_id)
+                print('#######CLASS_ID#########', cl.class_name, cl.class_id)
+                #  add a class to the relationship named ' classes' on the userstory table
+                # association table will automatically be filled this way
+
+                us.classes.append(cl)
+            sqlsession.commit()
+
         except Exception as e:
             print('EXCEPTION on adding class to DB:', e)
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -111,40 +156,6 @@ def add_concepts(output_ontobj, m, starting_id):
 
             sqlsession.rollback()
             excluded_concepts_list.append(class_vn)
-        # else:
-        #     break
-
-        # sqlsession.commit()
-
-        # WHAT HAPPENS HERE ???????????????????????????
-        list_of_us_ids = class_vn['occurs_in']
-        # class_from_db = sqlsession.query(ClassVN).filter_by(class_name=class_vn['class_name']).first()
-        class_from_db = sqlsession.query(ClassVN).order_by(ClassVN.class_id.desc()) \
-            .join(User).filter(User.id == the_user.id) \
-            .first()
-
-        class_id = class_from_db.class_id
-        print('#########', class_id, class_from_db.class_name)
-
-        #  check all user story ids in the list
-
-        print('$$$$$$$$$$$$', list_of_us_ids)
-        # each class/concept is part of one of more user stories
-        # this information is located in the relationship.list_of_us_ids property
-        for us_id in list_of_us_ids.split(', '):
-            # find the user story that is in the list_of_us_ids by .userstory_id
-            # and find it with .id as well so we find only the stories in this particular set
-            us = sqlsession.query(UserStoryVN).filter(and_(UserStoryVN.id > starting_id, UserStoryVN.id <= highest_id.id,
-                                                        UserStoryVN.userstory_id == us_id)).first()
-            print('%%%%%%%%%%', us.id, us.no_punct)
-            print('^^^^HIGHEST_ID', highest_id.id, highest_id.no_punct)
-            cl = sqlsession.query(ClassVN).get(class_id)
-            print('#######CLASS_ID#########', cl.class_name, cl.class_id)
-            #  add a class to the relationship named ' classes' on the userstory table
-            # association table will automatically be filled this way
-
-            us.classes.append(cl)
-        sqlsession.commit()
     print('******EXCLUDED CONCEPTS******', excluded_concepts_list)
 
 # funtction to add the relationships to the database

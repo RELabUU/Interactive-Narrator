@@ -45,11 +45,18 @@ function toggleNode(node, hideNode) {
     });
 }
 
+// a function that makes sure all nodes are shown on the visualization
 function showAllNodes() {
     nodes.forEach(function (node) {
-        edges.update({id: node.id, hidden: false});
+        nodes.update({id: node.id, hidden: false});
     });
-    edges.forEach(function (edge) {
+    // edges.forEach(function (edge) {
+    //     edges.update({id: edge.id, hidden: false});
+    // });
+}
+
+function showAllEdges() {
+        edges.forEach(function (edge) {
         edges.update({id: edge.id, hidden: false});
     });
 }

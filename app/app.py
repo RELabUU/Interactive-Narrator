@@ -146,6 +146,8 @@ def do_register():
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
 
+        sqlsession.rollback()
+
         error = 'Sorry, we could not register you'
 
         return render_template('register.html', form=form, error=error)
@@ -218,10 +220,15 @@ def admin_dashboard():
             .join(CompanyVN)\
             .join(User).filter(User.username == username).all()
 
-        sprints = [dict(sprint_id=sprint.id,
+        for sprint in all_sprints:
+            user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
+            print('COUNT USER STORIES', user_story_count)
+            sprints = [dict(sprint_id=sprint.id,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
-                        company_name=sprint.company_name) for sprint in all_sprints]
+                        company_name=sprint.company_name,
+                        user_story_count = user_story_count)]
+
 
         registered_users = sqlsession.query(User).all()
 
@@ -240,6 +247,7 @@ def admin_dashboard():
 # route for reaching the dashboard page for logged in users
 @app.route("/dashboard")
 def show_dash():
+    sprints = []
     if not session.get('logged_in'):
         return redirect(url_for('do_login'))
     # if session['username'] == 'demoman':
@@ -251,14 +259,23 @@ def show_dash():
         username = session['username']
         print(username)
         # show all the sprints that are in the database on the dashboard page
+
         all_sprints = sqlsession.query(SprintVN)\
             .join(CompanyVN)\
             .join(User).filter(User.username == username).all()
 
-        sprints = [dict(sprint_id=sprint.id,
+        for sprint in all_sprints:
+            user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
+            print('COUNT USER STORIES', user_story_count)
+            sprint = dict(sprint_id=sprint.sprint_id_user,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
-                        company_name=sprint.company_name) for sprint in all_sprints]
+                        company_name=sprint.company_name,
+                        user_story_count = user_story_count)
+
+            sprints.append(sprint)
+        # import pdb
+        # pdb.set_trace()
         # extra data for admin
         if username == 'govertjan':
             registered_users = sqlsession.query(User).all()
@@ -319,18 +336,33 @@ def delete_all():
 
 @app.route('/delete_sprint/<int:id>', methods=['GET', 'POST'])
 def delete_sprint(id):
-    username = session['username']
+    # username = session['username']
+    active_user = sqlsession.query(User).filter(User.username == session['username']).first()
+    # userstories = sqlsession.query(UserStoryVN) \
+    #     .join(us_sprint_association_table) \
+    #     .join(SprintVN) \
+    #     .join(CompanyVN) \
+    #     .join(User).filter(and_(SprintVN.id == id), (User.username == username)).all()
 
     userstories = sqlsession.query(UserStoryVN) \
         .join(us_sprint_association_table) \
-        .join(SprintVN) \
+        .join(SprintVN).filter(SprintVN.sprint_id_user == id) \
         .join(CompanyVN) \
-        .join(User).filter(and_(SprintVN.id == id), (User.username == username)).all()
-
+        .join(User).filter(User.username == active_user.username).all()
 
     for userstory in userstories:
         sqlsession.delete(userstory)
         # sqlsession.commit()
+
+        # find orphan sprints and delete them if necessary
+    sprints = sqlsession.query(SprintVN)\
+        .filter(SprintVN.sprint_id_user == id) \
+        .join(CompanyVN)\
+        .join(User).filter(User.username == active_user.username).all()\
+
+
+    for sprint in sprints:
+        sqlsession.delete(sprint)
 
     try:
         sqlsession.commit()
@@ -454,7 +486,7 @@ def upload_form():
 
                     except IndexError:
                         error = 'Sorry, the file was not accepted by our system. ' \
-                                'Does it really contain user stories in the format "as a (role) I want to (goal)"?'
+                                'Does it really contain user stories in English in the format "as a (role) I want to (goal)"?'
                         if newest_sprint:
                             # sqlsession.query(SprintVN).filter(SprintVN.sprint_name == newest_sprint.sprint_name).delete()
                             sqlsession.delete(newest_sprint)
@@ -484,7 +516,7 @@ def upload_form():
                     # if all went well redirect the user to the visualization directly
                     return redirect(url_for('show_vis'))
                 else:
-                    error = 'Sorry, the app could not accept and process your file.'
+                    error = 'Sorry, the app could not accept and process your file. Is it a .txt or .csv file?'
 
                     newest_sprint = sqlsession.query(SprintVN).filter(and_(
                         SprintVN.sprint_name == sprint_form_data['sprint_name']), (SprintVN.user_id == active_user.id)) \
@@ -533,7 +565,7 @@ def get_roles():
 def get_sprints():
     username = session['username']
     # print(username)
-    # show all the sprints that are in the database for this user on the dashboard page
+    # show all the sprints that are in the database for this user in the dropdownlistbox
 
     sprints = sqlsession.query(SprintVN) \
         .join(CompanyVN) \
@@ -788,4 +820,4 @@ def page_not_found_error(error):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
