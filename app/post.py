@@ -171,42 +171,61 @@ def add_relationships(output_prologobj, starting_id):
         rel_entry = RelationShipVN(relationship_domain=relationship.domain,
                                    relationship_name=relationship.name, relationship_range=relationship.range,
                                    user=the_user.id)
+        #
+        isa_duplicate = sqlsession.query(RelationShipVN).filter(and_(RelationShipVN.relationship_domain == relationship.domain),
+                                                                 (RelationShipVN.relationship_range == relationship.range),
+                                                                 (RelationShipVN.relationship_name == 'isa')).first()
+
+
         try:
-            sqlsession.add(rel_entry)
+            if isa_duplicate:
+                # import pdb
+                # pdb.set_trace()
+                print('THIS IS A DUPLICATE RELATIONSHIP, SO DO NOT ADD IT', isa_duplicate)
+                pass
+            else:
+                sqlsession.add(rel_entry)
+                sqlsession.commit()
+
+                # access the ontology object property "relationship.stories" which stores
+                # the user story ids in which the relationshsip occurs
+                list_of_us_ids = relationship.stories
+                # get the newest relationship (with the highest relationship_id) which should be the one just added
+                relationship_from_db = sqlsession.query(RelationShipVN).order_by(
+                    RelationShipVN.relationship_id.desc()).first()
+                # each relationship is part of one of more user stories
+                # this information is located in the relationship.list_of_us_ids property
+
+                # Here, you make sure that a relationship is never associated with the same user story twice
+                # It is important to note that this CAN be the case, but is not accommodated for as of now
+                seen_twice = set()
+                unique_list_of_us_ids = []
+                for us_id in list_of_us_ids:
+                    if us_id not in seen_twice:
+                        unique_list_of_us_ids.append(us_id)
+                        seen_twice.add(us_id)
+                for us_id in unique_list_of_us_ids:
+                    # find the user story that is in the list_of_us_ids by .userstory_id
+                    # and find it with .id as well so we find only the stories in this particular set
+                    us = sqlsession.query(UserStoryVN).filter(
+                        and_(UserStoryVN.id > starting_id, UserStoryVN.id <= highest_id.id,
+                             UserStoryVN.userstory_id == us_id)).first()
+
+                    #  add a class to the relationship named ' classes' on the userstory table
+                    # association table will automatically be filled this way
+                    us.relationships.append(relationship_from_db)
+
             sqlsession.commit()
+
+
         except Exception as e:
             print('Exception raised', e)
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             print(exc_type, fname, exc_tb.tb_lineno)
+            sqlsession.rollback()
 
-        # access the ontology object property "relationship.stories" which stores
-        # the user story ids in which the relationshsip occurs
-        list_of_us_ids = relationship.stories
-        # get the newest relationship (with the highest relationship_id) which should be the one just added
-        relationship_from_db = sqlsession.query(RelationShipVN).order_by(RelationShipVN.relationship_id.desc()).first()
-        # each relationship is part of one of more user stories
-        # this information is located in the relationship.list_of_us_ids property
 
-        # Here, you make sure that a relationship is never associated with the same user story twice
-        # It is important to note that this CAN be the case, but is not accommodated for as of now
-        seen_twice = set()
-        unique_list_of_us_ids = []
-        for us_id in list_of_us_ids:
-            if us_id not in seen_twice:
-                unique_list_of_us_ids.append(us_id)
-                seen_twice.add(us_id)
-        for us_id in unique_list_of_us_ids:
-            # find the user story that is in the list_of_us_ids by .userstory_id
-            # and find it with .id as well so we find only the stories in this particular set
-            us = sqlsession.query(UserStoryVN).filter(and_(UserStoryVN.id > starting_id, UserStoryVN.id <= highest_id.id,
-                                                        UserStoryVN.userstory_id == us_id)).first()
-
-            #  add a class to the relationship named ' classes' on the userstory table
-            # association table will automatically be filled this way
-            us.relationships.append(relationship_from_db)
-
-    sqlsession.commit()
 
 def add_data_to_db(us_instances, output_ontobj, output_prologobj, m, form_data):
     # get the starting position for the new userstory IDs, based on the presence/absence of
