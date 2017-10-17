@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-import sys
-import os
-import math
-import json
+import sys, os, math, json, collections
+# import os
+# import math
+# import json
 
 sys.path.append('/var/www/interactivenarrator')
 
@@ -112,10 +112,10 @@ def do_register():
             password = sha256_crypt.encrypt((str(form.password.data)))
 
             # check if a user is new or existent...
-            user_exists = sqlsession.query(User).filter(User.username == username).first()
+            user_exists = sqlsession.query(User).filter(User.email == email).first()
             # ... if it exists, notify the user
             if user_exists:
-                error = "That username is already taken, please choose another"
+                error = "That e-mail is already taken, please choose another"
                 return render_template('register.html', form=form, error=error)
             # ..else, create the new user and company
             else:
@@ -148,7 +148,7 @@ def do_register():
 
         sqlsession.rollback()
 
-        error = 'Sorry, we could not register you'
+        error = 'Sorry, we could not register you with these credentials'
 
         return render_template('register.html', form=form, error=error)
         # return(str(e))
@@ -550,14 +550,20 @@ def allowed_file(filename):
 @app.route('/getroles')
 def get_roles():
     username = session['username']
+    user = sqlsession.query(User).filter(User.username == username).one()
 
-    functional_roles = sqlsession.query(UserStoryVN.functional_role.distinct().label("functional_role"))\
-        .join(us_sprint_association_table) \
-        .join(SprintVN) \
-        .join(CompanyVN) \
-        .join(User).filter(User.username == username)
-    all_roles = [row.functional_role for row in functional_roles.all()]
-    print(all_roles)
+    # functional_roles = sqlsession.query(UserStoryVN.functional_role.distinct().label("functional_role"))\
+    #     .join(us_sprint_association_table) \
+    #     .join(SprintVN) \
+    #     .join(CompanyVN) \
+    #     .join(User).filter(User.username == user.username)
+
+    functional_roles = sqlsession.query(ClassVN)\
+        .filter(and_(ClassVN.user == user.id), (ClassVN.group == 'Role'))
+
+    # print(functional_roles)
+    all_roles = [row.class_name for row in functional_roles.all()]
+    # print(all_roles)
     return jsonify(all_roles)
 
 # get the sprints to populate the multiselect with javascript
@@ -583,7 +589,16 @@ def click_query():
     checked_roles = json.loads(request.args.get('roles'))
     checked_sprints = json.loads(request.args.get('sprints'))
 
-    print('SELECETD ROLES AND SPRINTS', checked_roles, checked_sprints)
+    # find the user_sprint_ids that belong to the sprint_ids
+    checked_sprints_ids = sqlsession.query(SprintVN)\
+        .filter(SprintVN.sprint_id_user.in_(checked_sprints)).all()
+
+    checked_sprints_ids_list = [sprint.sprint_id_user for sprint in checked_sprints_ids]
+
+    # import pdb
+    # pdb.set_trace()
+
+    print('SELECETD ROLES AND SPRINTS', checked_roles, checked_sprints, checked_sprints_ids_list)
     node_userstory_list = []
     active_user = sqlsession.query(User).filter(User.username == session['username']).first()
 
@@ -596,8 +611,9 @@ def click_query():
             .join(ClassVN) \
             .filter(and_(ClassVN.class_id == one_node['id']),
                     (ClassVN.user == active_user.id)) \
-            .filter(and_(UserStoryVN.functional_role.in_(checked_roles),(SprintVN.id.in_(checked_sprints))))\
             .all()
+            # .filter(and_(UserStoryVN.functional_role.in_(checked_roles),(UserStoryVN.in_sprint.in_(checked_sprints_ids_list))))\
+            # .all()
 
 
         print('THE USER STORIES THAT SHOULD BE PRINTED', node_userstories)
@@ -717,14 +733,27 @@ def concepts():
 
     username = session['username']
     # show all the sprints that are in the database on the dashboard page
-    concepts_query = sqlsession.query(ClassVN) \
+
+    # distinct_classes = sqlsession.query(ClassVN.class_name.distinct().label("class_name"))
+    # distinct_classes_list = [row.class_name for row, count in collections.Counter(distinct_classes).items() if count >= 1]
+
+    # subq = (sqlsession.query(func.min(ClassVN.class_id).label("min_id")).
+    #         group_by(ClassVN.class_name)).subquery()
+
+    # qry = (session.query(ClassVN).
+    #        join(subq, and_(ClassVN.class_id == subq.c.min_id)))
+
+    concepts_query = sqlsession.query(ClassVN)\
         .join(us_class_association_table) \
         .join(UserStoryVN) \
         .join(us_sprint_association_table) \
         .join(SprintVN) \
         .join(CompanyVN)\
-        .join(User).filter(User.username == username)\
+        .join(User).filter(User.username == username) \
         .all()
+
+    # import pdb
+    # pdb.set_trace()
 
     # now jsonify and return the concepts to the fore-end
     # concepts_query = sqlsession.query(ClassVN).all()

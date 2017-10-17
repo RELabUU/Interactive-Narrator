@@ -102,39 +102,43 @@ $('#searchfield').change(function () {
     // foundItem = null; //we'll store the matching value here
 
       if (formInput === '') {
-        edges.forEach(function(node){
+        nodes.forEach(function(node){
             nodes.update({id: node.id, color: '#97C2FC'})
         });
         edges.forEach(function(edge) {
-            edges.update({id: edge.id, color: '#97C2FC'})
+            edges.update({id: edge.id, color: '#5898ED'})
         });
           alert('Please Enter a Search Term');
         return false;
       }
-      nodes.forEach(function(node){
-          // var selected = nodes.get(node.id);
-         if (node.label == formInput){
-             console.log("i found it!");
-             var selected_nodes = [];
-             selected_nodes[0] = node.id;
-             console.log(selected_nodes);
-             // nodes.selectNode(node);
-             // node.color = undefined;
-            // node.trigger('click');
-             nodes.update({id: node.id, borderWidth: 3, color: '#ECC348'})
-         }
-         else{
-             nodes.update({id: node.id, color: '#97C2FC'})
-         }
-      });
-      edges.forEach(function(edge){
-          if (edge.label == formInput){
-              edges.update({id: edge.id, color:'#ECC348'})
-          }
-          else{
-              edges.update({id: edge.id, color:'#97C2FC'})
-          }
-      });
+
+      else if (formInput) {
+
+          nodes.forEach(function (node) {
+              // var selected = nodes.get(node.id);
+              if (node.label == formInput) {
+                  console.log("i found it!");
+                  var selected_nodes = [];
+                  selected_nodes[0] = node.id;
+                  console.log(selected_nodes);
+                  // nodes.selectNode(node);
+                  // node.color = undefined;
+                  // node.trigger('click');
+                  nodes.update({id: node.id, borderWidth: 3, color: '#ECC348'})
+              }
+              else {
+                  nodes.update({id: node.id, color: '#97C2FC'})
+              }
+          });
+          edges.forEach(function (edge) {
+              if (edge.label == formInput) {
+                  edges.update({id: edge.id, color: '#ECC348'})
+              }
+              else {
+                  edges.update({id: edge.id, color: '#97C2FC'})
+              }
+          });
+      }
     });
 // network.on("selectNode", function (params) {
 //
@@ -158,10 +162,10 @@ function showDataSet(data) {
 
     nodes_dataset.add(data.nodes);
     edges_dataset.add(data.edges);
-    console.log(nodes);
-    console.log(edges);
-    console.log(nodes_dataset);
-    console.log(edges_dataset);
+    console.log('NODES', nodes);
+    console.log('EDGES', edges);
+    console.log('NODES DATASET', nodes_dataset);
+    console.log('EDGES DATASET', edges_dataset);
 
     // updating the nodes //
     nodes.forEach(function (node) {
@@ -170,7 +174,7 @@ function showDataSet(data) {
         // console.log(selected);
         // if nothing is selected, make everything grey. NOT WORKING!
         if (!selected) {
-
+            console.log('this node is not part of the selection');
             nodes.update({id: node.id, color: '#E8E8E8', font:{color:'#E8E8E8'}});
         }
         // else if a node is selected make it blue
@@ -186,17 +190,17 @@ function showDataSet(data) {
     });
 
     // if no roles are selected, return to the default appearance
-    if (nodes_dataset.length == 0) {
-        nodes.forEach(function (node) {
-            nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
-
-            if (node.group == 'Role') {
-                nodes.update({id: node.id, color: '#4A87F4', font:{color:'#343434'}});
-
-            }
-        });
-
-    }
+    // if (nodes_dataset.length == 0) {
+    //     nodes.forEach(function (node) {
+    //         nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
+    //
+    //         if (node.group == 'Role') {
+    //             nodes.update({id: node.id, color: '#4A87F4', font:{color:'#343434'}});
+    //
+    //         }
+    //     });
+    //
+    // }
 
     // updating the edges //
     edges.forEach(function (edge) {
