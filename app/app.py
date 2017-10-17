@@ -146,6 +146,8 @@ def do_register():
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
 
+        sqlsession.rollback()
+
         error = 'Sorry, we could not register you'
 
         return render_template('register.html', form=form, error=error)
@@ -247,7 +249,7 @@ def show_dash():
     if session.get('logged_in') and session['username'] == 'admin':
         return redirect(url_for('admin_dashboard'))
     else:
-
+        sprints = []
         username = session['username']
         print(username)
         # show all the sprints that are in the database on the dashboard page
@@ -255,10 +257,16 @@ def show_dash():
             .join(CompanyVN)\
             .join(User).filter(User.username == username).all()
 
-        sprints = [dict(sprint_id=sprint.id,
+
+        for sprint in all_sprints:
+            user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
+            print('COUNT USER STORIES', user_story_count)
+            sprints = [dict(sprint_id=sprint.id,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
-                        company_name=sprint.company_name) for sprint in all_sprints]
+                        company_name=sprint.company_name,
+                        user_story_count = user_story_count)]
+
         # extra data for admin
         if username == 'govertjan':
             registered_users = sqlsession.query(User).all()
