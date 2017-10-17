@@ -18,8 +18,7 @@
                 <div id="db-sprint">
                     <strong>Sprint ID:</strong> {{ sprint.sprint_id }} <br>
                     <strong>Sprint name:</strong> {{ sprint.sprint_name }} <br>
-                    <strong>User Stories:</strong> {{ sprint.user_story_count }} <br>
-                    <a class="btn btn-warning" href="{{ url_for('delete_sprint', id=sprint.sprint_id) }}">Delete</a>
+{#                    <a class="btn btn-warning" href="{{ url_for('delete_sprint', id=sprint.sprint_id) }}">Delete</a>#}
 
                 </div>
             {% endfor %}
@@ -31,7 +30,6 @@
           <div id="dashboard-set-buttons">
                 <a class="btn btn-default" href="/vis">Show Visualization</a>
                 <a class="btn btn-success" href="{{ url_for('upload_form') }}"> Upload Set</a>
-                <br>
                 <a class="btn btn-warning" href="{{ url_for('delete_all') }}"> Delete All</a>
           </div>
     </div>

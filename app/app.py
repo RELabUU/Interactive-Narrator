@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-import sys, os, math, json, collections
-# import os
-# import math
-# import json
+import sys
+import os
+import math
+import json
 
 sys.path.append('/var/www/interactivenarrator')
 
@@ -112,10 +112,10 @@ def do_register():
             password = sha256_crypt.encrypt((str(form.password.data)))
 
             # check if a user is new or existent...
-            user_exists = sqlsession.query(User).filter(User.email == email).first()
+            user_exists = sqlsession.query(User).filter(User.username == username).first()
             # ... if it exists, notify the user
             if user_exists:
-                error = "That e-mail is already taken, please choose another"
+                error = "That username is already taken, please choose another"
                 return render_template('register.html', form=form, error=error)
             # ..else, create the new user and company
             else:
@@ -146,9 +146,7 @@ def do_register():
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
 
-        sqlsession.rollback()
-
-        error = 'Sorry, we could not register you with these credentials'
+        error = 'Sorry, we could not register you'
 
         return render_template('register.html', form=form, error=error)
         # return(str(e))
@@ -220,15 +218,10 @@ def admin_dashboard():
             .join(CompanyVN)\
             .join(User).filter(User.username == username).all()
 
-        for sprint in all_sprints:
-            user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
-            print('COUNT USER STORIES', user_story_count)
-            sprints = [dict(sprint_id=sprint.id,
+        sprints = [dict(sprint_id=sprint.id,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
-                        company_name=sprint.company_name,
-                        user_story_count = user_story_count)]
-
+                        company_name=sprint.company_name) for sprint in all_sprints]
 
         registered_users = sqlsession.query(User).all()
 
@@ -247,7 +240,6 @@ def admin_dashboard():
 # route for reaching the dashboard page for logged in users
 @app.route("/dashboard")
 def show_dash():
-    sprints = []
     if not session.get('logged_in'):
         return redirect(url_for('do_login'))
     # if session['username'] == 'demoman':
@@ -259,23 +251,14 @@ def show_dash():
         username = session['username']
         print(username)
         # show all the sprints that are in the database on the dashboard page
-
         all_sprints = sqlsession.query(SprintVN)\
             .join(CompanyVN)\
             .join(User).filter(User.username == username).all()
 
-        for sprint in all_sprints:
-            user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
-            print('COUNT USER STORIES', user_story_count)
-            sprint = dict(sprint_id=sprint.sprint_id_user,
+        sprints = [dict(sprint_id=sprint.id,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
-                        company_name=sprint.company_name,
-                        user_story_count = user_story_count)
-
-            sprints.append(sprint)
-        # import pdb
-        # pdb.set_trace()
+                        company_name=sprint.company_name) for sprint in all_sprints]
         # extra data for admin
         if username == 'govertjan':
             registered_users = sqlsession.query(User).all()
@@ -336,33 +319,18 @@ def delete_all():
 
 @app.route('/delete_sprint/<int:id>', methods=['GET', 'POST'])
 def delete_sprint(id):
-    # username = session['username']
-    active_user = sqlsession.query(User).filter(User.username == session['username']).first()
-    # userstories = sqlsession.query(UserStoryVN) \
-    #     .join(us_sprint_association_table) \
-    #     .join(SprintVN) \
-    #     .join(CompanyVN) \
-    #     .join(User).filter(and_(SprintVN.id == id), (User.username == username)).all()
+    username = session['username']
 
     userstories = sqlsession.query(UserStoryVN) \
         .join(us_sprint_association_table) \
-        .join(SprintVN).filter(SprintVN.sprint_id_user == id) \
+        .join(SprintVN) \
         .join(CompanyVN) \
-        .join(User).filter(User.username == active_user.username).all()
+        .join(User).filter(and_(SprintVN.id == id), (User.username == username)).all()
+
 
     for userstory in userstories:
         sqlsession.delete(userstory)
         # sqlsession.commit()
-
-        # find orphan sprints and delete them if necessary
-    sprints = sqlsession.query(SprintVN)\
-        .filter(SprintVN.sprint_id_user == id) \
-        .join(CompanyVN)\
-        .join(User).filter(User.username == active_user.username).all()\
-
-
-    for sprint in sprints:
-        sqlsession.delete(sprint)
 
     try:
         sqlsession.commit()
@@ -486,7 +454,7 @@ def upload_form():
 
                     except IndexError:
                         error = 'Sorry, the file was not accepted by our system. ' \
-                                'Does it really contain user stories in English in the format "as a (role) I want to (goal)"?'
+                                'Does it really contain user stories in the format "as a (role) I want to (goal)"?'
                         if newest_sprint:
                             # sqlsession.query(SprintVN).filter(SprintVN.sprint_name == newest_sprint.sprint_name).delete()
                             sqlsession.delete(newest_sprint)
@@ -516,7 +484,7 @@ def upload_form():
                     # if all went well redirect the user to the visualization directly
                     return redirect(url_for('show_vis'))
                 else:
-                    error = 'Sorry, the app could not accept and process your file. Is it a .txt or .csv file?'
+                    error = 'Sorry, the app could not accept and process your file.'
 
                     newest_sprint = sqlsession.query(SprintVN).filter(and_(
                         SprintVN.sprint_name == sprint_form_data['sprint_name']), (SprintVN.user_id == active_user.id)) \
@@ -550,20 +518,14 @@ def allowed_file(filename):
 @app.route('/getroles')
 def get_roles():
     username = session['username']
-    user = sqlsession.query(User).filter(User.username == username).one()
 
-    # functional_roles = sqlsession.query(UserStoryVN.functional_role.distinct().label("functional_role"))\
-    #     .join(us_sprint_association_table) \
-    #     .join(SprintVN) \
-    #     .join(CompanyVN) \
-    #     .join(User).filter(User.username == user.username)
-
-    functional_roles = sqlsession.query(ClassVN)\
-        .filter(and_(ClassVN.user == user.id), (ClassVN.group == 'Role'))
-
-    # print(functional_roles)
-    all_roles = [row.class_name for row in functional_roles.all()]
-    # print(all_roles)
+    functional_roles = sqlsession.query(UserStoryVN.functional_role.distinct().label("functional_role"))\
+        .join(us_sprint_association_table) \
+        .join(SprintVN) \
+        .join(CompanyVN) \
+        .join(User).filter(User.username == username)
+    all_roles = [row.functional_role for row in functional_roles.all()]
+    print(all_roles)
     return jsonify(all_roles)
 
 # get the sprints to populate the multiselect with javascript
@@ -571,7 +533,7 @@ def get_roles():
 def get_sprints():
     username = session['username']
     # print(username)
-    # show all the sprints that are in the database for this user in the dropdownlistbox
+    # show all the sprints that are in the database for this user on the dashboard page
 
     sprints = sqlsession.query(SprintVN) \
         .join(CompanyVN) \
@@ -589,16 +551,7 @@ def click_query():
     checked_roles = json.loads(request.args.get('roles'))
     checked_sprints = json.loads(request.args.get('sprints'))
 
-    # find the user_sprint_ids that belong to the sprint_ids
-    checked_sprints_ids = sqlsession.query(SprintVN)\
-        .filter(SprintVN.sprint_id_user.in_(checked_sprints)).all()
-
-    checked_sprints_ids_list = [sprint.sprint_id_user for sprint in checked_sprints_ids]
-
-    # import pdb
-    # pdb.set_trace()
-
-    print('SELECETD ROLES AND SPRINTS', checked_roles, checked_sprints, checked_sprints_ids_list)
+    print('SELECETD ROLES AND SPRINTS', checked_roles, checked_sprints)
     node_userstory_list = []
     active_user = sqlsession.query(User).filter(User.username == session['username']).first()
 
@@ -611,9 +564,8 @@ def click_query():
             .join(ClassVN) \
             .filter(and_(ClassVN.class_id == one_node['id']),
                     (ClassVN.user == active_user.id)) \
+            .filter(and_(UserStoryVN.functional_role.in_(checked_roles),(SprintVN.id.in_(checked_sprints))))\
             .all()
-            # .filter(and_(UserStoryVN.functional_role.in_(checked_roles),(UserStoryVN.in_sprint.in_(checked_sprints_ids_list))))\
-            # .all()
 
 
         print('THE USER STORIES THAT SHOULD BE PRINTED', node_userstories)
@@ -733,27 +685,14 @@ def concepts():
 
     username = session['username']
     # show all the sprints that are in the database on the dashboard page
-
-    # distinct_classes = sqlsession.query(ClassVN.class_name.distinct().label("class_name"))
-    # distinct_classes_list = [row.class_name for row, count in collections.Counter(distinct_classes).items() if count >= 1]
-
-    # subq = (sqlsession.query(func.min(ClassVN.class_id).label("min_id")).
-    #         group_by(ClassVN.class_name)).subquery()
-
-    # qry = (session.query(ClassVN).
-    #        join(subq, and_(ClassVN.class_id == subq.c.min_id)))
-
-    concepts_query = sqlsession.query(ClassVN)\
+    concepts_query = sqlsession.query(ClassVN) \
         .join(us_class_association_table) \
         .join(UserStoryVN) \
         .join(us_sprint_association_table) \
         .join(SprintVN) \
         .join(CompanyVN)\
-        .join(User).filter(User.username == username) \
+        .join(User).filter(User.username == username)\
         .all()
-
-    # import pdb
-    # pdb.set_trace()
 
     # now jsonify and return the concepts to the fore-end
     # concepts_query = sqlsession.query(ClassVN).all()
@@ -849,4 +788,4 @@ def page_not_found_error(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

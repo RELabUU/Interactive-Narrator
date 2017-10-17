@@ -10,17 +10,21 @@
         <div class="col-lg-6">
              <div id="uploadform">
 
-        <h3>Upload User Stories</h3>
+        <h3>Interactive Narrator</h3>
         <br>
         <h5>Instructions:</h5>
         <p>
+            Welcome to the Interactive Narrator.
 
-            Please supply a name for your set (sprint) of English user stories below. This name should be a unique identifier
+            Please supply a name for your set of user stories below. This name should be a unique identifier
             for this particular set of stories. Example: Sprint3.
 
             Then upload your set of user stories in .txt or .csv format on this page and click send.
 
-            Want to update existing user stories? Click delete, and upload your new file.
+            Want to update existing user stories? Delete them, and upload the updated file again.
+        </p>
+        <p id="mandatory">
+
         </p>
 
         <br>
@@ -28,6 +32,7 @@
 
             {{ render_field(form.sprint_name, maxlength=255, placeholder="the name of your sprint") }}
 
+            <br>
             <br>
             <h6>Upload your user stories in .txt or .csv format</h6>
             <input class="" type=file name=file>

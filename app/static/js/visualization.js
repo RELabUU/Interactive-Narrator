@@ -30,7 +30,7 @@ aClient.get('/concepts', function (response) { //actually execute the HTTP-reque
     // console.log('repsone tuple', response.clusters);
     console.log(nodes_parsed);
     nodes.add(nodes_parsed); // add the parsed data to the DataSet
-    console.log('NODES at /concepts', nodes)
+    console.log(nodes)
 });
 
 // HTTP-request to obtain the edges (relationships between concepts)
@@ -40,7 +40,6 @@ bClient.get('/relationships', function (response) {
     var edges_parsed = JSON.parse(response);
     // console.log(edges_parsed);
     edges.add(edges_parsed);
-    console.log('EDGES at /relationships', edges);
 });
 
 
