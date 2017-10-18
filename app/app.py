@@ -261,11 +261,12 @@ def show_dash():
         for sprint in all_sprints:
             user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
             print('COUNT USER STORIES', user_story_count)
-            sprints = [dict(sprint_id=sprint.id,
+            sprint = dict(sprint_id=sprint.id,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
                         company_name=sprint.company_name,
-                        user_story_count = user_story_count)]
+                        user_story_count = user_story_count)
+            sprints.append(sprint)
 
         # extra data for admin
         if username == 'govertjan':
@@ -559,9 +560,17 @@ def click_query():
     checked_roles = json.loads(request.args.get('roles'))
     checked_sprints = json.loads(request.args.get('sprints'))
 
-    print('SELECETD ROLES AND SPRINTS', checked_roles, checked_sprints)
-    node_userstory_list = []
     active_user = sqlsession.query(User).filter(User.username == session['username']).first()
+
+    # find the user_sprint_ids that belong to the sprint_ids
+    checked_sprints_ids = sqlsession.query(SprintVN) \
+        .filter(and_(SprintVN.user_id == active_user.id),(SprintVN.sprint_id_user.in_(checked_sprints))).all()
+
+    checked_sprints_ids_list = [sprint.id for sprint in checked_sprints_ids]
+
+    print('SELECETD ROLES AND SPRINTS', checked_roles, checked_sprints, checked_sprints_ids, checked_sprints_ids_list)
+    node_userstory_list = []
+    # active_user = sqlsession.query(User).filter(User.username == session['username']).first()
 
     for one_node in clicked_nodes:
         print('CLICKED NODE/CONCEPT ID', one_node['id'])
@@ -572,7 +581,7 @@ def click_query():
             .join(ClassVN) \
             .filter(and_(ClassVN.class_id == one_node['id']),
                     (ClassVN.user == active_user.id)) \
-            .filter(and_(UserStoryVN.functional_role.in_(checked_roles),(SprintVN.id.in_(checked_sprints))))\
+            .filter(and_(UserStoryVN.functional_role.in_(checked_roles),(UserStoryVN.in_sprint.in_(checked_sprints_ids_list))))\
             .all()
 
 
@@ -595,8 +604,17 @@ def get_nodes_edges():
     # retrieve the sprints and roles to look up, based on the user's selection
     checked_roles = json.loads(request.args.get('roles'))
     checked_sprints = json.loads(request.args.get('sprints'))
+
+    active_user = sqlsession.query(User).filter(User.username == session['username']).first()
+
+    # find the user_sprint_ids that belong to the sprint_ids
+    checked_sprints_ids = sqlsession.query(SprintVN) \
+        .filter(and_(SprintVN.user_id == active_user.id),(SprintVN.sprint_id_user.in_(checked_sprints))).all()
+
+    checked_sprints_ids_list = [sprint.id for sprint in checked_sprints_ids]
+
     # retrieve all the classes belonging to the selection
-    print(checked_roles)
+    print('CHECKED ROLES AND SPRINTS @ /QUERY', checked_roles, checked_sprints, checked_sprints_ids_list)
     classes = sqlsession.query(ClassVN) \
         .join(us_class_association_table) \
         .join(UserStoryVN) \
@@ -604,7 +622,7 @@ def get_nodes_edges():
         .join(SprintVN) \
         .filter(and_(
         UserStoryVN.functional_role.in_(checked_roles)),
-        (SprintVN.id.in_(checked_sprints))
+        (SprintVN.id.in_(checked_sprints_ids_list))
     ) \
         .all()
     # put all the classes in a list of dicts
@@ -627,7 +645,7 @@ def get_nodes_edges():
     ) \
         .filter(and_(
         UserStoryVN.functional_role.in_(checked_roles)),
-        (SprintVN.id.in_(checked_sprints))
+        (SprintVN.id.in_(checked_sprints_ids_list))
     ) \
         .all()
     print('HERE ARE THE RELATIONSHIPS', len(class_relationships), [{"id": rel.relationship_id, "domain": rel.relationship_domain, "range": rel.relationship_range} for rel in class_relationships])
