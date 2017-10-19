@@ -416,9 +416,8 @@ img#UU-logo{
     margin-bottom: 0px;
 }
 
-p#mandatory{
-    margin-top: 10px;
-    font-style: italic;
+#uploadform h3{
+    text-align: center;
 }
 
 ul.flashes li{
@@ -537,6 +536,8 @@ input#submit:hover{
 
 #db-records{
     padding: 10px 5px 5px 5px;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
 }
 
 #db-sprint{

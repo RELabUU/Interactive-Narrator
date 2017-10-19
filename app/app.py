@@ -336,13 +336,14 @@ def delete_all():
 
 @app.route('/delete_sprint/<int:id>', methods=['GET', 'POST'])
 def delete_sprint(id):
-    username = session['username']
+    # username = session['username']
+    active_user = sqlsession.query(User).filter(User.username == session['username']).first()
 
     userstories = sqlsession.query(UserStoryVN) \
         .join(us_sprint_association_table) \
         .join(SprintVN) \
         .join(CompanyVN) \
-        .join(User).filter(and_(SprintVN.id == id), (User.username == username)).all()
+        .join(User).filter(and_(SprintVN.id == id), (User.username == active_user.username)).all()
 
 
     for userstory in userstories:
@@ -352,6 +353,7 @@ def delete_sprint(id):
     try:
         sqlsession.commit()
         return redirect(url_for('show_dash'))
+
     except Exception as e:
         print('Exception raised', e)
         exc_type, exc_obj, exc_tb = sys.exc_info()

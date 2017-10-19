@@ -5,53 +5,29 @@ from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy import Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship, synonym
 from sqlalchemy.ext.declarative import declarative_base
-from werkzeug import check_password_hash
-from werkzeug import generate_password_hash
 
 Base = declarative_base()
 
-# from flask_security import UserMixin, RoleMixin
+from flask_security import Security, SQLAlchemyUserDatastore, \
+    UserMixin, RoleMixin, login_required
 
-# class RolesUsers(Base):
-#     __tablename__ = 'roles_users'
-#     id = Column(Integer(), primary_key=True)
-#     user_id = Column('user_id', Integer(), ForeignKey('user.id'))
-#     role_id = Column('role_id', Integer(), ForeignKey('role.id'))
-#
-# class Role(Base, RoleMixin):
-#     __tablename__ = 'role'
-#     id = Column(Integer(), primary_key=True)
-#     name = Column(String(80), unique=True)
-#     description = Column(String(255))
-#
-# class User(Base, UserMixin):
-#     __tablename__ = 'user'
-#     id = Column(Integer, primary_key=True)
-#     email = Column(String(255), unique=True)
-#     username = Column(String(255))
-#     password = Column(String(255))
-#     last_login_at = Column(DateTime())
-#     current_login_at = Column(DateTime())
-#     last_login_ip = Column(String(100))
-#     current_login_ip = Column(String(100))
-#     login_count = Column(Integer)
-#     active = Column(Boolean())
-#     confirmed_at = Column(DateTime())
-#     roles = relationship('Role', secondary='roles_users',
-#                          backref='users', lazy='dynamic')
-#
-#     # from old User class
-#     created = Column(DateTime, default=datetime.now)
-#     modified = Column(DateTime, default=datetime.now,
-#                       onupdate=datetime.now)
-#     company_id = Column(Integer, ForeignKey('company.id'))
-#     company_name = Column('company_name', String(100))
 
+class RolesUsers(Base):
+    __tablename__ = 'roles_users'
+    id = Column(Integer(), primary_key=True)
+    user_id = Column('user_id', Integer(), ForeignKey('user.id'))
+    role_id = Column('role_id', Integer(), ForeignKey('role.id'))
+
+class Role(Base, RoleMixin):
+    __tablename__ = 'role'
+    id = Column(Integer(), primary_key=True)
+    name = Column(String(80), unique=True)
+    description = Column(String(255))
 
 
 # Flask/SQLAlchemy ORM mappings for the objects we store in the DB
 
-class User(Base):
+class User(Base, UserMixin):
     """A user login, with credentials and authentication."""
     __tablename__ = 'user'
 
@@ -64,8 +40,21 @@ class User(Base):
     active = Column(Boolean, default=True)
 
     password = Column('password', String(100))
+
     company_id = Column(Integer, ForeignKey('company.id'))
     company_name = Column('company_name', String(100))
+
+    last_login_at = Column(DateTime())
+    current_login_at = Column(DateTime())
+    last_login_ip = Column(String(100))
+    current_login_ip = Column(String(100))
+    login_count = Column(Integer)
+    active = Column(Boolean())
+    confirmed_at = Column(DateTime())
+    roles = relationship('Role', secondary='roles_users',
+                         backref='users', lazy='dynamic')
+
+
 
     user_classes = relationship("ClassVN", backref="class")
     user_relationships = relationship("RelationShipVN", backref="relationship")
