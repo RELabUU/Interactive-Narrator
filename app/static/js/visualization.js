@@ -155,6 +155,10 @@ network.on( 'doubleClick', function(properties) {
     console.log('clicked nodes:', clickedNodes);
     labelBold = clickedNodes[0].label;
 
+    if (clickedNodes[0].color == '#ECC348'){
+        nodes.update({id: clickedNodes[0].id, color: '#97C2FC'})
+    }
+
     var role_values = $('#roleselector option:selected');//add the selected options to a var
     var sprint_values = $('#sprintselector option:selected');
 

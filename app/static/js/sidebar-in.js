@@ -47,7 +47,7 @@ function toggleNode(node, hideNode) {
 
 function showAllNodes() {
     nodes.forEach(function (node) {
-        edges.update({id: node.id, hidden: false});
+        nodes.update({id: node.id, hidden: false});
     });
     edges.forEach(function (edge) {
         edges.update({id: edge.id, hidden: false});
@@ -74,8 +74,36 @@ $('#weightSlider').change(function () {
     }
 });
 
+// var visible = true;
 // toggle relationships on and off
 $('#relationships').click(function () {
+    // if(visible){
+    //     edges.forEach(function (edge) {
+    //          edges.update({id: edge.id, hidden: true});
+    //     });
+    //     visible = false;
+    // }
+    // else {
+    //     nodes.forEach(function (node) {
+    //         if(node.hidden==true){
+    //             console.log('do nothing');
+    //         }
+    //         else{
+    //             var isConnectedToNode = (edge.from == node.id) || (edge.to == node.id);
+    //             if (isConnectedToNode && hideNode) {
+    //                 edges.forEach(function (edge) {
+    //
+    //                     edges.update({id: edge.id, hidden: true});
+    //             });
+    //                 }
+    //
+    //             }
+    //     });
+    //     // edges.forEach(function (edge) {
+    //     //      edges.update({id: edge.id, hidden: false});
+    //     // });
+    //     visible = true;
+    // }
     edges.forEach(function (edge) {
         if (!edge.hidden) {
             edges.update({id: edge.id, hidden: true});
@@ -95,39 +123,46 @@ $('#searchfield').change(function () {
     // foundItem = null; //we'll store the matching value here
 
       if (formInput === '') {
-        edges.forEach(function(node){
+        nodes.forEach(function(node){
+            if(node.color == '#ECC348' ){
+
             nodes.update({id: node.id, color: '#97C2FC'})
-        });
+            }
+      });
         edges.forEach(function(edge) {
-            edges.update({id: edge.id, color: '#97C2FC'})
+            if(edge.color == '#ECC348' ) {
+                edges.update({id: edge.id, color: '#97C2FC'})
+            }
         });
-          alert('Please Enter a Search Term');
+          alert('Node color reset');
         return false;
       }
-      nodes.forEach(function(node){
-          // var selected = nodes.get(node.id);
-         if (node.label == formInput){
-             console.log("i found it!");
-             var selected_nodes = [];
-             selected_nodes[0] = node.id;
-             console.log(selected_nodes);
-             // nodes.selectNode(node);
-             // node.color = undefined;
-            // node.trigger('click');
-             nodes.update({id: node.id, borderWidth: 3, color: '#ECC348'})
-         }
-         else{
-             nodes.update({id: node.id, color: '#97C2FC'})
-         }
-      });
-      edges.forEach(function(edge){
-          if (edge.label == formInput){
-              edges.update({id: edge.id, color:'#ECC348'})
-          }
-          else{
-              edges.update({id: edge.id, color:'#97C2FC'})
-          }
-      });
+      else{
+          nodes.forEach(function(node){
+              // var selected = nodes.get(node.id);
+             if (node.label == formInput){
+                 console.log("i found it!");
+                 var selected_nodes = [];
+                 selected_nodes[0] = node.id;
+                 console.log(selected_nodes);
+                 // nodes.selectNode(node);
+                 // node.color = undefined;
+                // node.trigger('click');
+                 nodes.update({id: node.id, borderWidth: 3, color: '#ECC348'})
+             }
+             else{
+                 nodes.update({id: node.id, color: '#97C2FC'})
+             }
+          });
+          edges.forEach(function(edge){
+              if (edge.label == formInput){
+                  edges.update({id: edge.id, color:'#ECC348'})
+              }
+              else{
+                  edges.update({id: edge.id, color:'#97C2FC'})
+              }
+          });
+                }
     });
 // network.on("selectNode", function (params) {
 //

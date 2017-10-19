@@ -45,6 +45,7 @@ Session = sessionmaker(bind=engine)
 sqlsession = Session()
 conn = engine.connect()
 
+
 # FLASK SECURITY
 
 # from flask_security import Security, login_required,\
@@ -212,7 +213,7 @@ def admin_dashboard():
     if session['username'] == 'demoman':
         return redirect(url_for("demo"))
     if session.get('logged_in') and session['username'] == 'admin':
-
+        sprints = []
         username = session['username']
         print(username)
         # show all the sprints that are in the database on the dashboard page
@@ -220,10 +221,16 @@ def admin_dashboard():
             .join(CompanyVN)\
             .join(User).filter(User.username == username).all()
 
-        sprints = [dict(sprint_id=sprint.id,
+        for sprint in all_sprints:
+            user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
+            print('COUNT USER STORIES', user_story_count)
+            sprint = dict(sprint_id=sprint.id,
+                          sprint_id_user = sprint.sprint_id_user,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
-                        company_name=sprint.company_name) for sprint in all_sprints]
+                        company_name=sprint.company_name,
+                        user_story_count = user_story_count)
+            sprints.append(sprint)
 
         registered_users = sqlsession.query(User).all()
 
@@ -244,8 +251,8 @@ def admin_dashboard():
 def show_dash():
     if not session.get('logged_in'):
         return redirect(url_for('do_login'))
-    # if session['username'] == 'demoman':
-    #     return redirect(url_for("demo"))
+    if session['username'] == 'demoman':
+        return redirect(url_for("demo"))
     if session.get('logged_in') and session['username'] == 'admin':
         return redirect(url_for('admin_dashboard'))
     else:
@@ -262,6 +269,7 @@ def show_dash():
             user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
             print('COUNT USER STORIES', user_story_count)
             sprint = dict(sprint_id=sprint.id,
+                          sprint_id_user = sprint.sprint_id_user,
                         sprint_name=sprint.sprint_name,
                         company_id=sprint.company_id,
                         company_name=sprint.company_name,
@@ -717,7 +725,8 @@ def concepts():
         .join(us_sprint_association_table) \
         .join(SprintVN) \
         .join(CompanyVN)\
-        .join(User).filter(User.username == username)\
+        .join(User)\
+        .filter(User.username == username)\
         .all()
 
     # now jsonify and return the concepts to the fore-end

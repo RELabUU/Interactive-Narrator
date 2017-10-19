@@ -380,6 +380,9 @@ h5#threshold {
     /*padding-top: 5px;*/
 }
 
+output#weightSliderAmount{
+    color: rgb(177, 178, 177);
+}
 input[type=range] {
     -webkit-appearance: none;
     margin: 10px 0;
