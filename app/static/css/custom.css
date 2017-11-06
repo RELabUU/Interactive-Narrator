@@ -444,6 +444,7 @@ ul.flashes li{
 
 p.error{
     color: #b93331;
+    text-align: center;
 }
 
 .registration, .login {
