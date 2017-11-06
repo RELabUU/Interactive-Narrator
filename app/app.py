@@ -162,36 +162,47 @@ def do_login():
     form = LoginForm(request.form)
     if not session.get('logged_in'):
         if request.method == "POST":
+            try:
 
-            POST_USERNAME = str(request.form['username'])
-            POST_PASSWORD = str(request.form['password'])
+                POST_USERNAME = str(request.form['username'])
+                POST_PASSWORD = str(request.form['password'])
 
-            # check if a user with the entered username exists
-            check_user = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]))
+                # check if a user with the entered username exists
+                check_user = sqlsession.query(User).filter(User.username.in_([POST_USERNAME]))
 
-            user_exists = check_user.first()
-            # print(user_exists.password)
-            if user_exists:
-                # flash('Wrong username/password, please try again')
-                # if the password matches the username, log the user in
-                if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
-                    print(check_user)
-                    # set the username in the session to the username that was just logged in
-                    session['username'] = POST_USERNAME
-                    session['logged_in'] = True
-                    flash('Thanks for logging in!')
-                    print('succes')
-                    if session['username'] == 'admin':
-                        return redirect(url_for('admin_dashboard'))
+                user_exists = check_user.first()
+                # print(user_exists.password)
+                if user_exists:
+                    # flash('Wrong username/password, please try again')
+                    # if the password matches the username, log the user in
+                    if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
+                        print(check_user)
+                        # set the username in the session to the username that was just logged in
+                        session['username'] = POST_USERNAME
+                        session['logged_in'] = True
+                        flash('Thanks for logging in!')
+                        print('succes')
+                        if session['username'] == 'admin':
+                            return redirect(url_for('admin_dashboard'))
+                        else:
+                            return redirect(url_for('show_dash'))
                     else:
-                        return redirect(url_for('show_dash'))
+                        error = 'Sorry, wrong password/username'
+                        print('failure')
+                        return render_template('login.html', form=form, error=error)
                 else:
                     error = 'Sorry, wrong password/username'
-                    print('failure')
                     return render_template('login.html', form=form, error=error)
-            else:
-                error = 'Sorry, wrong password/username'
+
+            except Exception as e:
+                print('Exception raised on login', e)
+
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)
+                error = 'Sorry, there was an unexpected error'
                 return render_template('login.html', form=form, error=error)
+
         else:
             return render_template('login.html', form=form)
 
