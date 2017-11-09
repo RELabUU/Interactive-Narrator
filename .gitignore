@@ -1,2 +1,3 @@
 app.db
 config.py
+passenger_wsgi.py

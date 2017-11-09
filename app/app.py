@@ -12,9 +12,10 @@ from sqlalchemy import and_, not_, or_
 from flask import Flask, jsonify, render_template, url_for, request
 from flask import flash, send_from_directory, Response, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 from werkzeug import secure_filename, redirect
 from passlib.hash import sha256_crypt
-from form import SetInfoForm, LoginForm, RegistrationForm
+from form import SetInfoForm, LoginForm, RegistrationForm, ContactForm
 from post import add_data_to_db
 import config
 sys.path.append('/var/www/VisualNarrator')
@@ -38,6 +39,8 @@ app.config.from_object(config)
 db = SQLAlchemy(app)
 db.Model = Base
 
+mail = Mail()
+mail.init_app(app)
 # NOTE: sqlsession vs session usage: session is a login/logout browser session while sqlsession is a Session() object
 
 Base.metadata.create_all(engine)
@@ -89,6 +92,26 @@ def demo():
 def homepage():
     return render_template('index.html')
 
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm(request.form)
+    if request.method == 'POST':
+        if form.validate() == False:
+            flash('All fields are required.')
+            print('ERROR POSTING FORM')
+            return render_template('contact.html', form=form)
+        else:
+            msg = Message(form.subject.data, sender=form.email.data, recipients=['interactivenarratoruu@gmail.com'])
+            msg.body = """
+              From: %s <%s>
+              %s
+              """ % (form.name.data, form.email.data, form.message.data)
+            mail.send(msg)
+            print('form was sent to server')
+            return render_template('contact.html', form=form, success=True)
+
+    elif request.method == 'GET':
+        return render_template('contact.html', form=form)
 
 # route for displaying the visualization
 @app.route('/vis', methods=['GET', 'POST'])
@@ -262,8 +285,8 @@ def admin_dashboard():
 def show_dash():
     if not session.get('logged_in'):
         return redirect(url_for('do_login'))
-    if session['username'] == 'demoman':
-        return redirect(url_for("demo"))
+    # if session['username'] == 'demoman':
+    #     return redirect(url_for("demo"))
     if session.get('logged_in') and session['username'] == 'admin':
         return redirect(url_for('admin_dashboard'))
     else:

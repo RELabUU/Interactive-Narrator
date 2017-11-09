@@ -436,9 +436,38 @@ ul.flashes li{
     /*width: 70%;*/
 /*}*/
 
-/* ####LOGIN AND REGISTRATION PAGE####*/
+/* ####LOGIN AND REGISTRATION ABD CONTACT PAGE####*/
+img#img-garm, img#img-govert-jan{
+    border-radius: 15px;
+    width: 150px;
+}
 
-.login h1, h2, h3, h4, h5, h6, .registration h1, h2, h3, h4, h5, h6{
+
+.contact-img-garm{
+    margin-left: 10px;
+    /*margin-right: 10px;*/
+    width: 150px;
+    float: left;
+    /*margin-bottom: 20px;*/
+}
+
+.contact-img-govert-jan{
+    float: left;
+}
+#contact-img-container{
+    margin: 0 auto;
+    /*width: 80%;*/
+    height: 200px;
+    text-align: center;
+}
+
+#contact-img-box{
+    margin: 0 auto;
+    display: inline-block;
+
+}
+
+.login h1, h2, h3, h4, h5, h6, .registration h1, h2, h3, h4, h5, h6, .contact h1, h2, h3, h4, h5, h6{
     color: #332F30;
 }
 
@@ -447,13 +476,13 @@ p.error{
     text-align: center;
 }
 
-.registration, .login {
+.registration, .login, .contact {
     margin: 100px auto;
     min-width: 350px;
     width: 40%;
 }
 
-.registration-title, .login-title{
+.registration-title, .login-title, .contact-title{
     text-align: center;
 }
 
@@ -461,7 +490,7 @@ p.error{
 #login-submit:hover{
     background-color:#4f81bd;
 }
-.registration-form input, .login-form input {
+.registration-form input, textarea#message, .login-form input {
 text-align: center;
 background-color: #ECF0F1;
 border: 2px solid transparent;
@@ -477,8 +506,13 @@ transition: border .5s;
     margin-bottom: 40px;
 }
 
-.registration-form input, .login-form input{
+.registration-form input, textarea#message, .login-form input{
     width: 300px;
+}
+
+textarea#message{
+    padding:5px;
+    min-height: 150px;
 }
 
 .registration-form .form-group, .login-form .form-group{
@@ -492,13 +526,13 @@ border: 2px solid #3498DB;
 box-shadow: none;
 }
 
-.registration-screen, .login-screen {
+.registration-screen, .login-screen, .contact-screen {
 background-color: #FFF;
 padding: 20px;
 border-radius: 5px
 }
 
-.registration-screen p{
+.registration-screen p, .contact-screen p{
     text-align: center;
 }
 
@@ -532,6 +566,14 @@ input#submit{
 
 input#submit:hover{
     background-color:#4f81bd;
+}
+
+textarea#message{
+    /*height: 200px;*/
+}
+
+p.confirm-success{
+    color: #3A7734;
 }
 /* ####DASHBOARD#### CSS*/
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from wtforms import Form, BooleanField
-from wtforms import StringField, SubmitField, IntegerField, PasswordField
+from wtforms import StringField, SubmitField, IntegerField, PasswordField, TextAreaField
 from wtforms import validators, ValidationError
 from wtforms.validators import Length, required, DataRequired
 
@@ -34,5 +34,13 @@ class RegistrationForm(Form):
     confirm = PasswordField('Repeat Password')
     # accept_tos = BooleanField('I accept the Terms of Service and Privacy Notice (updated Jan 22, 2015)', [validators.Required()])
     submit = SubmitField("Register")
+
+class ContactForm(Form):
+    name = StringField('Name', [Length(max=255), validators.DataRequired()])
+    company_name = StringField('Company Name', [Length(max=255), validators.DataRequired()])
+    email = StringField('Email Address', [validators.DataRequired()])
+    subject = StringField("Subject", [validators.DataRequired("Please enter a subject.")])
+    message = TextAreaField('Your Message', [validators.Length(min=20, max=500), validators.DataRequired()])
+    submit = SubmitField("Send")
 
 # if__name__ == '__main__':
