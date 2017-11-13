@@ -31,6 +31,7 @@ h1, h2, h3, h4, h5, h6{
     margin-top: -40px;
 }
 
+/*DOES THIS EXITS AT ALL?*/
 #main-nav{
     height: 50px;
     transition: top 0.2s ease-in-out;
@@ -318,6 +319,7 @@ h2#intro-text-left-slogan{
 img#UU-logo{
     float: left;
     padding-left: 5px;
+    padding-top: 10px;
 }
 
 #userstoryinfo{
@@ -506,13 +508,15 @@ transition: border .5s;
     margin-bottom: 40px;
 }
 
-.registration-form input, textarea#message, .login-form input{
+.registration-form input, .login-form input{
     width: 300px;
 }
 
 textarea#message{
     padding:5px;
     min-height: 150px;
+    width: 400px;
+    text-align: left;
 }
 
 .registration-form .form-group, .login-form .form-group{
@@ -619,4 +623,22 @@ a#logout-button{
 /* ERROR PAGES*/
 #error-message h1, h2, h3, h4, h5, h6{
     color: #FFFFFF;
+}
+
+.navbar-inverse{
+    min-height: 70px;
+}
+
+.navbar-nav > li > a {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 70px;
+    font-size: 16px;
+}
+
+.navbar-inverse .navbar-brand{
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 70px;
+    font-size: 30px;
 }
