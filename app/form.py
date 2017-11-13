@@ -40,7 +40,7 @@ class ContactForm(Form):
     company_name = StringField('Company Name', [Length(max=255), validators.DataRequired()])
     email = StringField('Email Address', [validators.DataRequired()])
     subject = StringField("Subject", [validators.DataRequired("Please enter a subject.")])
-    message = TextAreaField('Your Message', [validators.Length(min=20, max=500), validators.DataRequired()])
+    message = TextAreaField('Your Message', [validators.Length(min=10, max=2500), validators.DataRequired()])
     submit = SubmitField("Send")
 
 # if__name__ == '__main__':
