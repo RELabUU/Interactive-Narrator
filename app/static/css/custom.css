@@ -89,6 +89,25 @@ h1, h2, h3, h4, h5, h6{
     color:#ECC348;
 
 }
+
+.navbar-inverse{
+    min-height: 70px;
+}
+
+.navbar-nav > li > a {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 70px;
+    font-size: 16px;
+}
+
+.navbar-inverse .navbar-brand{
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 70px;
+    font-size: 30px;
+}
+
 .navbar-inverse .navbar-nav > li > a{
     color:rgb(177, 178, 177);
     font-weight: 600;
@@ -576,6 +595,16 @@ textarea#message{
     /*height: 200px;*/
 }
 
+#message::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;
+}
+#message::-webkit-input-placeholder {
+    text-align: center;
+}
+#message::-ms-input-placeholder {
+    text-align: center;
+}
+
 p.email-confirm-success{
     color: white;
     padding: 5px 2px 5px 2px;
@@ -625,20 +654,5 @@ a#logout-button{
     color: #FFFFFF;
 }
 
-.navbar-inverse{
-    min-height: 70px;
-}
 
-.navbar-nav > li > a {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    line-height: 70px;
-    font-size: 16px;
-}
 
-.navbar-inverse .navbar-brand{
-    padding-top: 0;
-    padding-bottom: 0;
-    line-height: 70px;
-    font-size: 30px;
-}
