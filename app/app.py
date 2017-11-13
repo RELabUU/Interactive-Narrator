@@ -101,7 +101,7 @@ def contact():
             print('ERROR POSTING FORM')
             return render_template('contact.html', form=form)
         else:
-            msg = Message(form.subject.data, sender='interactivenarratoruu@gmail.com', recipients=['interactivenarratoruu@gmail.com'])
+            msg = Message(form.subject.data, sender=app.config['MAIL_USERNAME'], recipients=['interactivenarratoruu@gmail.com'])
             msg.body = """
               From: %s <%s>
               %s

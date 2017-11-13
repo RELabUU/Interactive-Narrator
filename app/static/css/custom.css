@@ -572,8 +572,15 @@ textarea#message{
     /*height: 200px;*/
 }
 
-p.confirm-success{
-    color: #3A7734;
+p.email-confirm-success{
+    color: white;
+    padding: 5px 2px 5px 2px;
+    background-color: #3e8f3e;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+    border-radius: 5px;
 }
 /* ####DASHBOARD#### CSS*/
 
