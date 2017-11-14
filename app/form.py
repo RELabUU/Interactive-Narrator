@@ -27,7 +27,7 @@ class RegistrationForm(Form):
     username = StringField('Username', [validators.Length(min=4, max=20)])
     company_name = StringField('Company Name', [Length(max=255), validators.DataRequired()])
     email = StringField('Email Address', [validators.Length(min=6, max=50)])
-    password = PasswordField('New Password', [
+    password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
