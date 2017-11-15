@@ -211,6 +211,8 @@ def do_login():
                         flash('Thanks for logging in!')
                         print('login succes')
                         user_exists.last_login_at = datetime.datetime.utcnow()
+                        if user_exists.login_count == None:
+                            user_exists.login_count = 0
                         user_exists.login_count = user_exists.login_count + 1
                         # import pdb
                         # pdb.set_trace()
