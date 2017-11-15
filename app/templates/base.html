@@ -64,10 +64,11 @@
                     </ul>
 
                  {% if not session['username'] or session['username'] == '' or session['username'] == 'demoman' %}
-                     <li class="nav navbar-left"><a href="/demo">Demo</a></li>
+                     <li class="nav navbar-left"><a id="demo-link" href="/demo" >Demo</a></li>
                     {% else %}
 
                 {% endif %}
+                <li class="nav navbar-left"><a href="/about">About</a></li>
                 <li class="nav navbar-left"><a href="/contact">Contact</a></li>
 
             </ul>

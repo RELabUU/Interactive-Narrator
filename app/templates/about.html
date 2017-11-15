@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% from 'fields.html' import render_field %}
+{% block title %} About {% endblock title %}
+{% block main %}
+    <div class="about">
+    <div class="about-screen">
+        	<div class="contact-title">
+				<h1>About Interactive Narrator</h1>
+			</div>
+
+        <p>
+            Interactive Narrator is a documentation tool that makes your user stories visual,
+            facilitating discussion about requirements.
+        </p>
+
+        <p>
+            Interactive Narrator offers users the ability to upload their user stories in .csv or .txt
+            format and will automatically call on a Natural Language Processing tool called Visual Narrator
+            to derive a conceptual model and generate a graphical representation of that model.
+            This model is then presented to the user in the shape of a network diagram with which users can interact.
+        </p>
+
+        <p>
+            The tool provides filter mechanisms that allow hiding or showing
+            sprints and roles within and between sets of stories, a search function to find concepts or relationships,
+            and the option to turn relationships on or off. Users can also zoom in and out to inspect certain
+            parts of the model. The visualization itself is a network diagram that consists of nodes
+            that represent important concepts from the user stories and edges that represent the relationships
+            between those concepts. When clicking on a concept (node)in
+            the diagram, the full user stories in which the concept occurs are shown, providing the user
+            with more details.
+        </p>
+
+
+        {% if success %}
+            <p class="email-confirm-success">Thank you for your message. We'll get back to you shortly.</p>
+        {% endif %}
+
+
+
+        {# MESSAGE FLASHING#}
+        {# {% with messages = get_flashed_messages() %}#}
+        {# {% if messages %}#}
+        {#
+        <ul class=flashes>#}
+            {# {% for message in messages %}#}
+            {#
+            <li>{{ message }}</li>
+            #}
+            {# {% endfor %}#}
+            {#
+        </ul>
+        #}
+        {# {% endif %}#}
+        {# {% endwith %}#}
+
+    </div>
+</div>
+{% endblock main %}
