@@ -3,6 +3,7 @@ import sys
 import os
 import math
 import json
+import datetime
 
 sys.path.append('/var/www/interactivenarrator')
 
@@ -203,19 +204,25 @@ def do_login():
                     # flash('Wrong username/password, please try again')
                     # if the password matches the username, log the user in
                     if sha256_crypt.verify(POST_PASSWORD, user_exists.password):
-                        print(check_user)
+                        print(user_exists)
                         # set the username in the session to the username that was just logged in
                         session['username'] = POST_USERNAME
                         session['logged_in'] = True
                         flash('Thanks for logging in!')
-                        print('succes')
+                        print('login succes')
+                        user_exists.last_login_at = datetime.datetime.utcnow()
+                        user_exists.login_count = user_exists.login_count + 1
+                        # import pdb
+                        # pdb.set_trace()
+                        sqlsession.commit()
+
                         if session['username'] == 'admin':
                             return redirect(url_for('admin_dashboard'))
                         else:
                             return redirect(url_for('show_dash'))
                     else:
                         error = 'Sorry, wrong password/username'
-                        print('failure')
+                        print('failure on login')
                         return render_template('login.html', form=form, error=error)
                 else:
                     error = 'Sorry, wrong password/username'
