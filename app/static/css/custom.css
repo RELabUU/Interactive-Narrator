@@ -40,6 +40,7 @@ h1, h2, h3, h4, h5, h6{
 
 .navbar-header > a.navbar-brand{
     padding-left: 30px;
+    padding-bottom: 20px;
     font-weight: 400;
     font-size: 28px;
 }
@@ -78,7 +79,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .nav-up {
-    top: -50px;
+    top: -70px;
 }
 
 #navbar-items{
@@ -111,6 +112,10 @@ h1, h2, h3, h4, h5, h6{
 .navbar-inverse .navbar-nav > li > a{
     color:rgb(177, 178, 177);
     font-weight: 600;
+}
+
+#demo-link{
+    /*color: #FFFFFF;*/
 }
 
 #useraccountitems #vis_url{
@@ -216,7 +221,9 @@ h2#slogan{
 h2#intro-text-left-slogan{
     color: #ECC348;
 }
-
+h5#intro-text-left-slogan-subquote{
+    font-style: italic;
+}
 #intro-text-left ul > li{
     padding-right: 0;
 }
@@ -245,6 +252,7 @@ h2#intro-text-left-slogan{
 #introtext-row .btn{
     background-color: #ECC348;
     color: #332F30;
+    font-weight: 600;
 }
 
 #introtext-row a:hover{
@@ -458,6 +466,10 @@ ul.flashes li{
 /*}*/
 
 /* ####LOGIN AND REGISTRATION ABD CONTACT PAGE####*/
+.about p{
+    font-size: 12pt;
+}
+
 img#img-garm, img#img-govert-jan{
     border-radius: 15px;
     width: 150px;
@@ -488,7 +500,8 @@ img#img-garm, img#img-govert-jan{
 
 }
 
-.login h1, h2, h3, h4, h5, h6, .registration h1, h2, h3, h4, h5, h6, .contact h1, h2, h3, h4, h5, h6{
+.login h1, h2, h3, h4, h5, h6, .registration h1, h2, h3, h4, h5, h6, .contact h1, h2, h3, h4, h5, h6,
+.about h1, h2, h3, h4, h5, h6{
     color: #332F30;
 }
 
@@ -497,10 +510,14 @@ p.error{
     text-align: center;
 }
 
-.registration, .login, .contact {
+.registration, .login, .contact, .about {
     margin: 100px auto;
     min-width: 350px;
     width: 40%;
+}
+
+.about{
+    width: 60%;
 }
 
 .registration-title, .login-title, .contact-title{
@@ -549,10 +566,15 @@ border: 2px solid #3498DB;
 box-shadow: none;
 }
 
-.registration-screen, .login-screen, .contact-screen {
+.registration-screen, .login-screen, .contact-screen, .about-screen {
 background-color: #FFF;
 padding: 20px;
 border-radius: 5px
+}
+
+.about-screen{
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .registration-screen p, .contact-screen p{
