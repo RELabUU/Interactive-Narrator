@@ -6,7 +6,7 @@ $(document).ready(function () {
         for (i = 0; i < data.length; i++) {
             // console.log(data[i]);
             var roleValue = data[i];
-            $("#roleselector").append($("<option></option>").attr("value", roleValue).attr('selected','selected').text(roleValue));
+            $("#roleselector").append($("<option></option>").attr("value", roleValue).attr('selected', 'selected').text(roleValue));
 
         }
 
@@ -19,7 +19,7 @@ $(document).ready(function () {
         var i;
         for (i = 0; i < data.length; i++) {
             var sprintValue = data[i];
-            $("#sprintselector").append($("<option></option>").attr("value", sprintValue[1]).attr('selected','selected').text(sprintValue[0] + " (" + sprintValue[1] + ")"));
+            $("#sprintselector").append($("<option></option>").attr("value", sprintValue[1]).attr('selected', 'selected').text(sprintValue[0] + " (" + sprintValue[1] + ")"));
 
         }
         makeSprintSelector();
@@ -30,6 +30,7 @@ $(document).ready(function () {
 
 
 //SLIDER JS
+shown_edges = new vis.DataSet();
 
 function toggleNode(node, hideNode) {
     // huidige node verbergen of weergeven
@@ -69,6 +70,17 @@ $('#weightSlider').change(function () {
 
     });
 
+
+    // edges.forEach(function(edge){
+    //     if (!edge.hidden){
+    //         shown_edges.add(edge);
+    //     }
+    //     // if(edge.hidden){
+    //     //     shown_edges.remove(edge);
+    //     // }
+    //
+    // });
+
     if (weight == 0) {
         showAllNodes();
     }
@@ -76,44 +88,77 @@ $('#weightSlider').change(function () {
 
 // var visible = true;
 // toggle relationships on and off
+
+
 $('#relationships').click(function () {
-    // if(visible){
-    //     edges.forEach(function (edge) {
-    //          edges.update({id: edge.id, hidden: true});
-    //     });
-    //     visible = false;
-    // }
-    // else {
-    //     nodes.forEach(function (node) {
-    //         if(node.hidden==true){
-    //             console.log('do nothing');
-    //         }
-    //         else{
-    //             var isConnectedToNode = (edge.from == node.id) || (edge.to == node.id);
-    //             if (isConnectedToNode && hideNode) {
-    //                 edges.forEach(function (edge) {
-    //
-    //                     edges.update({id: edge.id, hidden: true});
-    //             });
-    //                 }
-    //
-    //             }
-    //     });
-    //     // edges.forEach(function (edge) {
-    //     //      edges.update({id: edge.id, hidden: false});
-    //     // });
-    //     visible = true;
-    // }
-    edges.forEach(function (edge) {
-        if (!edge.hidden) {
-            edges.update({id: edge.id, hidden: true});
+
+    shown_nodes = new vis.DataSet();
+
+    var weight = $('#weightSlider').val();
+    console.log(weight);
+    //check if nodes are currenly hidden by the weightslider or not
+    nodes.forEach(function (node) {
+
+        var nodeWeightBelowThreshold = (node.weight < weight);
+        console.log(nodeWeightBelowThreshold);
+        var nodeIsHidden = nodeWeightBelowThreshold;
+
+        if (!nodeIsHidden) {
+            shown_nodes.add(node);
         }
-        if (edge.hidden) {
-            edges.update({id: edge.id, hidden: false});
+        if (nodeIsHidden) {
+            shown_nodes.remove(node);
         }
     });
+    // if the weightslider is at 0, just turn all edges on/off
+    if (weight == 0) {
+        console.log('WEIGHT IS 0');
+
+        edges.forEach(function (edge) {
+            if (!edge.hidden) {
+                edges.update({id: edge.id, hidden: true});
+            }
+            if (edge.hidden) {
+                edges.update({id: edge.id, hidden: false});
+            }
+
+        });
+    }
+    //but if the weightslider has been moved...
+    else {
+        // console.log('WEIGHT IS NOT 0');
+
+        node_names = [];
+        shown_nodes.forEach(function (node) {
+
+            node_names.push(node.id);
+
+        });
+        // console.log('NODE NAMES', node_names);
+        //if an edge is connected to a node that is shown (by to AND from) then it can be turned on/off
+        edges.forEach(function (edge) {
+            // console.log(edge.from);
+            if ($.inArray(edge.from && edge.to, node_names) != -1) {
+                // console.log('in there', edge.label);
+                var edge_is_shown = true;
+                if (edge_is_shown && edge.hidden) {
+                    edges.update({id: edge.id, hidden: false});
+                }
+                else if (edge_is_shown && !edge.hidden) {
+                    edges.update({id: edge.id, hidden: true});
+                }
+            }
+            else {
+                // console.log('not in there');
+                edge_is_shown = false;
+
+            }
 
 
+        });
+    }
+
+    // console.log(shown_nodes, node_names);
 });
 
 //The function for the searchfield
@@ -122,58 +167,56 @@ $('#searchfield').change(function () {
     var formInput = document.getElementById("searchfield").value;
     // foundItem = null; //we'll store the matching value here
 
-      if (formInput === '') {
-        nodes.forEach(function(node){
-            if(node.color == '#ECC348' ){
+    if (formInput === '') {
+        nodes.forEach(function (node) {
+            if (node.color == '#ECC348') {
 
-            nodes.update({id: node.id, color: '#97C2FC'})
+                nodes.update({id: node.id, color: '#97C2FC'})
             }
-      });
-        edges.forEach(function(edge) {
-            if(edge.color == '#ECC348' ) {
+        });
+        edges.forEach(function (edge) {
+            if (edge.color == '#ECC348') {
                 edges.update({id: edge.id, color: '#97C2FC'})
             }
         });
-          alert('Node color reset');
+        alert('Node color reset');
         return false;
-      }
-      else{
-          nodes.forEach(function(node){
-              // var selected = nodes.get(node.id);
-             if (node.label == formInput){
-                 console.log("i found it!");
-                 var selected_nodes = [];
-                 selected_nodes[0] = node.id;
-                 console.log(selected_nodes);
-                 // nodes.selectNode(node);
-                 // node.color = undefined;
+    }
+    else {
+        nodes.forEach(function (node) {
+            // var selected = nodes.get(node.id);
+            if (node.label == formInput) {
+                console.log("i found it!");
+                var selected_nodes = [];
+                selected_nodes[0] = node.id;
+                console.log(selected_nodes);
+                // nodes.selectNode(node);
+                // node.color = undefined;
                 // node.trigger('click');
-                 nodes.update({id: node.id, borderWidth: 3, color: '#ECC348'})
-             }
-             else{
-                 nodes.update({id: node.id, color: '#97C2FC'})
-             }
-          });
-          edges.forEach(function(edge){
-              if (edge.label == formInput){
-                  edges.update({id: edge.id, color:'#ECC348'})
-              }
-              else{
-                  edges.update({id: edge.id, color:'#97C2FC'})
-              }
-          });
-                }
-    });
+                nodes.update({id: node.id, borderWidth: 3, color: '#ECC348'})
+            }
+            else {
+                nodes.update({id: node.id, color: '#97C2FC'})
+            }
+        });
+        edges.forEach(function (edge) {
+            if (edge.label == formInput) {
+                edges.update({id: edge.id, color: '#ECC348'})
+            }
+            else {
+                edges.update({id: edge.id, color: '#97C2FC'})
+            }
+        });
+    }
+});
 // network.on("selectNode", function (params) {
 //
 // }
 
 
-
-
 //This document contains the functions to select nodes based on the user interface elements in the sidebar
 
-window.onresize = function() {
+window.onresize = function () {
     network.fit();
 };
 
@@ -199,16 +242,16 @@ function showDataSet(data) {
         // if nothing is selected, make everything grey. NOT WORKING!
         if (!selected) {
 
-            nodes.update({id: node.id, color: '#E8E8E8', font:{color:'#E8E8E8'}});
+            nodes.update({id: node.id, color: '#E8E8E8', font: {color: '#E8E8E8'}});
         }
         // else if a node is selected make it blue
         else {
             if (node.group == 'Role') {
-                nodes.update({id: node.id, color: '#4A87F4', font:{color:'#343434'}});
+                nodes.update({id: node.id, color: '#4A87F4', font: {color: '#343434'}});
 
             }
             else {
-                nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
+                nodes.update({id: node.id, color: '#97C2FC', font: {color: '#343434'}});
             }
         }
     });
@@ -216,10 +259,10 @@ function showDataSet(data) {
     // if no roles are selected, return to the default appearance
     if (nodes_dataset.length == 0) {
         nodes.forEach(function (node) {
-            nodes.update({id: node.id, color: '#97C2FC', font:{color:'#343434'}});
+            nodes.update({id: node.id, color: '#97C2FC', font: {color: '#343434'}});
 
             if (node.group == 'Role') {
-                nodes.update({id: node.id, color: '#4A87F4', font:{color:'#343434'}});
+                nodes.update({id: node.id, color: '#4A87F4', font: {color: '#343434'}});
 
             }
         });
@@ -232,11 +275,11 @@ function showDataSet(data) {
         // console.log(edge.id);
         // if edges are not part of the selection, make them grey
         if (!selected) {
-            edges.update({id: edge.id, color: '#E8E8E8', font:{color:'#E8E8E8'} });
+            edges.update({id: edge.id, color: '#E8E8E8', font: {color: '#E8E8E8'}});
         }
         //else make all edges blue
         else {
-            edges.update({id: edge.id, color: '#5898ED', font:{color:'#343434'}} );
+            edges.update({id: edge.id, color: '#5898ED', font: {color: '#343434'}});
         }
 
     });
@@ -244,7 +287,7 @@ function showDataSet(data) {
     // if no roles are selected or a selected role has no relationships, return to the default appearance
     if (edges_dataset.length == 0 && nodes_dataset.length == 0) {
         edges.forEach(function (edge) {
-            edges.update({id: edge.id, color: '#5898ED', font:{color:'#343434'}});
+            edges.update({id: edge.id, color: '#5898ED', font: {color: '#343434'}});
         });
 
     }
@@ -284,9 +327,9 @@ function makeRoleSelector() {
             selectedSprints = selectedSprints.toArray();
 
             $.getJSON('/query', {
-                    roles: JSON.stringify(selectedRoles),
-                    sprints: JSON.stringify(selectedSprints)
-                }, showDataSet);
+                roles: JSON.stringify(selectedRoles),
+                sprints: JSON.stringify(selectedSprints)
+            }, showDataSet);
         },
         onInitialized: function (select, container) {
             var $button = container.find("button").eq(0);
@@ -308,9 +351,9 @@ function makeRoleSelector() {
             selectedSprints = selectedSprints.toArray();
 
             $.getJSON('/query', {
-                    roles: JSON.stringify(selectedRoles),
-                    sprints: JSON.stringify(selectedSprints)
-                }, showDataSet);
+                roles: JSON.stringify(selectedRoles),
+                sprints: JSON.stringify(selectedSprints)
+            }, showDataSet);
         }
     });
 }
@@ -345,9 +388,9 @@ function makeSprintSelector() {
             selectedSprints = selectedSprints.toArray();
             console.log('SELECTED SPRINTS SECOND TIME', selectedSprints);
             $.getJSON('/query', {
-                    roles: JSON.stringify(selectedRoles),
-                    sprints: JSON.stringify(selectedSprints)
-                }, showDataSet);
+                roles: JSON.stringify(selectedRoles),
+                sprints: JSON.stringify(selectedSprints)
+            }, showDataSet);
         },
         onInitialized: function (select, container) {
             var $button = container.find("button").eq(0);

@@ -449,6 +449,16 @@ img#UU-logo{
     text-align: center;
 }
 
+#uploadform-form{
+    margin-top: 10px;
+}
+
+p#note {
+    color: #ECC348;
+    margin-top: 5px;
+    display: block;
+}
+
 ul.flashes li{
     color: #b93331;
 }
