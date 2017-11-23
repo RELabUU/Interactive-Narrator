@@ -129,28 +129,38 @@ $('#relationships').click(function () {
         // console.log('WEIGHT IS NOT 0');
 
         node_names = [];
+        //put all the shown nodes in an array
         shown_nodes.forEach(function (node) {
 
             node_names.push(node.id);
 
         });
-        // console.log('NODE NAMES', node_names);
+        console.log('NODE NAMES OF SHOWN NODES', node_names);
         //if an edge is connected to a node that is shown (by to AND from) then it can be turned on/off
         edges.forEach(function (edge) {
-            // console.log(edge.from);
-            if ($.inArray(edge.from && edge.to, node_names) != -1) {
-                // console.log('in there', edge.label);
-                var edge_is_shown = true;
-                if (edge_is_shown && edge.hidden) {
+            console.log(edge.from);
+            edge_to_and_from = [];
+                edge_to_and_from.push(edge.from);
+                edge_to_and_from.push(edge.to);
+                console.log('edge to and from:', edge_to_and_from);
+                //if the edges to and from are in the array both:
+                var success = edge_to_and_from.every(function(val) {
+                    return node_names.indexOf(val) !== -1;
+                });
+            if (success) {
+            // if ($.inArray(edge.from && edge.to, node_names) !== -1) {
+                console.log('in there', edge.label, edge.from, edge.to);
+                var edge_is_present = true;
+                if (edge_is_present && edge.hidden) {
                     edges.update({id: edge.id, hidden: false});
                 }
-                else if (edge_is_shown && !edge.hidden) {
+                else if (edge_is_present && !edge.hidden) {
                     edges.update({id: edge.id, hidden: true});
                 }
             }
             else {
-                // console.log('not in there');
-                edge_is_shown = false;
+                console.log('not in there');
+                edge_is_present = false;
 
             }
 
