@@ -480,6 +480,7 @@ ul.flashes li{
     font-size: 12pt;
 }
 
+
 img#img-garm, img#img-govert-jan{
     border-radius: 15px;
     width: 150px;
@@ -499,6 +500,7 @@ img#img-garm, img#img-govert-jan{
 }
 #contact-img-container{
     margin: 0 auto;
+    margin-top: 5px;
     /*width: 80%;*/
     /*height: 200px;*/
     text-align: center;
@@ -561,7 +563,7 @@ transition: border .5s;
 textarea#message{
     padding:5px;
     min-height: 150px;
-    width: 400px;
+    min-width: 300px;
     text-align: left;
 }
 
@@ -585,6 +587,7 @@ border-radius: 5px
 .about-screen{
     margin-left: 40px;
     margin-right: 40px;
+    padding: 20px 45px 30px 45px;
 }
 
 .registration-screen p, .contact-screen p{
