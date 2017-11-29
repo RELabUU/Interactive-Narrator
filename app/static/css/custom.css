@@ -438,7 +438,8 @@ img#UU-logo{
 }
 
 #uploadform #submit{
-    width:15%
+    width:15%;
+    margin-top: 10px;
 }
 
 #uploadform p{
@@ -536,6 +537,10 @@ p.error{
     text-align: center;
 }
 
+#forgot-password{
+    position: relative;
+    left: 55%;
+}
 
 #login-submit:hover{
     background-color:#4f81bd;
@@ -592,6 +597,10 @@ border-radius: 5px
 
 .registration-screen p, .contact-screen p{
     text-align: center;
+}
+
+.contact-screen p{
+    padding: 0px 60px 0px 60px;
 }
 
 button#login-submit, button#registration-submit, input#submit  {

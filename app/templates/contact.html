@@ -8,8 +8,10 @@
 				<h1>Contact Us</h1>
 			</div>
 
-
-
+        <p>
+            Interested in using Interactive Narrator? Want to share your opinion? We would love to hear from you!
+            You can also use this form to request a new password.
+        </p>
         <p>
             Interactive Narrator has been developed at Utrecht University by:
         </p>
@@ -38,7 +40,7 @@
             {{ render_field(form.company_name, maxlength=255, placeholder="your company") }}
             {{ render_field(form.email, maxlength=255, placeholder="your e-mail adress") }}
             {{ render_field(form.subject, placeholder="your subject") }}
-            {{ render_field(form.message, placeholder="your message to us") }}
+            {{ render_field(form.message, placeholder="your message (drag box to enlarge it)") }}
 
 
 {#            {{ render_field(form.confirm, maxlength=255, placeholder="your password again") }}#}

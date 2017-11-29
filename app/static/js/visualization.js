@@ -119,7 +119,20 @@ var options = {
         // widthConstraint: {minimum: 25, maximum: 50}
     },
     groups: {
-        Role: {color: {background: '#4A87F4'}, borderWidth: 5}
+        Role:{shape: 'icon',
+            icon: {
+              face: 'FontAwesome',
+              code: '\uf007',
+              size: 50,
+              color: '#084ef4'
+            }
+        },
+        IsaRelationship:{
+          color: '#f40004',
+            width:5
+        }
+
+            // {color: {background: '#4A87F4'}, borderWidth: 5, }
     },
 
     edges: {

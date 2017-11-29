@@ -33,7 +33,7 @@ from models import Base, User, UserStoryVN, RelationShipVN, ClassVN, CompanyVN, 
     us_sprint_association_table
 
 
-# configuration
+# configuration settings from config.py
 app = Flask(__name__)
 app.config.from_object(config)
 
@@ -78,10 +78,10 @@ conn = engine.connect()
 # route for the demopage. Not accessible to users that are logged in
 @app.route('/demo', methods=['GET', 'POST'])
 def demo():
-    # if session['logged_in'] and session['username'] !='demoman':
-    #     return redirect(url_for('homepage'))
-    #
-    # else:
+    if session['logged_in'] and session['username'] !='demoman':
+        return redirect(url_for('homepage'))
+
+    else:
         username = 'demoman'
         # session['logged_in'] = True
         session['username'] = username
@@ -121,7 +121,6 @@ def contact():
 # route for displaying the visualization
 @app.route('/vis', methods=['GET', 'POST'])
 def show_vis():
-    # return render_template('vis.html')
     if session.get('logged_in'):
         return render_template('vis.html')
     else:
@@ -180,13 +179,11 @@ def do_register():
         error = 'Sorry, we could not register you'
 
         return render_template('register.html', form=form, error=error)
-        # return(str(e))
 
 
 # route for when the login form on the homepage is submitted
 @app.route('/login', methods=['GET', 'POST'])
 def do_login():
-    # try:
     form = LoginForm(request.form)
     if not session.get('logged_in'):
         if request.method == "POST":
@@ -214,8 +211,7 @@ def do_login():
                         if user_exists.login_count == None:
                             user_exists.login_count = 0
                         user_exists.login_count = user_exists.login_count + 1
-                        # import pdb
-                        # pdb.set_trace()
+
                         sqlsession.commit()
 
                         if session['username'] == 'admin':
@@ -223,7 +219,7 @@ def do_login():
                         else:
                             return redirect(url_for('show_dash'))
                     else:
-                        error = 'Sorry, wrong password/username'
+                        error = 'Could not login. Wrong password/username?'
                         print('failure on login')
                         return render_template('login.html', form=form, error=error)
                 else:
@@ -250,7 +246,7 @@ def do_login():
 def logout():
     session['logged_in'] = False
     session['username'] = ''
-    return redirect(url_for('do_login'))
+    return redirect(url_for('homepage'))
 
 # admin page
 @app.route("/admindashboard")
@@ -311,7 +307,6 @@ def show_dash():
             .join(CompanyVN)\
             .join(User).filter(User.username == username).all()
 
-
         for sprint in all_sprints:
             user_story_count = sqlsession.query(UserStoryVN).filter(UserStoryVN.in_sprint == sprint.id).count()
             print('COUNT USER STORIES', user_story_count)
@@ -337,7 +332,6 @@ def show_dash():
             company_name = ''
 
         return render_template("dashboard.html", sprints=sprints, username=username, company_name=company_name, registered_users=registered_users)
-
 
 
 # View for clearing all sets for a particular user
@@ -383,7 +377,6 @@ def delete_all():
 
 @app.route('/delete_sprint/<int:id>', methods=['GET', 'POST'])
 def delete_sprint(id):
-    # username = session['username']
     active_user = sqlsession.query(User).filter(User.username == session['username']).first()
 
     userstories = sqlsession.query(UserStoryVN) \
@@ -392,10 +385,8 @@ def delete_sprint(id):
         .join(CompanyVN) \
         .join(User).filter(and_(SprintVN.id == id), (User.username == active_user.username)).all()
 
-
     for userstory in userstories:
         sqlsession.delete(userstory)
-        # sqlsession.commit()
 
     try:
         sqlsession.commit()
@@ -425,8 +416,6 @@ def upload_form():
             active_company_name = active_user.company_name
             active_company = sqlsession.query(CompanyVN).filter \
                 (CompanyVN.company_name == active_company_name).first()
-
-            # flash(session['username'])
 
         if request.method == 'POST' and form.validate():
             sprint_form_data = {}
@@ -485,14 +474,11 @@ def upload_form():
                             SprintVN.sprint_name == sprint_form_data['sprint_name']), (SprintVN.user_id == active_user.id)) \
                             .order_by(SprintVN.id.desc())\
                             .first()
-                        # import pdb
-                        # pdb.set_trace()
+
                         # and obtain its ID
                         sprint_form_data['sprint_id'] = newest_sprint.id
-                        # flash('sprint added')
 
                         # run the visual narrator back-end and obtain needed objects for visualization
-
                         data = run.call(set_filename, spacy_nlp)
                         #  run the poster.add_data_to_db method to place the objects and their attributes in the database
                         add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
@@ -850,8 +836,10 @@ def relationships():
         # for key, value in concepts_dict.items():
         #     if value == rel.relationship_range:
         #         y = key
-
-        edges_id_dict = {'id': rel.relationship_id, 'from': x, 'to': y, 'label': rel.relationship_name}
+        if rel.relationship_name == 'isa':
+            edges_id_dict = {'id': rel.relationship_id, 'from': x, 'to': y, 'label': rel.relationship_name, 'dashes': "true"}
+        else:
+            edges_id_dict = {'id': rel.relationship_id, 'from': x, 'to': y, 'label': rel.relationship_name}
         # ELSE??
         edges_id_list.append(edges_id_dict)
 
