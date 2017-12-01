@@ -78,7 +78,8 @@ conn = engine.connect()
 # route for the demopage. Not accessible to users that are logged in
 @app.route('/demo', methods=['GET', 'POST'])
 def demo():
-    if session['logged_in'] and session['username'] !='demoman':
+    if session['logged_in']:
+            # or session['username'] !='demoman':
         return redirect(url_for('homepage'))
 
     else:
