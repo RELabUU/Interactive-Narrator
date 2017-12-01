@@ -167,7 +167,14 @@ $('#relationships').click(function () {
 
         });
     }
-
+    var x = document.getElementById("relationships-on-off");
+    if (x.innerHTML === "OFF") {
+        console.log('label on');
+        x.innerHTML = "ON";
+    } else if (x.innerHTML === "ON"){
+        x.innerHTML = "OFF";
+        console.log('label off');
+    }
     // console.log(shown_nodes, node_names);
 });
 
@@ -181,7 +188,7 @@ $('#searchfield').change(function () {
         nodes.forEach(function (node) {
             if (node.color == '#ECC348') {
 
-                nodes.update({id: node.id, color: '#97C2FC'})
+                nodes.update({id: node.id, color: '#97C2FC', icon: {color:'#084ef4'}})
             }
         });
         edges.forEach(function (edge) {
@@ -197,13 +204,15 @@ $('#searchfield').change(function () {
             // var selected = nodes.get(node.id);
             if (node.label == formInput) {
                 console.log("i found it!");
-                var selected_nodes = [];
-                selected_nodes[0] = node.id;
-                console.log(selected_nodes);
+                // var selected_nodes = [];
+                // selected_nodes[0] = node.id;
+                console.log(node);
                 // nodes.selectNode(node);
                 // node.color = undefined;
                 // node.trigger('click');
-                nodes.update({id: node.id, borderWidth: 3, color: '#ECC348'})
+                nodes.update({id: node.id, color: '#ECC348', icon: {color:'#ECC348'}});
+                //color gets reset after 20 seconds
+                setTimeout(function(){nodes.update({id: node.id, color: '#97C2FC', icon: {color:'#084ef4'}}) }, 20000);
             }
             else {
                 nodes.update({id: node.id, color: '#97C2FC'})
@@ -213,9 +222,10 @@ $('#searchfield').change(function () {
             if (edge.label == formInput) {
                 edges.update({id: edge.id, color: '#ECC348'})
             }
-            else {
-                edges.update({id: edge.id, color: '#97C2FC'})
-            }
+            // else {
+                // edges.update({id: edge.id, color: '#97C2FC'})
+
+            // }
         });
     }
 });

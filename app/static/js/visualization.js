@@ -126,13 +126,8 @@ var options = {
               size: 50,
               color: '#084ef4'
             }
-        },
-        IsaRelationship:{
-          color: '#f40004',
-            width:5
         }
 
-            // {color: {background: '#4A87F4'}, borderWidth: 5, }
     },
 
     edges: {
@@ -197,7 +192,7 @@ network.on( 'doubleClick', function(properties) {
 
         for (var i = 0; i < data.length; i++) {
             if (i== 0){
-                console.log('succes');
+                console.log('succes creating table');
                 $('#userstorytable').append("<tr><th>Spr.</th><th>US</th><th>Text</th></tr>");
 
             }
@@ -221,7 +216,7 @@ network.on( 'doubleClick', function(properties) {
                 //remove the close button
                 $('.closeWindow').remove();
                 //add the close button
-                $('#userstorytable').append("<div onclick='closeWindow()' class='closeWindow'><span class='glyphicon glyphicon-remove-circle'></span></div>");
+                $('#userstorytable').before("<div onclick='closeWindow()' class='closeWindow'><span class='glyphicon glyphicon-remove-circle'></span></div>");
         }
     );
     // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');
