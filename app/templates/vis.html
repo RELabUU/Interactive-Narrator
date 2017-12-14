@@ -244,59 +244,12 @@
 <script>
 
     $("#topbar-button-a").click(function (e) {
-{#        e.preventDefault();#}
-{#        e.stopPropagation();#}
+
         $("nav").toggleClass("nav-up");
-{#        return false;#}
+
     });
 
 </script>
-      <!--          Keep the dropdowns open if the user clicks on the  visualization -->
-      <script>
-
-{#          $('#visualization').click(function (e) { e.stopPropagation(); });#}
-
-          $('.sidebar-nav > a').click(function (e) { e.stopPropagation(); });
-
-
-{#          $("#sidebar-wrapper button, .multiselect, .sub_icon").on('click', function(e) {#}
-{#              console.log("click registered");#}
-{#              $("#wrapper").addClass("toggled");#}
-{##}
-{##}
-{#          });#}
-          $(".sidebar-nav").on('click', function (e) {
-              if(!$("#wrapper").hasClass("toggled")){
-                  $("#wrapper").addClass("toggled");
-              }
-
-          });
-{#          $("#sidebar-wrapper .multiselect .dropdown-toggle .btn .btn-default").on('click', function(e) {#}
-{#              $("#wrapper").addClass("toggled");#}
-{#          });#}
-
-
-{#          $("#visualization").on('click', function() {#}
-{#              console.log("click registered");#}
-{#              if ($("#roleselector-btn-group").hasClass("open")) {#}
-{##}
-{#                  setTimeout(function () {#}
-{#                      $("#roleselector-btn-group").addClass('open');#}
-{##}
-{#                  },)#}
-{#              }#}
-{#              if ($("#sprintselector-btn-group").hasClass("open")) {#}
-{##}
-{#                  setTimeout(function () {#}
-{#                      $("#sprintselector-btn-group").addClass('open');#}
-{##}
-{#                  },)#}
-{#              }#}
-{# });#}
-
-      </script>
-
-
 
 
 </body>

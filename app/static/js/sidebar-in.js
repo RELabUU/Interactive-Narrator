@@ -53,6 +53,8 @@ function showAllNodes() {
     edges.forEach(function (edge) {
         edges.update({id: edge.id, hidden: false});
     });
+    var relationshipsLabel = document.getElementById("relationships-on-off");
+    relationshipsLabel.innerHTML = "ON";
 }
 
 //
@@ -509,3 +511,87 @@ $(document).ready(function () {
 
 });
 
+          $('.sidebar-nav > a').click(function (e) { e.stopPropagation(); });
+
+
+
+          $(".sidebar-nav").on('click', function (e) {
+              if(!$("#wrapper").hasClass("toggled")){
+                  $("#wrapper").addClass("toggled");
+              }
+
+          });
+
+
+
+          $("#visualization").on('click', function() {
+              console.log("click on visualization registered");
+              if ($("#roleselector-btn-group").hasClass("open")) {
+
+                  setTimeout(function () {
+                      $("#roleselector-btn-group").addClass('open');
+
+                  })
+              }
+              if ($("#sprintselector-btn-group").hasClass("open")) {
+
+                  setTimeout(function () {
+                      $("#sprintselector-btn-group").addClass('open');
+
+                  })
+              }
+ });
+
+          //Keep the dropdowns open when clicking elsewhere
+          $('body').on('click.hideMenu', function(e) {
+              console.log("click on body registered");
+              console.log(e.target, e.target.class);
+              var target = $(e.target);
+
+              if ($(target).is('#relationships')) {
+                  console.log('relationships button clicked');
+                     if ($('#sprintselector-btn-group').hasClass('open')) {
+                        setTimeout(function () {
+                              $("#sprintselector-btn-group").addClass('open');
+                          })
+                     }
+                        if ($('#roleselector-btn-group').hasClass('open')) {
+                        setTimeout(function () {
+                              $("#roleselector-btn-group").addClass('open');
+                          })
+                     }
+                     if ($('#roleselector-btn-group' && '#sprintselector-btn-group').hasClass('open')) {
+                                               console.log("both are open");
+                         setTimeout(function () {
+                              $("#roleselector-btn-group" && "#sprintselector-btn-group").addClass('open');
+                          })
+
+                     }
+              }
+
+                  if ($('#sprintselector-btn-group').has(target).length) {
+                      console.log("event target is button");
+
+
+                      if ($('#roleselector-btn-group').hasClass('open')) {
+                          console.log("roles has class open");
+
+                          setTimeout(function () {
+                              $("#roleselector-btn-group").addClass('open');
+                          })
+                      }
+                  }
+
+                  if ($('#roleselector-btn-group').has(target).length) {
+
+                      if ($('#sprintselector-btn-group').hasClass('open')) {
+                          console.log("sprints has class open");
+
+                          setTimeout(function () {
+                              $("#sprintselector-btn-group").addClass('open');
+                          })
+
+                      }
+                  }
+
+              });
