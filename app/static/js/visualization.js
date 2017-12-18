@@ -216,7 +216,7 @@ network.on( 'doubleClick', function(properties) {
                 //remove the close button
                 $('.closeWindow').remove();
                 //add the close button
-                $('#userstorytable').before("<div onclick='closeWindow()' class='closeWindow'><span class='glyphicon glyphicon-remove-circle'></span></div>");
+                $('#userstorytable').append("<div onclick='closeWindow()' class='closeWindow'><span class='glyphicon glyphicon-remove-circle'></span></div>");
         }
     );
     // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');
