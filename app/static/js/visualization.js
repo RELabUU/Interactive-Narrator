@@ -151,8 +151,11 @@ var options = {
 var network = new vis.Network(container, data, options);
 
 
-function closeWindow(id) {
+function closeWindow() {
 	$("#userstorytable").css('display', 'none');
+	$("#userstorytable").remove();
+	$("#userstoryinfo").remove();
+	$('.closeWindow').remove();
 }
 
 // Retrieve the user stories that belong to the node that is clicked, and put them in a table
@@ -186,6 +189,15 @@ network.on( 'doubleClick', function(properties) {
                     roles: JSON.stringify(selectedRoles),
                     sprints: JSON.stringify(selectedSprints)
     },function (data) {
+
+
+        //remove the previously created table
+        $("#userstoryinfo").remove();
+        $("#userstorytable").remove();
+        //add the newly created table
+        $("body").append('<div id="userstoryinfo"></div>');
+        $("#userstoryinfo").append('<div id="userstorytable"></div>');
+
         console.log(data);
 
         $("#userstorytable tr").remove();
@@ -200,10 +212,7 @@ network.on( 'doubleClick', function(properties) {
             var s = data[i].text;
 
             var newText = s.replace(RegExp(labelBold, "ig"), '<b>' + labelBold + '</b>');
-            // console.log(labelBold);
-            // console.log(data[i].id);
-            // console.log(data[i].text);
-            // console.log(data[i]['in sprint']);
+
             tr = $('<tr/>');
             tr.append("<td>" + data[i]['in sprint'] + "</td>");
             tr.append("<td>" + data[i].id + "</td>");
@@ -212,11 +221,20 @@ network.on( 'doubleClick', function(properties) {
             $('#userstorytable').append(tr);
             $("#userstorytable").css('display', 'block');
 
+
+
         }
                 //remove the close button
                 $('.closeWindow').remove();
                 //add the close button
-                $('#userstorytable').append("<div onclick='closeWindow()' class='closeWindow'><span class='glyphicon glyphicon-remove-circle'></span></div>");
+                $('#userstoryinfo').append("<div onclick='closeWindow()' class='closeWindow'><span class='glyphicon glyphicon-remove-circle'></span></div>");
+
+                //make div draggable with JQuery UI
+                $('#userstoryinfo').draggable({
+                    start: function(event, ui){
+                        $('.ui-draggable').css('height', $(event.target).height());}
+   });
+                // $('#userstoryinfo').resizable();
         }
     );
     // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');

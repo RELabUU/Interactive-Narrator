@@ -249,7 +249,8 @@ def do_login():
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
-    session['username'] = ''
+    session.pop('username', None)
+    # session['username'] = ''
     return redirect(url_for('homepage'))
 
 # admin page
@@ -720,30 +721,30 @@ def get_nodes_edges():
 
 
 # a route for clustering
-# @app.route('/clusters')
-# def cluster():
-#     # get all the nodes that are connected to a role
-#     x = 1
-#     start_at_role = sqlsession.query(UserStoryVN.functional_role).distinct()
-#     list_of_roles = [role.functional_role for role in start_at_role]
-#     nodes = []
-#     for role in list_of_roles:
-#         classes = sqlsession.query(ClassVN) \
-#             .join(us_class_association_table) \
-#             .join(UserStoryVN) \
-#             .filter(or_(UserStoryVN.functional_role == func.lower(role),
-#                         UserStoryVN.functional_role == role)) \
-#             .all()
-#
-#         for concept in classes:
-#             concept.cluster = x
-#             nodes.append([{"name": concept.class_name} for concept in classes])
-#         sqlsession.commit()
-#         x = x + 1
-#
-#     json_nodes = json.dumps(nodes)
-#
-#     return jsonify(roles=list_of_roles, nodes=nodes)
+@app.route('/clusters')
+def cluster():
+    # get all the nodes that are connected to a role
+    x = 1
+    start_at_role = sqlsession.query(UserStoryVN.functional_role).distinct()
+    list_of_roles = [role.functional_role for role in start_at_role]
+    nodes = []
+    for role in list_of_roles:
+        classes = sqlsession.query(ClassVN) \
+            .join(us_class_association_table) \
+            .join(UserStoryVN) \
+            .filter(or_(UserStoryVN.functional_role == func.lower(role),
+                        UserStoryVN.functional_role == role)) \
+            .all()
+
+        for concept in classes:
+            concept.cluster = x
+            nodes.append([{"name": concept.class_name} for concept in classes])
+        sqlsession.commit()
+        x = x + 1
+
+    json_nodes = json.dumps(nodes)
+
+    return jsonify(roles=list_of_roles, nodes=nodes)
 
 
 # a route for delivering the list of concepts to be made into nodes

@@ -60,22 +60,22 @@
 <body>
       <nav id= "main-nav" class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
-        <div class="navbar-header" style="margin-left: 240px;">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+        <div class="navbar-header">
+{#          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">#}
+{#            <span class="sr-only">Toggle navigation</span>#}
+{#            <span class="icon-bar"></span>#}
+{#            <span class="icon-bar"></span>#}
+{#            <span class="icon-bar"></span>#}
+{#          </button>#}
           <a class="navbar-brand" href="/">Interactive Narrator</a>
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
+{#        <div id="navbar" class="collapse navbar-collapse">#}
           <ul class="nav navbar-nav">
               <li><a href="/">Home</a> </li>
 
           </ul>
-
-        </div><!--/.nav-collapse -->
+{##}
+{#        </div><!--/.nav-collapse -->#}
       </div>
       <div id="topbar-button">
         <a id="topbar-button-a" href="#">Menu<span class="topbar-icon glyphicon glyphicon-menu-down"></span></a>
@@ -157,15 +157,23 @@
           <div class="modal-body">
             <h5>Welcome tot the Interactive Narrator.</h5>
               <h6>Usage:</h6>
-              <p>Interactive Narrator has processed your user stories and made the visualization. The visualization
+              <p>Interactive Narrator has processed your user stories and made the visualization. </p>
+              <p>The visualization
                   consists of nodes and edges: each node represents a concept extracted from one or more user stories, whereas
               an edge stands for a relationship that exists between two concepts inside a user story. A relationship can also
-              be of a 'generalization' type, in in which the relationships respresents a child-parent hierarchy. These relationships
-              can span across user stories.</p>
+              be of a 'generalization' type, in in which the relationships represents a child-parent hierarchy. These relationships
+              can span across user stories and are displayed by a dotted line.</p>
               <p>Double click on a node to see to which user story its concept belongs. The larger the node is, the more often it occurs within your
-              set of user stories. Use the slider to hide nodes below a certain weight limit. Nodes that have a thick blue border are concepts that have a 'role function' within a user story.
+              set of user stories. Use the Weight Slider to hide nodes below a certain weight limit. Nodes that have a dark blue person shape are
+                  concepts that have a 'role function' within a user story.
               Theses are often the actors that carry out certain tasks/behavior that is modeled by the user stories.</p>
-              <p></p>
+              <ul>
+                  <li>Double click on a node to see user stories</li>
+                  <li>Zoom in and out by scrolling</li>
+                  <li>Drag the whole visualization by holding down the mouse key</li>
+                  <li>Use the Weight Slider to show/hide more important concepts</li>
+                  <li>Show/hide concepts by checking/unchecking roles and sprints</li>
+              </ul>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -183,11 +191,6 @@
                     <script src="static/js/visualization.js"></script>
                 </div> <!-- End .col-lg-12-->
             </div><!-- End .row -->
-            <div id="userstoryinfo">
-                <table id="userstorytable">
-
-                </table>
-            </div>
         </div><!-- End .container-fluid-->
     </div> <!-- End vis-wrapper-->
 </div><!--End #wrapper -->
@@ -199,7 +202,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 {#      <script src="static/js/jquery-1.12.4.min.js"></script>#}
 <!--<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>-->
-
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!-- Bootstrap Javascript files -->
 <script src="static/js/bootstrap.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -284,11 +287,7 @@
 {#              }#}
 {# });#}
 
-
       </script>
-
-
-
 
 </body>
 </html>
