@@ -34,9 +34,6 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 
-    <!-- Tooltip library -->
-{#  <link rel="stylesheet" type="text/css" href="static/css/tipped/tipped.css"/>#}
-
     <!-- load VIS.js-->
     <script src="static/js/vis.js"></script>
     <link href="static/css/vis.css" rel="stylesheet" type="text/css"/>
@@ -47,9 +44,6 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <!-- Custom CSS for the sidebar navigation -->
-    <link href="static/css/sidebar-in.css" rel="stylesheet">
-{#    <link href="static/css/rangeslider.css" rel="stylesheet">#}
 
     <!-- Custom styles for this template -->
     <link href="static/css/custom.css" rel="stylesheet">
@@ -123,10 +117,10 @@
                 <a id="relationships" href="#">Relationships<span id="relationships-on-off">ON</span><span class="sub_icon glyphicon glyphicon-random"
                                                                   aria-hidden="true"></span></a>
             </li>
-{#       <li>#}
-{#                <a id="save-canvas" onclick="downloadCanvas()" href="#">IMG<span class="sub_icon glyphicon glyphicon-camera"#}
-{#                                                                  aria-hidden="true"></span></a>#}
-{#            </li>#}
+       <li>
+                <a id="canvasImg" href="">Save as PNG<span class="sub_icon glyphicon glyphicon-camera"
+                                                                  aria-hidden="true"></span></a>
+            </li>
             <li id="weight-slider-li">
                 <h5 id="threshold">Threshold:</h5>
                 <input type="range" id="weightSlider"
@@ -162,7 +156,6 @@
           </div>
           <div class="modal-body">
             <h5>Welcome tot the Interactive Narrator.</h5>
-              <h6>Usage:</h6>
               <p>Interactive Narrator has processed your user stories and made the visualization. </p>
               <p>The visualization
                   consists of nodes and edges: each node represents a concept extracted from one or more user stories, whereas
@@ -173,6 +166,7 @@
               set of user stories. Use the Weight Slider to hide nodes below a certain weight limit. Nodes that have a dark blue person shape are
                   concepts that have a 'role function' within a user story.
               Theses are often the actors that carry out certain tasks/behavior that is modeled by the user stories.</p>
+              <h6>Usage:</h6>
               <ul>
                   <li>Double click on a node to see user stories</li>
                   <li>Zoom in and out by scrolling</li>

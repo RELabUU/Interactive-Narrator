@@ -77,20 +77,21 @@ var options = {
 
          physics:{
            enabled:true,
-           adaptiveTimestep:false,
+           adaptiveTimestep:true,
     //      //   minVelocity:0.75,
-           maxVelocity:15,
+           maxVelocity:35,
            barnesHut: {gravitationalConstant: -10000,
                avoidOverlap: 0.9
                 // centralGravity: 0
                // springConstant: 0
                // damping: 0
-    //        stabilization: {
-    //            enabled: true,
-    // //          //   iterations: 1000,
-    // //          //   updateInterval: 100,
+               },
+           stabilization: {
+               enabled: true,
+                  iterations: 1000,
+        //       //   updateInterval: 100,
     // //          //   onlyDynamicEdges: false,
-    //            fit: true
+               fit: true
             }
     // //
          },
@@ -372,3 +373,47 @@ network.on( 'doubleClick', function(properties) {
    // };
 
 //comment
+
+// function saveIMG(ctx) {
+
+
+network.on("afterDrawing", function (ctx) {
+    // context = canvas.getContext("2d");
+
+// set to draw behind current content
+// context.globalCompositeOperation = "destination-over";
+
+// set background color
+// context.fillStyle = '#fff'; // <- background color
+
+// draw background / rect on entire canvas
+// context.fillRect(0, 0, canvas.width, canvas.height);
+
+    // change non-opaque pixels to white
+    // var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    // var data = imgData.data;
+    // for (var i = 0; i < data.length; i += 4) {
+    //     if (data[i + 3] == 0) {
+    //         data[i] = 255;
+    //         data[i + 1] = 255;
+    //         data[i + 2] = 255;
+    //         data[i + 3] = 255;
+    //     }
+    // }
+    // ctx.putImageData(imgData, 0, 0);
+
+    var dataURL = ctx.canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
+    var download = document.getElementById('canvasImg');
+    download.setAttribute("href", dataURL);
+    // var w = window.open(dataURL);
+    // w.document.write("<img src='"+dataURL+"' alt='from canvas'/>");
+    });
+
+
+// }
+    // var c=document.getElementsByName("canvas");
+// var d=c.toDataURL("image/png");
+// window.open(c.toDataURL('image/png'));
+// var w=window.open('about:blank','image from canvas');
+// w.document.write("<img src='"+d+"' alt='from canvas'/>");
+

@@ -76,7 +76,6 @@ def add_concepts(output_ontobj, m, starting_id):
         one_concept = {'class_name': class_vn.name, 'parent_name': class_vn.parent,
                        'occurs_in': occurence_list(class_vn.stories), 'weight': '0', 'group': class_vn.is_role}
         all_classes_list.append(one_concept)
-        # if cl is not is_us:
 
         # ....else add it with the name and weight from the weights_dict
 
@@ -102,9 +101,8 @@ def add_concepts(output_ontobj, m, starting_id):
         try:
             sqlsession.commit()
 
-            # WHAT HAPPENS HERE ???????????????????????????
             list_of_us_ids = class_vn['occurs_in']
-            # class_from_db = sqlsession.query(ClassVN).filter_by(class_name=class_vn['class_name']).first()
+
             class_from_db = sqlsession.query(ClassVN).order_by(ClassVN.class_id.desc()) \
                 .join(User).filter(User.id == the_user.id) \
                 .first()
@@ -144,8 +142,7 @@ def add_concepts(output_ontobj, m, starting_id):
             sqlsession.rollback()
             excluded_concepts_list.append(class_vn)
 
-
-
+    # print a list of the concepts that were not included
     print('******EXCLUDED CONCEPTS******', excluded_concepts_list)
 
 # funtction to add the relationships to the database
