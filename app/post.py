@@ -170,6 +170,7 @@ def add_relationships(output_prologobj, starting_id):
                 print('THIS IS A DUPLICATE RELATIONSHIP, SO DO NOT ADD IT', isa_duplicate)
                 pass
             else:
+                print('ADD A RELATIONSHIP', rel_entry)
                 sqlsession.add(rel_entry)
                 sqlsession.commit()
 
@@ -205,7 +206,7 @@ def add_relationships(output_prologobj, starting_id):
 
 
         except Exception as e:
-            print('Exception raised', e)
+            print('Exception raised on adding relationship', e)
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             print(exc_type, fname, exc_tb.tb_lineno)

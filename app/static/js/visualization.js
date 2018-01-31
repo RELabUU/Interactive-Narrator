@@ -88,18 +88,19 @@ var options = {
                },
            stabilization: {
                enabled: true,
-                  iterations: 1000,
+                  iterations: 1500,
         //       //   updateInterval: 100,
     // //          //   onlyDynamicEdges: false,
                fit: true
-            }
+            },
+             timestep:0.5
     // //
          },
     //
     layout:{
       improvedLayout:true,
-      randomSeed:1
-    //  randomSeed:undefined,
+      // randomSeed:1
+     randomSeed:undefined
     //   hierarchical: {
     //    enabled:true}
         },
@@ -134,7 +135,7 @@ var options = {
     edges: {
         labelHighlightBold: true,
         width: 1,
-        length: undefined, //the lenght of the edges is set here. standard:undefined
+        length: 200, //undefined, //the lenght of the edges is set here. standard:undefined
         arrows: {
             to: {enabled: true, scaleFactor: 1, type: 'arrow'},
             middle: {enabled: false, scaleFactor: 1, type: 'arrow'},

@@ -3,7 +3,7 @@ import sys
 import os
 import math
 import json
-import datetime
+import datetime, time
 
 sys.path.append('/var/www/interactivenarrator')
 
@@ -649,6 +649,7 @@ def click_query():
 # connected (i.e. occur in a user story where the role occurs in) to the selected role.
 @app.route('/query')
 def get_nodes_edges():
+    start_time = time.gmtime()
     # retrieve the sprints and roles to look up, based on the user's selection
     checked_roles = json.loads(request.args.get('roles'))
     checked_sprints = json.loads(request.args.get('sprints'))
@@ -657,7 +658,7 @@ def get_nodes_edges():
 
     # find the user_sprint_ids that belong to the sprint_ids
     checked_sprints_ids = sqlsession.query(SprintVN) \
-        .filter(and_(SprintVN.user_id == active_user.id),(SprintVN.sprint_id_user.in_(checked_sprints))).all()
+        .filter(and_(SprintVN.user_id == active_user.id), (SprintVN.sprint_id_user.in_(checked_sprints))).all()
 
     checked_sprints_ids_list = [sprint.id for sprint in checked_sprints_ids]
 
@@ -669,18 +670,18 @@ def get_nodes_edges():
         .join(us_sprint_association_table) \
         .join(SprintVN) \
         .filter(and_(
-        UserStoryVN.functional_role.in_(checked_roles)),
+            UserStoryVN.functional_role.in_(checked_roles)),
         (SprintVN.id.in_(checked_sprints_ids_list))
     ) \
         .all()
     # put all the classes in a list of dicts
     nodes = [{"label": cl.class_name, "weight": cl.weight, "id": cl.class_id} for cl in classes]
-    print('THE NODES ARE HERE', nodes, len(nodes))
+    # print('THE NODES ARE HERE', nodes, len(nodes))
     # find all the unique class names
     class_names = [cl.class_name for cl in classes]
     # make a list of all class names and ids
     class_name_id_map = {cl.class_name: cl.class_id for cl in classes}
-    print('CLASS_NAME_ID_MAP', len(class_names), len(class_name_id_map))
+    # print('CLASS_NAME_ID_MAP', len(class_names), len(class_name_id_map))
 
     class_relationships = sqlsession.query(RelationShipVN) \
         .join(us_relationship_association_table) \
@@ -696,7 +697,7 @@ def get_nodes_edges():
         (SprintVN.id.in_(checked_sprints_ids_list))
     ) \
         .all()
-    print('HERE ARE THE RELATIONSHIPS', len(class_relationships), [{"id": rel.relationship_id, "domain": rel.relationship_domain, "range": rel.relationship_range} for rel in class_relationships])
+    # print('HERE ARE THE RELATIONSHIPS', len(class_relationships), [{"id": rel.relationship_id, "domain": rel.relationship_domain, "range": rel.relationship_range} for rel in class_relationships])
     edges = []
 
     for class_relationship in class_relationships:
@@ -713,7 +714,8 @@ def get_nodes_edges():
             class_relationship.relationship_range))
             pass
 
-
+    end_time = time.gmtime()
+    print(start_time, end_time)
     return jsonify(nodes=nodes, edges=edges)
 
 

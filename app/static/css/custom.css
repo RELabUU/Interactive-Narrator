@@ -704,6 +704,11 @@ p.email-confirm-success{
     display:inline;
     margin: 10px 10px 10px 10px;
 }
+
+#dashboard-set-buttons .btn-warning{
+    margin-top: 40px;
+}
+
 a#logout-button{
     margin-top: 50px;
 }
@@ -832,7 +837,7 @@ a#logout-button{
     font-family: 'Open Sans', sans-serif;
 }
 
-.sidebar-nav a#canvasrelationships{
+.sidebar-nav #canvasImg{
     margin-bottom: 20px;
 }
 .sidebar-nav button {
@@ -888,7 +893,7 @@ li.sidebar-brand {
 }
 
 input[type=text]{
-    color: rgb(177, 178, 177);
+    /*color: rgb(177, 178, 177);*/
 }
 
 

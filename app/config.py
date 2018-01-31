@@ -8,7 +8,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 # set the secret key.  keep this really secret:
-SECRET_KEY = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+SECRET_KEY = 'M&8/XD-P0|.}_4R>Db]K5w(H$2-/$S'
 
 MAIL_SERVER = 'smtp.gmail.com'
 MAIL_PORT = 465

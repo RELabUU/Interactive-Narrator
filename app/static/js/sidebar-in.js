@@ -72,9 +72,10 @@ function showAllNodes() {
 //
 $('#weightSlider').change(function () {
     var weight = $(this).val();
-
+    var startTime1 = new Date();
     showAllNodes();
-
+    var endTime1 = new Date() - startTime1;
+    console.log(endTime1);
     // hide the nodes that are below weight
     nodes.forEach(function (node) {
         var nodeWeightBelowThreshold = (node.weight < weight);
@@ -83,8 +84,8 @@ $('#weightSlider').change(function () {
 
 
     });
-
-
+    var endTime2 = new Date() - startTime1;
+    console.log(endTime2);
     // edges.forEach(function(edge){
     //     if (!edge.hidden){
     //         shown_edges.add(edge);
@@ -256,7 +257,7 @@ window.onresize = function () {
 
 function showDataSet(data) {
 
-    console.log(data);
+    console.log('showDataSet is being executed', data);
 
     var nodes_dataset = new vis.DataSet();
     var edges_dataset = new vis.DataSet();
@@ -268,6 +269,7 @@ function showDataSet(data) {
     console.log(nodes_dataset);
     console.log(edges_dataset);
 
+    var startTime2 = new Date();
     // updating the nodes //
     nodes.forEach(function (node) {
         var selected = nodes_dataset.get(node.id);
@@ -327,7 +329,8 @@ function showDataSet(data) {
     }
 
     // console.log(nodes_dataset);
-
+    var endTime3 = new Date() - startTime2;
+    console.log(endTime3);
 }
 
 //    ROLE SELECTION
@@ -336,14 +339,15 @@ function makeRoleSelector() {
         enableClickableOptGroups: true,
         enableCollapsibleOptGroups: true,
         enableFiltering: true,
-        includeSelectAllOption: true,
+        includeSelectAllOption: false,
         maxHeight: 400,
         enableCaseInsensitiveFiltering: true,
         buttonContainer: '<div id="roleselector-btn-group" class="btn-group" />',
         buttonText: function (options, select) {
             return 'Roles';
         },
-        onSelectAll: function (option, checked, select) {		//use the onChange event to listen to changes in the listbox
+        onSelectAll: function (option, checked, select) {		//if all boxes in a listbox are checked...
+            console.log('onSelectAll is being executed');
             var role_values = $('#roleselector option:selected');//add the selected options to a var
             var sprint_values = $('#sprintselector option:selected');
 
@@ -399,7 +403,7 @@ function makeSprintSelector() {
         enableClickableOptGroups: true,
         enableCollapsibleOptGroups: true,
         enableFiltering: true,
-        includeSelectAllOption: true,
+        includeSelectAllOption: false,
         maxHeight: 400,
         enableCaseInsensitiveFiltering: true,
         buttonContainer: '<div id="sprintselector-btn-group" class="btn-group" />',
@@ -535,7 +539,7 @@ $(document).ready(function () {
           });
 
 
-
+          //Keep the dropdowns open when clicking on the visualization
           $("#visualization").on('click', function() {
               console.log("click on visualization registered");
               if ($("#roleselector-btn-group").hasClass("open")) {
