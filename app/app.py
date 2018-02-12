@@ -489,7 +489,7 @@ def upload_form():
                         add_data_to_db(data['us_instances'], data['output_ontobj'], data['output_prologobj'], data['matrix'],
                                        sprint_form_data)
                     except UnicodeDecodeError:
-                        error = 'Sorry, the file was not accepted by our system. ' \
+                        error = 'Sorry, the file could not be decoded properly. ' \
                                 'It might be ASCII encoded, Please try UTF-8 Unicode encoding for your file'
                         if newest_sprint:
                             sqlsession.delete(newest_sprint)
@@ -533,7 +533,7 @@ def upload_form():
                         else:
                             pass
                         error = 'Sorry, the file could not be processed. ' \
-                                'Please try UNICODE in .txt or .csv files'
+                                'Please check you user stories for errors'
 
                         return render_template('uploadform.html', form=form, error=error)
 
