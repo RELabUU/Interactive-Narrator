@@ -145,7 +145,7 @@ a#topbar-button-a:active{
 /*}*/
 
 #useraccountitems{
-    padding-right: 15px;
+    /*padding-right: 15px;*/
 }
 #useraccountitems a{
     font-weight: 600;
@@ -349,6 +349,7 @@ h5#intro-text-left-slogan-subquote{
     font-weight: 600;
 }
 
+/*CAROUSEL */
 #homepage-slider{
     margin-bottom: 20px;
 }
@@ -360,6 +361,13 @@ h5#intro-text-left-slogan-subquote{
 
 .carousel-inner > .item > img {
     margin: 0 auto;
+}
+
+.carousel-inner > .item{
+    -webkit-transition: 3s ease-in-out left;
+    -moz-transition: 3s ease-in-out left;
+    -o-transition: 3s ease-in-out left;
+    transition: 3s ease-in-out left;
 }
 
 img#UU-logo{

@@ -554,7 +554,7 @@ $(document).ready(function () {
 
 
 //Keep the dropdowns open when clicking anywhere but a dropdown button
-$('body').on("click", function (e) {
+$('body').on("click touch", function (e) {
     // $(this).parent().is(".open") && e.stopPropagation();
     if (!$(".multiselect.dropdown-toggle.btn.btn-default").is(e.target)){
         if ($("#roleselector-btn-group").hasClass("open")) {
