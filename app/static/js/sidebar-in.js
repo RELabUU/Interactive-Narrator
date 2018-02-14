@@ -552,10 +552,18 @@ $(document).ready(function () {
 //     }
 // });
 
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    deviceEventType = 'touchstart'
+} else {
+//If its not a mobile device use 'click'
+    deviceEventType = 'click'
+}
 
+console.log(deviceEventType);
 //Keep the dropdowns open when clicking anywhere but a dropdown button
-$('body').on("click tap", function (e) {
+$('body').on(deviceEventType, function (e) {
     // $(this).parent().is(".open") && e.stopPropagation();
+    console.log(e);
     if (!$(".multiselect.dropdown-toggle.btn.btn-default").is(e.target)){
         if ($("#roleselector-btn-group").hasClass("open")) {
             e.stopPropagation();
@@ -563,10 +571,10 @@ $('body').on("click tap", function (e) {
         if ($("#sprintselector-btn-group").hasClass("open")) {
             e.stopPropagation();
         }
-
-
     }
 });
+
+
 
           //Keep the dropdowns open when clicking on the visualization
  //          $("#visualization").on('click', function() {
