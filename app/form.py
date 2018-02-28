@@ -3,9 +3,9 @@
 from wtforms import Form, BooleanField
 from wtforms import StringField, SubmitField, IntegerField, PasswordField, TextAreaField
 from wtforms import validators, ValidationError
-from wtforms.validators import Length, required, DataRequired
+from wtforms.validators import Length, required, DataRequired, Email
 
-
+# for to upload a new set of user stories
 class SetInfoForm(Form):
     # company_id = IntegerField('CompanyID', [validators.DataRequired("Please enter a valid name.")])
     # [required()])
@@ -16,6 +16,7 @@ class SetInfoForm(Form):
     submit = SubmitField("Send")
     # Regexp(r'^[\w.@+-]+$')
     # validators.Regexp(r'^[a-zA-Z0-9_ ]*$'),
+
 class LoginForm(Form):
     username = StringField('Username', [Length(max=255), validators.DataRequired()])
     password = PasswordField('Password', [Length(max=255), validators.DataRequired(message='wrong')])
@@ -26,7 +27,7 @@ class LoginForm(Form):
 class RegistrationForm(Form):
     username = StringField('Username', [validators.Length(min=4, max=20)])
     company_name = StringField('Company Name', [Length(max=255), validators.DataRequired()])
-    email = StringField('Email Address', [validators.Length(min=6, max=50)])
+    email = StringField('Email Address', [validators.Length(min=6, max=50), Email()])
     password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
@@ -38,9 +39,14 @@ class RegistrationForm(Form):
 class ContactForm(Form):
     name = StringField('Name', [Length(max=255), validators.DataRequired()])
     company_name = StringField('Company Name', [Length(max=255), validators.DataRequired()])
-    email = StringField('Email Address', [validators.DataRequired()])
+    email = StringField('Email Address', [validators.DataRequired(), Email()])
     subject = StringField("Subject", [validators.DataRequired("Please enter a subject.")])
     message = TextAreaField('Your Message', [validators.Length(min=10, max=2500), validators.DataRequired()])
     submit = SubmitField("Send")
 
+class EmailForm(Form):
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(min=6, max=40)])
+
+class PasswordForm(Form):
+    password = PasswordField('New Password', [Length(max=255), validators.DataRequired()])
 # if__name__ == '__main__':

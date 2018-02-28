@@ -16,7 +16,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from werkzeug import secure_filename, redirect
 from passlib.hash import sha256_crypt
-from form import SetInfoForm, LoginForm, RegistrationForm, ContactForm
+from itsdangerous import URLSafeTimedSerializer
+from form import SetInfoForm, LoginForm, RegistrationForm, ContactForm, EmailForm, PasswordForm
 from post import add_data_to_db
 import config
 sys.path.append('/var/www/VisualNarrator')
@@ -143,7 +144,7 @@ def do_register():
             email = form.email.data
             password = sha256_crypt.encrypt((str(form.password.data)))
 
-            # check if a user is new or existent...
+            # check by username if a user is new or existent...
             user_exists = sqlsession.query(User).filter(User.username == username).first()
             # ... if it exists, notify the user
             if user_exists:
@@ -252,6 +253,84 @@ def logout():
     session.pop('username', None)
     # session['username'] = ''
     return redirect(url_for('homepage'))
+
+
+@app.route("/resetpassword", methods=["GET", "POST"])
+def reset():
+    form = EmailForm(request.form)
+    if request.method == "POST" and form.validate():
+        print('email for rest validated')
+        try:
+            user = sqlsession.query(User).filter(User.email == form.email.data).first()
+            print(user)
+        except Exception as e:
+            print('Exception raised at rest password view', e)
+            flash('Invalid email address!', 'error')
+            # return render_template('reset_password.html', form=form)
+            return redirect(url_for('homepage'))
+        if user:
+            send_password_reset_email(user.email)
+            flash('Please check your email for a password reset link.', 'success')
+            confirmation = 'Please check your email for a password reset link.'
+            print('succes')
+            # return render_template('reset_password.html', form=form)
+            return render_template('reset_password.html', form=form, confirmation=confirmation)
+        else:
+            flash('Your email address must be confirmed before attempting a password reset.', 'error')
+            error = 'Your email address must be confirmed before attempting a password reset.'
+            return render_template('reset_password.html', form=form, error=error)
+        # return redirect(url_for('login'))
+
+    return render_template('reset_password.html', form=form)
+
+
+@app.route('/reset/<token>', methods=["GET", "POST"])
+def reset_with_token(token):
+    try:
+        password_reset_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        email = password_reset_serializer.loads(token, salt='password-reset-salt', max_age=3600)
+    except:
+        flash('The password reset link is invalid or has expired.', 'error')
+        return redirect(url_for('do_login'))
+
+    form = PasswordForm(request.form)
+
+    if request.method == "POST" and form.validate():
+        try:
+            user = sqlsession.query(User).filter(User.email == email).first()
+        except:
+            flash('Invalid email address!', 'error')
+            return redirect(url_for('do_login'))
+
+        user.password = sha256_crypt.encrypt((str(form.password.data)))
+        # sqlsession.add(user)
+        sqlsession.commit()
+        flash('Your password has been updated!', 'success')
+        return redirect(url_for('do_login'))
+
+    return render_template('reset_password_with_token.html', form=form, token=token)
+
+
+def send_password_reset_email(user_email):
+    password_reset_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+
+    password_reset_url = url_for(
+        'reset_with_token',
+        token=password_reset_serializer.dumps(user_email, salt='password-reset-salt'),
+        _external=True)
+
+    html = render_template(
+        'reset_password_email.html',
+        password_reset_url=password_reset_url)
+
+    send_email('Password Reset Requested', user_email, html)
+
+
+def send_email(subject, email, html):
+    msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[email])
+    msg.body = html
+    mail.send(msg)
+
 
 # admin page
 @app.route("/admindashboard")

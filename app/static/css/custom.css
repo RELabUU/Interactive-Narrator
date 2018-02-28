@@ -681,6 +681,17 @@ textarea#message{
     text-align: center;
 }
 
+p.confirm-success{
+    color: white;
+    padding: 5px 2px 5px 2px;
+    background-color: #3e8f3e;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
 p.email-confirm-success{
     color: white;
     padding: 5px 2px 5px 2px;

@@ -346,6 +346,24 @@ function makeRoleSelector() {
         buttonText: function (options, select) {
             return 'Roles';
         },
+        onDropdownHidden: function(e){
+            // console.log(e, e.target.tagName);
+            // function hideMe(e){
+            //     console.log(e.target, 'click registered by ondropdownhidden');
+            //      if (!$('#roleselector-btn-group').is(e.target)){
+            //
+            // }
+            //
+            // }
+
+
+            // if (e.target.nodeName == 'DIV') {
+            //     $("#roleselector-btn-group").addClass('open');
+            //     console.log('jep');
+            // }
+                // e.stopPropagation();
+        },
+
         onSelectAll: function (option, checked, select) {		//if all boxes in a listbox are checked...
             console.log('onSelectAll is being executed');
             var role_values = $('#roleselector option:selected');//add the selected options to a var
@@ -561,9 +579,12 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 
 console.log(deviceEventType);
 //Keep the dropdowns open when clicking anywhere but a dropdown button
-$('body').on(deviceEventType, function (e) {
+$('body').on('click', function (e) {
     // $(this).parent().is(".open") && e.stopPropagation();
     console.log(e);
+    if ($("div#roleselector-btn-group.btn-group").is(e.target)){
+        console.log('log this');
+    }
     if (!$(".multiselect.dropdown-toggle.btn.btn-default").is(e.target)){
         if ($("#roleselector-btn-group").hasClass("open")) {
             e.stopPropagation();
@@ -574,77 +595,118 @@ $('body').on(deviceEventType, function (e) {
     }
 });
 
+// $("body").on( "click", ".multiselect.dropdown-toggle.btn.btn-default", function( event ) {
+//     console.log(event);
+//   event.stopPropagation();
+// });
+
+// $(function() {
+//     var closeble = false;
+//     $('body').on('click', function (e) {
+//         if (!$(event.target).is("a.dropdown-toggle")) {
+//             closeble = false;
+//         }
+//
+//     });
+//
+//     $('.dropdown').on({
+//         "click": function (event) {
+//             if ($(event.target).closest('.dropdown-toggle').length) {
+//                 closeble = true;
+//             } else {
+//                 closeble = false;
+//             }
+//         },
+//         "hide.bs.dropdown": function () {
+//             return closeble;
+//         }
+//     });
+// });
 
 
-          //Keep the dropdowns open when clicking on the visualization
- //          $("#visualization").on('click', function() {
- //              console.log("click on visualization registered");
- //              if ($("#roleselector-btn-group").hasClass("open")) {
- //
- //                  setTimeout(function () {
- //                      $("#roleselector-btn-group").addClass('open');
- //
- //                  })
- //              }
- //              if ($("#sprintselector-btn-group").hasClass("open")) {
- //
- //                  setTimeout(function () {
- //                      $("#sprintselector-btn-group").addClass('open');
- //
- //                  })
- //              }
- // });
+// $('#roleselector').on('hide.bs.dropdown', function (e) {
+//     var target = $(e.target);
+//     console.log('target', target);
+//     if(target.hasClass("keepopen") || target.parents(".keepopen").length){
+//         return false; // returning false should stop the dropdown from hiding.
+//     }else{
+//         return true;
+//     }
+// });
+          // Keep the dropdowns open when clicking on the visualization
+// $('body').on('touchstart', function() {
+//     console.log("touch on visualization registered");
+//     if ($("#roleselector-btn-group").hasClass("open")) {
+//         console.log('it has open class');
+//         $('.multiselect.dropdown-toggle.btn.btn-default').dropdown('toggle');
+//
+//         // setTimeout(function () {
+//         //     $("#roleselector-btn-group").addClass('open');
+//         //     console.log('timeout function works');
+//         // })
+//     }
+//     if ($("#sprintselector-btn-group").hasClass("open")) {
+//
+//         setTimeout(function () {
+//             $("#sprintselector-btn-group").addClass('open');
+//         })
+//     }
+//     else{
+//         console.log('do nothing');
+//         // $("#roleselector-btn-group").addClass('open');
+//     }
+//  });
 
-          //Keep the dropdowns open when clicking elsewhere
-          // $('body').on('click.hideMenu', function(e) {
-          //     console.log("click on body registered");
-          //     console.log(e.target, e.target.class);
-          //     var target = $(e.target);
-          //
-          //     if ($(target).is('#relationships')) {
-          //         console.log('relationships button clicked');
-          //            if ($('#sprintselector-btn-group').hasClass('open')) {
-          //               setTimeout(function () {
-          //                     $("#sprintselector-btn-group").addClass('open');
-          //                 })
-          //            }
-          //               if ($('#roleselector-btn-group').hasClass('open')) {
-          //               setTimeout(function () {
-          //                     $("#roleselector-btn-group").addClass('open');
-          //                 })
-          //            }
-          //            if ($('#roleselector-btn-group' && '#sprintselector-btn-group').hasClass('open')) {
-          //                                      console.log("both are open");
-          //                setTimeout(function () {
-          //                     $("#roleselector-btn-group" && "#sprintselector-btn-group").addClass('open');
-          //                 })
-          //
-          //            }
-          //     }
-          //
-          //         if ($('#sprintselector-btn-group').has(target).length) {
-          //             console.log("event target is button");
-          //
-          //
-          //             if ($('#roleselector-btn-group').hasClass('open')) {
-          //                 console.log("roles has class open");
-          //
-          //                 setTimeout(function () {
-          //                     $("#roleselector-btn-group").addClass('open');
-          //                 })
-          //             }
-          //         }
-          //
-          //         if ($('#roleselector-btn-group').has(target).length) {
-          //
-          //             if ($('#sprintselector-btn-group').hasClass('open')) {
-          //                 console.log("sprints has class open");
-          //
-          //                 setTimeout(function () {
-          //                     $("#sprintselector-btn-group").addClass('open');
-          //                 })
-          //
-          //             }
-          //         }
-          //
-          //     });
+          // Keep the dropdowns open when clicking elsewhere
+          $('body').on('click.hideMenu', function(e) {
+              // console.log("click on body registered");
+              // console.log('target from click.hidemenu', e.target, e.target.class);
+              var target = $(e.target);
+
+              if ($(target).is('#relationships')) {
+                  console.log('relationships button clicked');
+                     if ($('#sprintselector-btn-group').hasClass('open')) {
+                        setTimeout(function () {
+                              $("#sprintselector-btn-group").addClass('open');
+                          })
+                     }
+                        if ($('#roleselector-btn-group').hasClass('open')) {
+                        setTimeout(function () {
+                              $("#roleselector-btn-group").addClass('open');
+                          })
+                     }
+                     if ($('#roleselector-btn-group' && '#sprintselector-btn-group').hasClass('open')) {
+                                               console.log("both are open");
+                         setTimeout(function () {
+                              $("#roleselector-btn-group" && "#sprintselector-btn-group").addClass('open');
+                          })
+
+                     }
+              }
+
+                  if ($('#sprintselector-btn-group').has(target).length) {
+                      console.log("event target is button");
+
+
+                      if ($('#roleselector-btn-group').hasClass('open')) {
+                          console.log("roles has class open");
+
+                          setTimeout(function () {
+                              $("#roleselector-btn-group").addClass('open');
+                          })
+                      }
+                  }
+
+                  if ($('#roleselector-btn-group').has(target).length) {
+
+                      if ($('#sprintselector-btn-group').hasClass('open')) {
+                          console.log("sprints has class open");
+
+                          setTimeout(function () {
+                              $("#sprintselector-btn-group").addClass('open');
+                          })
+
+                      }
+                  }
+
+              });
