@@ -21,6 +21,8 @@ from form import SetInfoForm, LoginForm, RegistrationForm, ContactForm, EmailFor
 from post import add_data_to_db
 import config, socket
 
+host = 'localhost'
+
 sys.path.append('/var/www/VisualNarrator')
 
 from VisualNarrator import run
