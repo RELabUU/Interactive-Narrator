@@ -19,7 +19,8 @@ from passlib.hash import sha256_crypt
 from itsdangerous import URLSafeTimedSerializer
 from form import SetInfoForm, LoginForm, RegistrationForm, ContactForm, EmailForm, PasswordForm
 from post import add_data_to_db
-import config
+import config, socket
+
 sys.path.append('/var/www/VisualNarrator')
 
 from VisualNarrator import run
@@ -41,8 +42,8 @@ app.config.from_object(config)
 db = SQLAlchemy(app)
 db.Model = Base
 
-mail = Mail()
-mail.init_app(app)
+mail = Mail(app)
+# mail.init_app(app)
 # NOTE: sqlsession vs session usage: session is a login/logout browser session while sqlsession is a Session() object
 
 Base.metadata.create_all(engine)
@@ -161,7 +162,11 @@ def do_register():
 
                 sqlsession.commit()
                 # flash('thanks for registering')
-
+                welcome_text = 'Hi, you created and account with username', username,\
+                               'at https://interactivenarrator.science.uu.nl'
+                # msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[email])
+                # msg.body = welcome_text
+                send_email('Your account with Interactive Narrator', email, welcome_text)
                 session['logged_in'] = True
                 session['username'] = username
 
