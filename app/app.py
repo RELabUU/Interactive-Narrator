@@ -21,7 +21,6 @@ from form import SetInfoForm, LoginForm, RegistrationForm, ContactForm, EmailFor
 from post import add_data_to_db
 import config, socket
 
-host = 'localhost'
 
 sys.path.append('/var/www/VisualNarrator')
 
@@ -44,7 +43,13 @@ app.config.from_object(config)
 db = SQLAlchemy(app)
 db.Model = Base
 
+# host = 'localhost'
+# port = 465
+# s = socket.socket()
+# s.bind(host, port)
+
 mail = Mail(app)
+
 # mail.init_app(app)
 # NOTE: sqlsession vs session usage: session is a login/logout browser session while sqlsession is a Session() object
 
@@ -261,7 +266,7 @@ def logout():
     # session['username'] = ''
     return redirect(url_for('homepage'))
 
-
+# resetting the password
 @app.route("/resetpassword", methods=["GET", "POST"])
 def reset():
     form = EmailForm(request.form)
@@ -291,6 +296,7 @@ def reset():
     return render_template('reset_password.html', form=form)
 
 
+# generate the new password with a token
 @app.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):
     try:
@@ -317,7 +323,7 @@ def reset_with_token(token):
 
     return render_template('reset_password_with_token.html', form=form, token=token)
 
-
+# this method actually sends the password reset link in an e-mail
 def send_password_reset_email(user_email):
     password_reset_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
@@ -332,7 +338,7 @@ def send_password_reset_email(user_email):
 
     send_email('Password Reset Requested', user_email, html)
 
-
+# send an e-mail
 def send_email(subject, email, html):
     msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[email])
     msg.body = html

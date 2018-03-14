@@ -658,55 +658,55 @@ $('body').on('click', function (e) {
 //  });
 
           // Keep the dropdowns open when clicking elsewhere
-          $('body').on('click.hideMenu', function(e) {
-              // console.log("click on body registered");
-              // console.log('target from click.hidemenu', e.target, e.target.class);
-              var target = $(e.target);
-
-              if ($(target).is('#relationships')) {
-                  console.log('relationships button clicked');
-                     if ($('#sprintselector-btn-group').hasClass('open')) {
-                        setTimeout(function () {
-                              $("#sprintselector-btn-group").addClass('open');
-                          })
-                     }
-                        if ($('#roleselector-btn-group').hasClass('open')) {
-                        setTimeout(function () {
-                              $("#roleselector-btn-group").addClass('open');
-                          })
-                     }
-                     if ($('#roleselector-btn-group' && '#sprintselector-btn-group').hasClass('open')) {
-                                               console.log("both are open");
-                         setTimeout(function () {
-                              $("#roleselector-btn-group" && "#sprintselector-btn-group").addClass('open');
-                          })
-
-                     }
-              }
-
-                  if ($('#sprintselector-btn-group').has(target).length) {
-                      console.log("event target is button");
-
-
-                      if ($('#roleselector-btn-group').hasClass('open')) {
-                          console.log("roles has class open");
-
-                          setTimeout(function () {
-                              $("#roleselector-btn-group").addClass('open');
-                          })
-                      }
-                  }
-
-                  if ($('#roleselector-btn-group').has(target).length) {
-
-                      if ($('#sprintselector-btn-group').hasClass('open')) {
-                          console.log("sprints has class open");
-
-                          setTimeout(function () {
-                              $("#sprintselector-btn-group").addClass('open');
-                          })
-
-                      }
-                  }
-
-              });
+          // $('body').on('click.hideMenu', function(e) {
+          //     // console.log("click on body registered");
+          //     // console.log('target from click.hidemenu', e.target, e.target.class);
+          //     var target = $(e.target);
+          //
+          //     if ($(target).is('#relationships')) {
+          //         console.log('relationships button clicked');
+          //            if ($('#sprintselector-btn-group').hasClass('open')) {
+          //               setTimeout(function () {
+          //                     $("#sprintselector-btn-group").addClass('open');
+          //                 })
+          //            }
+          //               if ($('#roleselector-btn-group').hasClass('open')) {
+          //               setTimeout(function () {
+          //                     $("#roleselector-btn-group").addClass('open');
+          //                 })
+          //            }
+          //            if ($('#roleselector-btn-group' && '#sprintselector-btn-group').hasClass('open')) {
+          //                                      console.log("both are open");
+          //                setTimeout(function () {
+          //                     $("#roleselector-btn-group" && "#sprintselector-btn-group").addClass('open');
+          //                 })
+          //
+          //            }
+          //     }
+          //
+          //         if ($('#sprintselector-btn-group').has(target).length) {
+          //             console.log("event target is button");
+          //
+          //
+          //             if ($('#roleselector-btn-group').hasClass('open')) {
+          //                 console.log("roles has class open");
+          //
+          //                 setTimeout(function () {
+          //                     $("#roleselector-btn-group").addClass('open');
+          //                 })
+          //             }
+          //         }
+          //
+          //         if ($('#roleselector-btn-group').has(target).length) {
+          //
+          //             if ($('#sprintselector-btn-group').hasClass('open')) {
+          //                 console.log("sprints has class open");
+          //
+          //                 setTimeout(function () {
+          //                     $("#sprintselector-btn-group").addClass('open');
+          //                 })
+          //
+          //             }
+          //         }
+          //
+          //     });

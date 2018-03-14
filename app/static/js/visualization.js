@@ -242,6 +242,7 @@ network.on( 'doubleClick', function(properties) {
     // $('#userstorytable tbody').after('<tr><th>Sprint</th><th>more data</th></tr>');
 });
 
+
 // network.on( 'click', function(){
 //     nodes.update({id: node.id, color: '#97C2FC'});
 //     edges.update({id: node.id, color: '#97C2FC'});
