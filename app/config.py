@@ -16,7 +16,7 @@ MAIL_USE_SSL = False
 MAIL_USE_TLS = False
 
 MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+# MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
 # administrator list
 ADMINS = ['interactivenarratoruu@gmail.com']
