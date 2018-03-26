@@ -169,8 +169,7 @@ def do_register():
 
                 sqlsession.commit()
                 # flash('thanks for registering')
-                welcome_text = 'Hi, you created and account with username', username,\
-                               'at https://interactivenarrator.science.uu.nl'
+                welcome_text = 'Hi, you created and account with us at https://interactivenarrator.science.uu.nl'
                 # msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[email])
                 # msg.body = welcome_text
                 send_email('Your account with Interactive Narrator', email, welcome_text)
