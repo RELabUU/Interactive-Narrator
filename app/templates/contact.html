@@ -10,7 +10,7 @@
 
         <p>
             Interested in using Interactive Narrator? Want to share your opinion? We would love to hear from you!
-            You can also use this form to request a new password.
+            You can also send an email to interactivenarratoruu at gmail.
         </p>
         <p>
             Interactive Narrator has been developed at Utrecht University by:
@@ -43,16 +43,9 @@
             {{ render_field(form.message, placeholder="your message (drag box to enlarge it)") }}
 
 
-{#            {{ render_field(form.confirm, maxlength=255, placeholder="your password again") }}#}
-
-            {# {{ render_field(form.accept_tos, maxlength=255, placeholder="") }}#}
-
-
             <div class="form-group">
                 {{ form.submit }}
-                {#
-                <button id=registration-submit type="submit" value="Sign Up" class="btn btn-default">Sign Up</button>
-                #}
+
             </div>
             {% if error %}
             <p class="error"><strong>Error: </strong>{{error}}</p>

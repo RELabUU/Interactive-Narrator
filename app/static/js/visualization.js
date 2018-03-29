@@ -2,7 +2,8 @@
  * Created by Govert-Jan on 29-4-2016.
  * the Javascript code for our data visualization
  */
-    //this file helps obtaining the json data from the app **??
+    //this file helps obtaining the json data from the visualization and takes care of the
+    // visualization itself**??
 
 
 //Create an object for a HTTP-request
@@ -152,7 +153,7 @@ var options = {
 
 var network = new vis.Network(container, data, options);
 
-
+//function to close the user story pop up
 function closeWindow() {
 	$("#userstorytable").css('display', 'none');
 	$("#userstorytable").remove();
@@ -248,7 +249,9 @@ network.on( 'doubleClick', function(properties) {
 //     edges.update({id: node.id, color: '#97C2FC'});
 // });
 
-//CLUSTERING//
+
+
+//CLUSTERING. NOT IMPLEMENTED YET, BUT IS READY FOR IT WITH MINOR WORK
 //
 // // set the first initial zoom level
 // network.once('initRedraw', function () {
@@ -346,40 +349,21 @@ network.on( 'doubleClick', function(properties) {
 //
 // });
 
-// ANOTHER OPTIONS VARIABLE FOR THE VISUALIZATION
- //    var options2 = {
-   //      physics:{
-   //        adaptiveTimestep:false,
-   //          enabled:true,
-   //          maxVelocity:5
-   //      },
-   //
-   // layout:{
-   //   improvedLayout:true,
-   //   hierarchical: {
-   //    enabled:false}},
-   //
-   // scaling:{
-   //   label:{
-   //       enabled:true
-   //   }
-   // },
-   // nodes:{
-   //   shape:'dot'
-   // },
-   // edges:{
-   //   labelHighlightBold:true,
-	//  length:100 //the lenght of the edges is set here. standard:undefined
-   // }
-   //
-   // };
 
-//comment
-
-// function saveIMG(ctx) {
-
-
+//put the link to the screenshot of the network diagram in the download png button
 network.on("afterDrawing", function (ctx) {
+    var dataURL = ctx.canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
+    var download = document.getElementById('canvasImg');
+    download.setAttribute("href", dataURL);
+    // var w = window.open(dataURL);
+    // w.document.write("<img src='"+dataURL+"' alt='from canvas'/>");
+    });
+
+
+
+
+
+// EXPERIMENTAL CODE for rendering the PNG with another background color
     // context = canvas.getContext("2d");
 
 // set to draw behind current content
@@ -404,15 +388,6 @@ network.on("afterDrawing", function (ctx) {
     // }
     // ctx.putImageData(imgData, 0, 0);
 
-    var dataURL = ctx.canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
-    var download = document.getElementById('canvasImg');
-    download.setAttribute("href", dataURL);
-    // var w = window.open(dataURL);
-    // w.document.write("<img src='"+dataURL+"' alt='from canvas'/>");
-    });
-
-
-// }
     // var c=document.getElementsByName("canvas");
 // var d=c.toDataURL("image/png");
 // window.open(c.toDataURL('image/png'));

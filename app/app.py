@@ -5,6 +5,7 @@ import math
 import json
 import datetime, time
 
+# tell python where to look for packages
 sys.path.append('/var/www/interactivenarrator')
 
 from sqlalchemy import create_engine, select, update, func
@@ -21,7 +22,7 @@ from form import SetInfoForm, LoginForm, RegistrationForm, ContactForm, EmailFor
 from post import add_data_to_db
 import config, socket
 
-
+# tell python where to look for VisualNarrator packages
 sys.path.append('/var/www/VisualNarrator')
 
 from VisualNarrator import run
@@ -43,14 +44,8 @@ app.config.from_object(config)
 db = SQLAlchemy(app)
 db.Model = Base
 
-# host = 'localhost'
-# port = 465
-# s = socket.socket()
-# s.bind(host, port)
-
 mail = Mail(app)
 
-# mail.init_app(app)
 # NOTE: sqlsession vs session usage: session is a login/logout browser session while sqlsession is a Session() object
 
 Base.metadata.create_all(engine)
@@ -58,31 +53,6 @@ Session = sessionmaker(bind=engine)
 sqlsession = Session()
 conn = engine.connect()
 
-
-# FLASK SECURITY
-
-# from flask_security import Security, login_required,\
-#     SQLAlchemySessionUserDatastore
-# from flask_login import LoginManager, UserMixin
-# from models import User, Role
-#
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-#
-# # user_datastore = SQLAlchemySessionUserDatastore(sqlsession, User, Role)
-#
-# @app.before_first_request
-# def create_user():
-#     # init_db()
-#     # user_datastore.create_user(email='govertjan@msn.com', password='qwerty')
-#     sqlsession.commit()
-#
-# # Views
-# @app.route('/flasksec')
-# @login_required
-# def flask_sec():
-#     return render_template('index.html')
-# END FLASK SECURITY
 
 # route for the demopage. Not accessible to users that are logged in
 @app.route('/demo', methods=['GET', 'POST'])
@@ -106,10 +76,12 @@ def demo():
 def homepage():
     return render_template('index.html')
 
+# route for about page
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+# route for contact page
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = ContactForm(request.form)
@@ -118,6 +90,7 @@ def contact():
             flash('All fields are required.')
             print('ERROR POSTING FORM')
             return render_template('contact.html', form=form)
+        # send the contact form message if all went well
         else:
             msg = Message(form.subject.data, sender=app.config['MAIL_USERNAME'], recipients=['interactivenarratoruu@gmail.com'])
             msg.body = """
@@ -140,7 +113,7 @@ def show_vis():
         return redirect(url_for('homepage'))
 
 
-# registering a user
+# route for registering a user
 @app.route('/register', methods=['GET', 'POST'])
 def do_register():
     try:
@@ -170,8 +143,7 @@ def do_register():
                 sqlsession.commit()
                 # flash('thanks for registering')
                 welcome_text = 'Hi, you created and account with us at https://interactivenarrator.science.uu.nl'
-                # msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[email])
-                # msg.body = welcome_text
+
                 send_email('Your account with Interactive Narrator', email, welcome_text)
                 session['logged_in'] = True
                 session['username'] = username
@@ -189,7 +161,7 @@ def do_register():
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
-
+        # make sure the session is reverted if an error occured
         sqlsession.rollback()
 
         error = 'Sorry, we could not register you'
@@ -277,20 +249,17 @@ def reset():
         except Exception as e:
             print('Exception raised at rest password view', e)
             flash('Invalid email address!', 'error')
-            # return render_template('reset_password.html', form=form)
             return redirect(url_for('homepage'))
         if user:
             send_password_reset_email(user.email)
             flash('Please check your email for a password reset link.', 'success')
             confirmation = 'Please check your email for a password reset link.'
             print('succes')
-            # return render_template('reset_password.html', form=form)
             return render_template('reset_password.html', form=form, confirmation=confirmation)
         else:
             flash('Your email address must be confirmed before attempting a password reset.', 'error')
             error = 'Your email address must be confirmed before attempting a password reset.'
             return render_template('reset_password.html', form=form, error=error)
-        # return redirect(url_for('login'))
 
     return render_template('reset_password.html', form=form)
 
@@ -315,7 +284,6 @@ def reset_with_token(token):
             return redirect(url_for('do_login'))
 
         user.password = sha256_crypt.encrypt((str(form.password.data)))
-        # sqlsession.add(user)
         sqlsession.commit()
         flash('Your password has been updated!', 'success')
         return redirect(url_for('do_login'))
@@ -337,14 +305,14 @@ def send_password_reset_email(user_email):
 
     send_email('Password Reset Requested', user_email, html)
 
-# send an e-mail
+# method to send an e-mail (this should actually not be in app.py)
 def send_email(subject, email, html):
     msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[email])
     msg.body = html
     mail.send(msg)
 
 
-# admin page
+# route for the admin page, it shows additional info for admin users
 @app.route("/admindashboard")
 def admin_dashboard():
     if not session.get('logged_in'):
@@ -470,32 +438,33 @@ def delete_all():
         return redirect(url_for('show_dash'))
 
 
-
-@app.route('/delete_sprint/<int:id>', methods=['GET', 'POST'])
-def delete_sprint(id):
-    active_user = sqlsession.query(User).filter(User.username == session['username']).first()
-
-    userstories = sqlsession.query(UserStoryVN) \
-        .join(us_sprint_association_table) \
-        .join(SprintVN) \
-        .join(CompanyVN) \
-        .join(User).filter(and_(SprintVN.id == id), (User.username == active_user.username)).all()
-
-    for userstory in userstories:
-        sqlsession.delete(userstory)
-
-    try:
-        sqlsession.commit()
-        return redirect(url_for('show_dash'))
-
-    except Exception as e:
-        print('Exception raised', e)
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-
-        sqlsession.rollback()
-        return redirect(url_for('show_dash'))
+# a route for deleting sprints per separate sprint (NOT WORKING) there is a button to trigger
+# this method from the dashboard
+# @app.route('/delete_sprint/<int:id>', methods=['GET', 'POST'])
+# def delete_sprint(id):
+#     active_user = sqlsession.query(User).filter(User.username == session['username']).first()
+#
+#     userstories = sqlsession.query(UserStoryVN) \
+#         .join(us_sprint_association_table) \
+#         .join(SprintVN) \
+#         .join(CompanyVN) \
+#         .join(User).filter(and_(SprintVN.id == id), (User.username == active_user.username)).all()
+#
+#     for userstory in userstories:
+#         sqlsession.delete(userstory)
+#
+#     try:
+#         sqlsession.commit()
+#         return redirect(url_for('show_dash'))
+#
+#     except Exception as e:
+#         print('Exception raised', e)
+#         exc_type, exc_obj, exc_tb = sys.exc_info()
+#         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+#         print(exc_type, fname, exc_tb.tb_lineno)
+#
+#         sqlsession.rollback()
+#         return redirect(url_for('show_dash'))
 
 
 # route for the form that enables uploading of files containing user stories
@@ -654,9 +623,8 @@ def upload_form():
     else:
         return redirect(url_for('do_login'))
 
-    # return render_template('uploadform.html', form=form)
 
-
+# method to check if a file is of the proper filetype
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
@@ -680,7 +648,6 @@ def get_roles():
 @app.route('/getsprints')
 def get_sprints():
     username = session['username']
-    # print(username)
     # show all the sprints that are in the database for this user on the dashboard page
 
     sprints = sqlsession.query(SprintVN) \
@@ -811,9 +778,9 @@ def get_nodes_edges():
 
 
 
-
-
 # a route for clustering
+# the method in this view is currently only activated by manually visiting /clusters
+# clustering is also not implemented yet at the front end. (see visualization.js for the clustering JavaScript)
 @app.route('/clusters')
 def cluster():
     # get all the nodes that are connected to a role
@@ -915,25 +882,14 @@ def relationships():
         relationshipslist.append([rel.relationship_domain, rel.relationship_range,
                                   rel.relationship_name, rel.relationship_id])
 
-        # for rel in relationships_query_result:
         for concept in concepts_dict_list:
             if rel.relationship_domain == concept[1]:
                 x = concept[0]
-        # for rel in relationships_query_result:
+
         for concept in concepts_dict_list:
             if rel.relationship_range == concept[1]:
                 y = concept[0]
-        # for rel in relationships_query_result:
-        #     for key, value in concepts_dict.items():
-        #         if rel.relationship_range == value:
-        #             y = key
-        #
-        # for key, value in concepts_dict.items():
-        #     if value == rel.relationship_domain:
-        #         x = key
-        # for key, value in concepts_dict.items():
-        #     if value == rel.relationship_range:
-        #         y = key
+
         if rel.relationship_name == 'isa':
             edges_id_dict = {'id': rel.relationship_id, 'from': x, 'to': y, 'label': rel.relationship_name, 'dashes': "true"}
         else:

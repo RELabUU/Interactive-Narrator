@@ -346,23 +346,6 @@ function makeRoleSelector() {
         buttonText: function (options, select) {
             return 'Roles';
         },
-        onDropdownHidden: function(e){
-            // console.log(e, e.target.tagName);
-            // function hideMe(e){
-            //     console.log(e.target, 'click registered by ondropdownhidden');
-            //      if (!$('#roleselector-btn-group').is(e.target)){
-            //
-            // }
-            //
-            // }
-
-
-            // if (e.target.nodeName == 'DIV') {
-            //     $("#roleselector-btn-group").addClass('open');
-            //     console.log('jep');
-            // }
-                // e.stopPropagation();
-        },
 
         onSelectAll: function (option, checked, select) {		//if all boxes in a listbox are checked...
             console.log('onSelectAll is being executed');
@@ -485,90 +468,19 @@ function makeSprintSelector() {
     });
 }
 
-// THEME SELECTION, NOT WORKING YET
-$(document).ready(function () {
-    $('#themeselector').multiselect({
-
-        // dropRight: true
-        enableClickableOptGroups: true,
-        enableCollapsibleOptGroups: true,
-        enableFiltering: true,
-        includeSelectAllOption: true,
-        maxHeight: 400,
-        enableCaseInsensitiveFiltering: true,
-        onChange: function (option, checked, select) {		//use the onChange event to listen to changes in the listbox
-            var values = $('#themeselector option:selected');//add the selected options to a var
-
-            var selectedThemes = $(values).map(function (index, option) {			//???
-                return $(option).val();		//put the values in the array
-            });
-            // Array to keep track of selected checkboxes i.e. selected themes
-            selectedThemes = selectedThemes.toArray();
-
-            // window.s = selectedThemes;
-            // console.log(selectedThemes);
-
-            // show all edges
-            edges.forEach(function (edge) {
-                edges.update({id: edge.id, hidden: false});
-            });
-
-            nodes.forEach(function (node) {
-                //The indexOf() method returns the position of the first occurrence of a specified value in a string.
-                //This method returns -1 if the value to search for never occurs.
-                var groupIsSelected = (selectedThemes.indexOf(node.theme) != -1);
-                nodes.update({id: node.id, hidden: groupIsSelected});
-
-                edges.forEach(function (edge) {
-                    // arrows
-                    // edges.update({id: edge.id, arrows: { to: { enabled: true}}});
-                    var isConnectedToNode = (edge.from == node.id) || (edge.to == node.id);
-
-                    if (isConnectedToNode && groupIsSelected) {
-                        edges.update({id: edge.id, hidden: true});
-                    }
-                });
-            });
-        },
-
-        buttonText: function (options, select) {
-            return 'Themes';
-        },
-        onInitialized: function (select, container) {
-            var $button = container.find("button").eq(0);
-            $button.append('<span class="multiselect_icon sub_icon glyphicon glyphicon-tags" aria-hidden="true"></span>');
-            console.log($button);
-        }
-
+//some functions to help keep the sidebar and its menus open on certain clicks
+$('.sidebar-nav > a').click(function (e) {
+    e.stopPropagation();
     });
 
 
-});
+$(".sidebar-nav").on('click', function (e) {
+    if(!$("#wrapper").hasClass("toggled")){
+        $("#wrapper").addClass("toggled");
+        }
+        });
 
-          $('.sidebar-nav > a').click(function (e) {
-              e.stopPropagation();
-          });
 
-
-          $(".sidebar-nav").on('click', function (e) {
-              if(!$("#wrapper").hasClass("toggled")){
-                  $("#wrapper").addClass("toggled");
-              }
-
-          });
-
-// $(document).on('click', 'someyourContainer .dropdown-menu', function (e) {
-//   e.stopPropagation();
-// });
-//
-// $('#roleselector').on('hide.bs.dropdown', function (e) {
-//     var target = $(e.target);
-//     if(target.hasClass("keepopen") || target.parents(".keepopen").length){
-//         return false; // returning false should stop the dropdown from hiding.
-//     }else{
-//         return true;
-//     }
-// });
 
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     deviceEventType = 'touchstart'
@@ -594,6 +506,25 @@ $('body').on('click', function (e) {
         }
     }
 });
+
+
+
+
+// EXPERIMENTAL CODE TO KEEP SIDEBAR AND ITS MENUS OPEN ON CLICKS
+
+// $(document).on('click', 'someyourContainer .dropdown-menu', function (e) {
+//   e.stopPropagation();
+// });
+//
+// $('#roleselector').on('hide.bs.dropdown', function (e) {
+//     var target = $(e.target);
+//     if(target.hasClass("keepopen") || target.parents(".keepopen").length){
+//         return false; // returning false should stop the dropdown from hiding.
+//     }else{
+//         return true;
+//     }
+// });
+
 
 // $("body").on( "click", ".multiselect.dropdown-toggle.btn.btn-default", function( event ) {
 //     console.log(event);
