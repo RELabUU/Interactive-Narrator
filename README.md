@@ -60,3 +60,18 @@ solution: only delete entity (concept) when it is in a use story that is in only
 - downloading the PNG of the network now gives a transparent image. This should be reworked to contain a white 
 background. Some experimental code exists in visualization.js
 - various print statements exist to help logging during development
+
+TO DO LIST:
+- improve rendering performance on mobile devices (change settings for algorithm)
+- add clustering (method already in place)
+- increase security for users (flask_security module already in place but not in use)
+- enable delete per sprint (code already present, just needs tweaking. see app.py delete_sprint())
+- add progress bar and hide rendering of the visualization until it's done
+- add ceiling AND bottom to the weight filter
+- add support for themes and epics
+- improve support for touch events
+- add more succes confirmations
+- add a tutorial
+- enable drawing on the visualization on touch devices
+- enable downloading of the reports VN generates.
+- add detection mechanism for redundencies/inconsistencies/dependencies such as color alerts
