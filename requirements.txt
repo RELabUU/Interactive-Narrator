@@ -15,6 +15,5 @@ flask_security
 numpy==1.12.1
 pandas==0.19.2
 spacy==1.8.2
-Django==1.9
-Jinja2==2.9.5
-
+Jinja2>=2.10.1
+django>=1.11.19
