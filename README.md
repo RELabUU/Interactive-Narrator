@@ -1,10 +1,10 @@
 # Interactive Narrator
 **Developed @ Utrecht University**
 
+**IMPORTANT: This project is not maintained nor functional at the moment. If you are interested in maintaining it, please contact Fabiano Dalpiaz at f.dalpiaz@uu.nl**
+
 Visualize your user stories to improve understanding of the project, inspect system functionality 
 and improve communication among stakeholders.
-
-Please visit [this page](http://interactivenarrator.science.uu.nl) to start using the application.
 
 This application uses the Visual Narrator (https://github.com/marcelrobeer/visualnarrator) to generate a conceptual model which is then
 visualized using Vis.js and is presented to the user in the browser from where the visualization can be adapted to cater to the 
